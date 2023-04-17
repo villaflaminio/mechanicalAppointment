@@ -4,7 +4,6 @@ import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
 import it.mtempobono.mechanicalappointment.model.User;
 import it.mtempobono.mechanicalappointment.model.UserPrincipal;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
-import it.mtempobono.mechanicalappointment.repository.projection.UserMe;
 import it.mtempobono.mechanicalappointment.security.CurrentUser;
 import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Controller with the REST endpoints for user managament.
@@ -40,13 +36,13 @@ public class UserController {
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        // Return the current user found by id.
-        UserMe user =userRepository.findProjectedById(userPrincipal.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-        User user2 =userRepository.findByIdAndSubscriptions_active(userPrincipal.getId(), true).orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-
-
-
-        return ResponseEntity.ok(user2);
+//        // Return the current user found by id.
+//        UserMe user =userRepository.findProjectedById(userPrincipal.getId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+//        User user2 =userRepository.findByIdAndSubscriptions_active(userPrincipal.getId(), true).orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+//
+//
+//
+        return ResponseEntity.ok("");
     }
 
     /**

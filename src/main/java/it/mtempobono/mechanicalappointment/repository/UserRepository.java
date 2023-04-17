@@ -1,7 +1,6 @@
 package it.mtempobono.mechanicalappointment.repository;
 
 import it.mtempobono.mechanicalappointment.model.User;
-import it.mtempobono.mechanicalappointment.repository.projection.UserMe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
-    Optional<UserMe> findProjectedById(long id);
-    Optional<User> findByIdAndSubscriptions_active(long id, boolean active);
 
 }
