@@ -1,12 +1,12 @@
 package it.mtempobono.mechanicalappointment.config;
 
-import com.flaminiovilla.obd.security.RestAuthenticationEntryPoint;
-import com.flaminiovilla.obd.security.TokenAuthenticationFilter;
-import com.flaminiovilla.obd.security.oauth2.CustomOAuth2UserService;
-import com.flaminiovilla.obd.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.flaminiovilla.obd.security.oauth2.OAuth2AuthenticationFailureHandler;
-import com.flaminiovilla.obd.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.flaminiovilla.obd.service.CustomUserDetailsService;
+import it.mtempobono.mechanicalappointment.security.RestAuthenticationEntryPoint;
+import it.mtempobono.mechanicalappointment.security.TokenAuthenticationFilter;
+import it.mtempobono.mechanicalappointment.security.oauth2.CustomOAuth2UserService;
+import it.mtempobono.mechanicalappointment.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import it.mtempobono.mechanicalappointment.security.oauth2.OAuth2AuthenticationFailureHandler;
+import it.mtempobono.mechanicalappointment.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

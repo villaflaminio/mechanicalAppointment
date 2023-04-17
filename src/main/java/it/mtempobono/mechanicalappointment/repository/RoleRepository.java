@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.repository;
 
-import com.flaminiovilla.obd.model.Role;
+import it.mtempobono.mechanicalappointment.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

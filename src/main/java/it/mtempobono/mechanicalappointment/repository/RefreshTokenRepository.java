@@ -1,7 +1,7 @@
 package it.mtempobono.mechanicalappointment.repository;
 
-import com.flaminiovilla.obd.model.RefreshToken;
-import com.flaminiovilla.obd.model.User;
+import it.mtempobono.mechanicalappointment.model.RefreshToken;
+import it.mtempobono.mechanicalappointment.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 

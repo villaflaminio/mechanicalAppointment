@@ -1,7 +1,7 @@
 package it.mtempobono.mechanicalappointment.config;
 
-import com.flaminiovilla.obd.repository.PasswordResetTokenRepository;
-import com.flaminiovilla.obd.repository.RefreshTokenRepository;
+import it.mtempobono.mechanicalappointment.repository.PasswordResetTokenRepository;
+import it.mtempobono.mechanicalappointment.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;

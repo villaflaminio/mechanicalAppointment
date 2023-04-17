@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.repository.projection;
 
-import com.flaminiovilla.obd.model.*;
+
+import it.mtempobono.mechanicalappointment.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -18,127 +19,7 @@ public interface UserMe {
 
     String getImageUrl();
 
-    List<SubscriptionInfo> getSubscriptions();
-
-    List<DeviceInfo> getSharedDevice();
-
-    FlespiTokenInfo getToken();
-
     Collection<RoleInfo> getRoles();
-
-
-
-    /**
-     * A Projection for the {@link Subscription} entity
-     */
-    interface SubscriptionInfo {
-        Long getId();
-
-        String getName();
-
-        String getDescription();
-
-        LocalDateTime getStartDateSubscription();
-
-        LocalDateTime getEndDateSubscription();
-
-        int getSubscriptionType();
-
-        Boolean getActive();
-
-        DeviceInfo getDevice();
-
-        /**
-         * A Projection for the {@link Device} entity
-         */
-        interface DeviceInfo {
-            Long getId();
-
-            String getModel();
-
-            CarInfo getCarInstance();
-
-            /**
-             * A Projection for the {@link Car} entity
-             */
-            interface CarInfo {
-                Long getId();
-
-                String getModel();
-
-                String getYearTo();
-
-                String getProgramNumber();
-
-                String getDateFrom();
-
-                List<CarFunctionInfo> getCarFunctions();
-
-                /**
-                 * A Projection for the {@link CarFunction} entity
-                 */
-                interface CarFunctionInfo {
-                    Long getId();
-
-                    String getName();
-                }
-            }
-        }
-    }
-
-    /**
-     * A Projection for the {@link Device} entity
-     */
-    interface DeviceInfo {
-        Long getId();
-
-        String getModel();
-
-        String getVin();
-
-        String getSerialNumber();
-
-        String getImei();
-
-        String getSim();
-
-        CarInfo getCarInstance();
-
-        /**
-         * A Projection for the {@link Car} entity
-         */
-        interface CarInfo {
-            Long getId();
-
-            String getModel();
-
-            String getYearTo();
-
-            String getProgramNumber();
-
-            String getDateFrom();
-
-            List<CarFunctionInfo> getCarFunctions();
-
-            /**
-             * A Projection for the {@link CarFunction} entity
-             */
-            interface CarFunctionInfo {
-                Long getId();
-
-                String getName();
-            }
-        }
-    }
-
-    /**
-     * A Projection for the {@link FlespiToken} entity
-     */
-    interface FlespiTokenInfo {
-        Long getId();
-
-        String getToken_key();
-    }
 
     /**
      * A Projection for the {@link Role} entity
