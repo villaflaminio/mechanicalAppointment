@@ -1,5 +1,6 @@
 package it.mtempobono.mechanicalappointment.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.mtempobono.mechanicalappointment.model.dto.AuthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,6 +54,16 @@ public class User {
     private AuthProvider provider;
 
     private String providerId;
+
+    //relation with vehicle
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Vehicle> vehicle;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Reservation> reservation;
+
 
 
     @ManyToMany(fetch = FetchType.EAGER)
