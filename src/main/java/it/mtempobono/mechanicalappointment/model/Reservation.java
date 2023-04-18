@@ -25,10 +25,6 @@ public class Reservation {
     private OpenDay openDay;
 
     @ManyToOne
-    @JsonBackReference
-    private User user;
-
-    @ManyToOne
     private MechanicalAction mechanicalAction;
 
     @Column(name = "start_time")
