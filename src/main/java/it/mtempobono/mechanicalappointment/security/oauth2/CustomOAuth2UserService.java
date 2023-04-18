@@ -1,9 +1,9 @@
 package it.mtempobono.mechanicalappointment.security.oauth2;
 
 import it.mtempobono.mechanicalappointment.exception.OAuth2AuthenticationProcessingException;
-import it.mtempobono.mechanicalappointment.model.Role;
-import it.mtempobono.mechanicalappointment.model.User;
-import it.mtempobono.mechanicalappointment.model.UserPrincipal;
+import it.mtempobono.mechanicalappointment.model.entity.Role;
+import it.mtempobono.mechanicalappointment.model.entity.User;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.model.dto.AuthProvider;
 import it.mtempobono.mechanicalappointment.repository.RoleRepository;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;

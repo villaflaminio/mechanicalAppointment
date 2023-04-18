@@ -1,8 +1,8 @@
 package it.mtempobono.mechanicalappointment.security;
 
 import it.mtempobono.mechanicalappointment.exception.TokenRefreshException;
-import it.mtempobono.mechanicalappointment.model.RefreshToken;
-import it.mtempobono.mechanicalappointment.model.User;
+import it.mtempobono.mechanicalappointment.model.entity.RefreshToken;
+import it.mtempobono.mechanicalappointment.model.entity.User;
 import it.mtempobono.mechanicalappointment.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;

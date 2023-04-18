@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model;
+package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,5 +34,7 @@ public class Reservation {
     @JsonManagedReference
     private Vehicle vehicle;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private AppointmentStatus status;
 }

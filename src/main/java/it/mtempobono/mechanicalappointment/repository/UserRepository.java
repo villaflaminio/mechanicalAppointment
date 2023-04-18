@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.repository;
 
-import it.mtempobono.mechanicalappointment.model.User;
+import it.mtempobono.mechanicalappointment.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

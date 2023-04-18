@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.repository;
 
-import it.mtempobono.mechanicalappointment.model.Role;
+import it.mtempobono.mechanicalappointment.model.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

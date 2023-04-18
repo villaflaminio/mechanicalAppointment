@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.repository;
 
-import it.mtempobono.mechanicalappointment.model.PasswordResetToken;
+import it.mtempobono.mechanicalappointment.model.entity.PasswordResetToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 

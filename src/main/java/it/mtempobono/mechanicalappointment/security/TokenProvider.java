@@ -1,10 +1,10 @@
 package it.mtempobono.mechanicalappointment.security;
 
 import it.mtempobono.mechanicalappointment.config.AppProperties;
-import it.mtempobono.mechanicalappointment.model.RefreshToken;
-import it.mtempobono.mechanicalappointment.model.Role;
-import it.mtempobono.mechanicalappointment.model.User;
-import it.mtempobono.mechanicalappointment.model.UserPrincipal;
+import it.mtempobono.mechanicalappointment.model.entity.RefreshToken;
+import it.mtempobono.mechanicalappointment.model.entity.Role;
+import it.mtempobono.mechanicalappointment.model.entity.User;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.model.dto.AuthResponseDto;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import com.google.gson.Gson;

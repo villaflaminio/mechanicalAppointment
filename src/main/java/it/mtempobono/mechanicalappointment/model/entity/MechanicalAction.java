@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model;
+package it.mtempobono.mechanicalappointment.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model;
+package it.mtempobono.mechanicalappointment.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.mtempobono.mechanicalappointment.model.dto.AuthProvider;

@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.service;
 
-import it.mtempobono.mechanicalappointment.model.Role;
+import it.mtempobono.mechanicalappointment.model.entity.Role;
 import it.mtempobono.mechanicalappointment.model.dto.RoleDto;
 import it.mtempobono.mechanicalappointment.repository.RoleRepository;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;

@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model;
+package it.mtempobono.mechanicalappointment.model.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

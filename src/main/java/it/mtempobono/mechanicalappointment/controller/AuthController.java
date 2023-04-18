@@ -2,10 +2,11 @@ package it.mtempobono.mechanicalappointment.controller;
 
 
 import it.mtempobono.mechanicalappointment.config.AppProperties;
+import it.mtempobono.mechanicalappointment.entity.*;
 import it.mtempobono.mechanicalappointment.exception.BadRequestException;
 import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
-import it.mtempobono.mechanicalappointment.model.*;
 import it.mtempobono.mechanicalappointment.model.dto.*;
+import it.mtempobono.mechanicalappointment.model.entity.*;
 import it.mtempobono.mechanicalappointment.repository.PasswordResetTokenRepository;
 import it.mtempobono.mechanicalappointment.repository.RoleRepository;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;

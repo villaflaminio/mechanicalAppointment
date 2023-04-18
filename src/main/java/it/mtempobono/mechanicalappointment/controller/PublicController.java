@@ -1,20 +1,14 @@
 package it.mtempobono.mechanicalappointment.controller;
 
-import it.mtempobono.mechanicalappointment.model.Place;
+import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.xml.sax.SAXException;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
