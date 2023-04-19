@@ -57,12 +57,15 @@ public class AppointmentServiceImpl {
         List<TimePeriod> toAdd = new ArrayList();
         Collections.sort(appointments);
         for (Appointment appointment : appointments) {
+            TimePeriod appointMentPeroid = new TimePeriod(appointment.getInternalTime().getStart(), appointment.getInternalTime().getEnd());
+            System.out.println("Appointment: " + appointMentPeroid.getStart() + " - " + appointMentPeroid.getEnd());
             for (TimePeriod peroid : peroids) {
                 if ((appointment.getInternalTime().getStart().isBefore(peroid.getStart()) || appointment.getInternalTime().getStart().equals(peroid.getStart()))
                         && appointment.getInternalTime().getEnd().isAfter(peroid.getStart()) && appointment.getInternalTime().getEnd().isBefore(peroid.getEnd())) {
                     peroid.setStart(appointment.getInternalTime().getEnd());
                 }
-                if (appointment.getInternalTime().getStart().isAfter(peroid.getStart()) && appointment.getInternalTime().getStart().isBefore(peroid.getEnd()) && appointment.getInternalTime().getEnd().isAfter(peroid.getEnd()) || appointment.getInternalTime().getEnd().equals(peroid.getEnd())) {
+                if (appointment.getInternalTime().getStart().isAfter(peroid.getStart()) && appointment.getInternalTime().getStart().isBefore(peroid.getEnd())
+                        && appointment.getInternalTime().getEnd().isAfter(peroid.getEnd()) || appointment.getInternalTime().getEnd().equals(peroid.getEnd())) {
                     peroid.setEnd(appointment.getInternalTime().getStart());
                 }
                 if (appointment.getInternalTime().getStart().isAfter(peroid.getStart()) && appointment.getInternalTime().getEnd().isBefore(peroid.getEnd())) {

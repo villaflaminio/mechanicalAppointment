@@ -82,7 +82,7 @@ public class PublicController {
         OpenDay openDay = new OpenDay();
 
         DayPlan dayPlan = new DayPlan();
-        dayPlan.setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(18, 0)));
+        dayPlan.setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(17, 0)));
         List<TimePeriod> breaks = new ArrayList<>();
         breaks.add(new TimePeriod(LocalTime.of(12, 0), LocalTime.of(14, 0)));
         dayPlan.setBreaks(breaks);
@@ -94,10 +94,16 @@ public class PublicController {
 
 
         Appointment appointment = new Appointment();
-        appointment.setInternalTime(new TimePeriod(LocalTime.of(8, 0), LocalTime.of(15, 0)));
+        appointment.setInternalTime(new TimePeriod(LocalTime.of(5, 0), LocalTime.of(11, 0)));
+        appointment.setStartTime(LocalTime.of(8, 0));
+
+        Appointment appointment2 = new Appointment();
+        appointment2.setInternalTime(new TimePeriod(LocalTime.of(15, 0), LocalTime.of(19, 0)));
+        appointment2.setStartTime(LocalTime.of(16, 0));
 
         ArrayList<Appointment> appointments = new ArrayList<>();
         appointments.add(appointment);
+        appointments.add( appointment2);
         openDay.setAppointments(appointments);
 
         MechanicalAction work = new MechanicalAction();

@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -31,7 +32,7 @@ public class Appointment implements Comparable<Appointment> {
     private MechanicalAction mechanicalAction;
 
     @Column(name = "start_time")
-    private LocalDate startTime;
+    private LocalTime startTime;
 
     private String comment;
 
