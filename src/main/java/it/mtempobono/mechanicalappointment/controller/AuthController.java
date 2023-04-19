@@ -2,7 +2,6 @@ package it.mtempobono.mechanicalappointment.controller;
 
 
 import it.mtempobono.mechanicalappointment.config.AppProperties;
-import it.mtempobono.mechanicalappointment.entity.*;
 import it.mtempobono.mechanicalappointment.exception.BadRequestException;
 import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
 import it.mtempobono.mechanicalappointment.model.dto.*;

@@ -1,7 +1,13 @@
 package it.mtempobono.mechanicalappointment.controller;
 
+import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.model.TimePeriod;
+import it.mtempobono.mechanicalappointment.model.entity.Appointment;
+import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
+import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
+import it.mtempobono.mechanicalappointment.service.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +27,9 @@ public class PublicController {
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @Autowired
+    private AppointmentServiceImpl appointmentService;
 
     private List<String> getRecordFromLine(String line) {
         List<String> values = new ArrayList<String>();
@@ -64,4 +75,38 @@ public class PublicController {
 
     }
 
+
+    //test DayPlan
+    @GetMapping("/test")
+    private void test() {
+        OpenDay openDay = new OpenDay();
+
+        DayPlan dayPlan = new DayPlan();
+        dayPlan.setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(18, 0)));
+        List<TimePeriod> breaks = new ArrayList<>();
+        breaks.add(new TimePeriod(LocalTime.of(12, 0), LocalTime.of(14, 0)));
+        dayPlan.setBreaks(breaks);
+
+        System.out.println(dayPlan);
+        System.out.println(dayPlan.getWorkingHours());
+        List<TimePeriod> timePeroidsWithBreaksExcluded = dayPlan.timePeroidsWithBreaksExcluded();
+        openDay.setWorkPlan(dayPlan);
+
+
+        Appointment appointment = new Appointment();
+        appointment.setInternalTime(new TimePeriod(LocalTime.of(8, 0), LocalTime.of(15, 0)));
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+        appointments.add(appointment);
+        openDay.setAppointments(appointments);
+
+        MechanicalAction work = new MechanicalAction();
+        work.setInternalDuration(Duration.ofHours(1));
+
+
+        List<TimePeriod> availableHours = this.appointmentService.getAvailableHours(openDay, work);
+
+        System.out.println(availableHours);
+
+    }
 }

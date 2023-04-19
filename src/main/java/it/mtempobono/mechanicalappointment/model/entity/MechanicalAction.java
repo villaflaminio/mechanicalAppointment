@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Duration;
 
 @Getter
 @Setter
@@ -28,13 +29,18 @@ public class MechanicalAction {
     @Column(name = "price")
     private Double price;
 
-    @Column(name = "internal_duration")
-    private Integer internalDuration;
-
-    @Column(name = "external_duration")
-    private Integer externalDuration;
+//    @Column(name = "internal_duration")
+//    private Integer internalDuration;
+//
+//    @Column(name = "external_duration")
+//    private Integer externalDuration;
 
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "internal_duration")
+    Duration internalDuration ;
+
+    @Column(name = "external_duration")
+    Duration externalDuration;
 }

@@ -2,11 +2,11 @@ package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.model.JpaConverterJson;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -35,10 +35,9 @@ public class OpenDay {
     private Integer maxParallelAppointments;
 
     @OneToMany(mappedBy = "openDay")
-    private List<Reservation> reservation;
+    private List<Appointment> appointments;
 
-    @Type(type = "json")
-    @Column(columnDefinition = "json", name = "workPlan")
+    @Convert(converter = JpaConverterJson.class)
     private DayPlan workPlan;
 
 }

@@ -13,28 +13,28 @@ import java.util.List;
 @Builder
 public class DayPlan {
 
-    private TimePeroid workingHours;
-    private List<TimePeroid> breaks;
+    private TimePeriod workingHours;
+    private List<TimePeriod> breaks;
 
     public DayPlan() {
         breaks = new ArrayList();
     }
 
-    public List<TimePeroid> timePeroidsWithBreaksExcluded() {
-        ArrayList<TimePeroid> timePeroidsWithBreaksExcluded = new ArrayList<>();
-        timePeroidsWithBreaksExcluded.add(getWorkingHours());
-        List<TimePeroid> breaks = getBreaks();
+    public List<TimePeriod> timePeroidsWithBreaksExcluded() {
+        ArrayList<TimePeriod> timePeroidsWithBreaksExcluded = new ArrayList<>();
+        timePeroidsWithBreaksExcluded.add(new TimePeriod(getWorkingHours().getStart(), getWorkingHours().getEnd()));
+        List<TimePeriod> breaks = getBreaks();
 
         if (!breaks.isEmpty()) {
-            ArrayList<TimePeroid> toAdd = new ArrayList();
-            for (TimePeroid break1 : breaks) {
+            ArrayList<TimePeriod> toAdd = new ArrayList();
+            for (TimePeriod break1 : breaks) {
                 if (break1.getStart().isBefore(workingHours.getStart())) {
                     break1.setStart(workingHours.getStart());
                 }
                 if (break1.getEnd().isAfter(workingHours.getEnd())) {
                     break1.setEnd(workingHours.getEnd());
                 }
-                for (TimePeroid peroid : timePeroidsWithBreaksExcluded) {
+                for (TimePeriod peroid : timePeroidsWithBreaksExcluded) {
                     if (break1.getStart().equals(peroid.getStart()) && break1.getEnd().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
                         peroid.setStart(break1.getEnd());
                     }
@@ -42,7 +42,7 @@ public class DayPlan {
                         peroid.setEnd(break1.getStart());
                     }
                     if (break1.getStart().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
-                        toAdd.add(new TimePeroid(peroid.getStart(), break1.getStart()));
+                        toAdd.add(new TimePeriod(peroid.getStart(), break1.getStart()));
                         peroid.setStart(break1.getEnd());
                     }
                 }

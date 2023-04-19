@@ -44,6 +44,6 @@ public class Vehicle {
 
     @OneToMany(mappedBy = "vehicle")
     @JsonBackReference
-    private List<Reservation> reservation;
+    private List<Appointment> reservation;
 
 }
