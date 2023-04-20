@@ -161,6 +161,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/api/auth/**", "/api/public/**","/api/oauth2/**","/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
+                    .antMatchers("/**") // TODO: remove this line after testing
+                        .permitAll() // TODO: remove this line after testing
                     .anyRequest()
                         .authenticated()
                     .and()

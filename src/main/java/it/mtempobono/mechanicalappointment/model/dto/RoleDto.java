@@ -5,7 +5,7 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link com.flaminiovilla.obd.model.Role} entity
+ * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.Role} entity
  */
 @Data
 @Getter

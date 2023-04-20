@@ -32,7 +32,7 @@ public class EmailService {
 
     // Methods that sends an email using Freemarker specified template.
 
-    // -------------------[sendOnBoardingToolstaffingEmail]----------------------
+    // -------------------[sendEmail]----------------------
     public MailResponse sendEmail(String to, String subject, Map<String, Object> model, String ftlFileName) {
         MailResponse response = new MailResponse();
         MimeMessage message = javaMailSender.createMimeMessage();

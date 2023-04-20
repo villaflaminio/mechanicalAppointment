@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 /**
-* Class used to contain outlook mail server configuration.
+* Class used to contain Gmail mail server configuration.
 */
 
 @Component

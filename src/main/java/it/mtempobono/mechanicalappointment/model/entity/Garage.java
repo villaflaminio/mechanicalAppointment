@@ -48,7 +48,4 @@ public class Garage {
 
     @OneToMany(mappedBy = "garage")
     private List<OpenDay> openDay;
-
-
-
 }
