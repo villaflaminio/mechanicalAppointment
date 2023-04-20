@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +26,49 @@ public class AppointmentServiceImpl {
     @Autowired
     private OpenDayRepository openDayRepository;
 
+    public static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+        return start1.isBefore(end2) && start2.isBefore(end1);
+    }
 
-    public List<TimePeriod> getAvailableHours(OpenDay openDay,MechanicalAction work ) {
+    public List<TimePeriod> findOverlappingInterval(List<Appointment> intervals) {
+        Collections.sort(intervals); //(n log n)
+        List<TimePeriod> overlappingInterval = new ArrayList<>();
+
+        for (int i = 0; i < intervals.size() - 1; i++) { //n
+            if (isOverlapping(intervals.get(i).getInternalTime().getStart(), intervals.get(i).getInternalTime().getEnd(),
+                    intervals.get(i + 1).getInternalTime().getStart(), intervals.get(i + 1).getInternalTime().getEnd())) {
+
+                LocalTime prevStartInterval = intervals.get(i).getInternalTime().getStart();
+                LocalTime currStartInterval = intervals.get(i + 1).getInternalTime().getStart();
+
+                LocalTime prevEndInterval = intervals.get(i).getInternalTime().getEnd();
+                LocalTime currEndInterval = intervals.get(i + 1).getInternalTime().getEnd();
+
+                int[] prevInterval = {prevStartInterval.toSecondOfDay(), prevEndInterval.toSecondOfDay()};
+                int[] currInterval = {currStartInterval.toSecondOfDay(), currEndInterval.toSecondOfDay()};
+
+
+                List<int[]> overlappingIntervals = new ArrayList<>();
+                overlappingIntervals.add(new int[]{Math.max(prevInterval[0], currInterval[0]), Math.min(prevInterval[1], currInterval[1])});
+
+
+
+                for (int[] interval : overlappingIntervals) {
+
+                        overlappingInterval.add(new TimePeriod(LocalTime.ofSecondOfDay(interval[0]), LocalTime.ofSecondOfDay(interval[1])));
+                }
+            }
+
+        }
+//            if (intervals.get(i).getInternalTime().getEnd().isBefore(intervals.get(i+1).getInternalTime().getStart())) {
+//                overlappingInterval.add(intervals.get(i).getInternalTime());
+//                overlappingInterval.add(intervals.get(i+1).getInternalTime());
+//            }
+
+        return overlappingInterval;
+}
+
+    public List<TimePeriod> getAvailableHours(OpenDay openDay, MechanicalAction work) {
 //        OpenDay openDay = openDayRepository.findById(openDayId).orElseThrow(() -> new RuntimeException("OpenDay not found"));
 
         DayPlan day = openDay.getWorkPlan();
@@ -34,12 +76,15 @@ public class AppointmentServiceImpl {
         List<Appointment> scheduledAppointments = openDay.getAppointments();
         List<TimePeriod> availablePeroids = day.timePeroidsWithBreaksExcluded();
 
+        List<TimePeriod> overlappingIntervals = findOverlappingInterval(scheduledAppointments);
+
+
         availablePeroids = excludeAppointmentsFromTimePeroids(availablePeroids, scheduledAppointments);
 
         return calculateAvailableHours(availablePeroids, work);
     }
 
-    public List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeroids, MechanicalAction work){
+    public List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeroids, MechanicalAction work) {
         ArrayList<TimePeriod> availableHours = new ArrayList();
         for (TimePeriod peroid : availableTimePeroids) {
             TimePeriod workPeroid = new TimePeriod(peroid.getStart(), peroid.getStart().plusMinutes(work.getInternalDuration().toMinutes()));
@@ -84,7 +129,6 @@ public class AppointmentServiceImpl {
         OpenDay openDay = openDayRepository.findById(request.getOpenDayId()).orElseThrow(() -> new RuntimeException("OpenDay not found"));
 
         List<Appointment> appointments = appointmentRepository.findByOpenDay(openDay);
-
 
 
     }
