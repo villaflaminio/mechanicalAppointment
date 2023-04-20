@@ -5,15 +5,11 @@ import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -71,7 +67,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableHours(openDay, work);
+        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 3);
         assertEquals(availableHours.get(0).getStart(), LocalTime.of(11, 0));
@@ -104,7 +100,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableHours(openDay, work);
+        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 9);
     }
@@ -134,7 +130,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableHours(openDay, work);
+        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 8);
 

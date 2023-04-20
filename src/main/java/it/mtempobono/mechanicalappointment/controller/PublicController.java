@@ -89,7 +89,7 @@ public class PublicController {
 
         System.out.println(dayPlan);
         System.out.println(dayPlan.getWorkingHours());
-        List<TimePeriod> timePeroidsWithBreaksExcluded = dayPlan.timePeroidsWithBreaksExcluded();
+        List<TimePeriod> timePeroidsWithBreaksExcluded = dayPlan.timePeriodsWithBreaksExcluded();
         openDay.setWorkPlan(dayPlan);
 
 
@@ -121,7 +121,7 @@ public class PublicController {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = this.appointmentService.getAvailableHours(openDay, work);
+        List<TimePeriod> availableHours = this.appointmentService.getAvailableAppointments(openDay, work);
 
         System.out.println(availableHours);
 
