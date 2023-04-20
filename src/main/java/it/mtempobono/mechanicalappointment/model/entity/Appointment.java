@@ -47,6 +47,8 @@ public class Appointment implements Comparable<Appointment> {
     @Convert(converter = JpaConverterJson.class)
     private TimePeriod internalTime;
 
+    @Column(name = "price")
+    private Double price;
 
     //get start time from internal time
     public LocalTime getStartTime() {

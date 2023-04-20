@@ -61,7 +61,7 @@ public class TimePeriod implements Comparable<TimePeriod> {
 
     @Override
     public String toString() {
-        return "TimePeroid{" +
+        return "TimePeriod{" +
                 "start=" + start +
                 ", end=" + end +
                 '}';
