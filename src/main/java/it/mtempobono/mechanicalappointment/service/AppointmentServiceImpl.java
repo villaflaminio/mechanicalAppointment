@@ -32,7 +32,7 @@ public class AppointmentServiceImpl {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
 
-    //    public List<TimePeriod> findOverlappingInterval(List<Appointment> intervals) {
+//        public List<TimePeriod> findOverlappingIntervalPeriod(List<Appointment> intervals) {
 //        Collections.sort(intervals); //(n log n)
 //        List<TimePeriod> overlappingInterval = new ArrayList<>();
 //
@@ -100,36 +100,36 @@ public class AppointmentServiceImpl {
         return overlappingInterval;
     }
 
-    public List<TimePeriod> findOverlappingInterval(List<TimePeriod> intervals) {
-        Collections.sort(intervals); //(n log n)
-        List<TimePeriod> overlappingInterval = new ArrayList<>();
-        List<int[]> overlappingIntervals = new ArrayList<>();
-
-        for (int i = 0; i < intervals.size(); i++) { //n
-
-            for (int j = i + 1; j < intervals.size(); j++) {
-                if (isOverlapping(intervals.get(i).getStart(), intervals.get(i).getEnd(),
-                        intervals.get(j).getStart(), intervals.get(j).getEnd())) {
-
-                    LocalTime prevStartInterval = intervals.get(i).getStart();
-                    LocalTime currStartInterval = intervals.get(j).getStart();
-
-                    LocalTime prevEndInterval = intervals.get(i).getEnd();
-                    LocalTime currEndInterval = intervals.get(j).getEnd();
-
-                    int[] prevInterval = {prevStartInterval.toSecondOfDay(), prevEndInterval.toSecondOfDay()};
-                    int[] currInterval = {currStartInterval.toSecondOfDay(), currEndInterval.toSecondOfDay()};
-                    overlappingIntervals.add(new int[]{Math.max(prevInterval[0], currInterval[0]), Math.min(prevInterval[1], currInterval[1])});
-
-                }
-            }
-        }
-        for (int[] interval : overlappingIntervals) {
-
-            overlappingInterval.add(new TimePeriod(LocalTime.ofSecondOfDay(interval[0]), LocalTime.ofSecondOfDay(interval[1])));
-        }
-        return overlappingInterval;
-    }
+//    public List<TimePeriod> findOverlappingInterval(List<TimePeriod> intervals) {
+//        Collections.sort(intervals); //(n log n)
+//        List<TimePeriod> overlappingInterval = new ArrayList<>();
+//        List<int[]> overlappingIntervals = new ArrayList<>();
+//
+//        for (int i = 0; i < intervals.size(); i++) { //n
+//
+//            for (int j = i + 1; j < intervals.size(); j++) {
+//                if (isOverlapping(intervals.get(i).getStart(), intervals.get(i).getEnd(),
+//                        intervals.get(j).getStart(), intervals.get(j).getEnd())) {
+//
+//                    LocalTime prevStartInterval = intervals.get(i).getStart();
+//                    LocalTime currStartInterval = intervals.get(j).getStart();
+//
+//                    LocalTime prevEndInterval = intervals.get(i).getEnd();
+//                    LocalTime currEndInterval = intervals.get(j).getEnd();
+//
+//                    int[] prevInterval = {prevStartInterval.toSecondOfDay(), prevEndInterval.toSecondOfDay()};
+//                    int[] currInterval = {currStartInterval.toSecondOfDay(), currEndInterval.toSecondOfDay()};
+//                    overlappingIntervals.add(new int[]{Math.max(prevInterval[0], currInterval[0]), Math.min(prevInterval[1], currInterval[1])});
+//
+//                }
+//            }
+//        }
+//        for (int[] interval : overlappingIntervals) {
+//
+//            overlappingInterval.add(new TimePeriod(LocalTime.ofSecondOfDay(interval[0]), LocalTime.ofSecondOfDay(interval[1])));
+//        }
+//        return overlappingInterval;
+//    }
 
     public List<TimePeriod> getAvailableHours(OpenDay openDay, MechanicalAction work) {
 //        OpenDay openDay = openDayRepository.findById(openDayId).orElseThrow(() -> new RuntimeException("OpenDay not found"));
@@ -137,7 +137,7 @@ public class AppointmentServiceImpl {
         DayPlan day = openDay.getWorkPlan();
 
 
-        List<TimePeriod> scheduledAppointments = openDay.getAppointments().stream().map(Appointment::getInternalTime).toList();
+        List<TimePeriod> scheduledAppointments = new ArrayList<TimePeriod>(openDay.getAppointments().stream().map(Appointment::getInternalTime).toList());
 
         List<TimePeriod> availablePeroids = day.timePeroidsWithBreaksExcluded();
 
@@ -147,7 +147,7 @@ public class AppointmentServiceImpl {
            availablePeroids = excludeAppointmentsFromTimePeriods(availablePeroids, scheduledAppointments);
 
        }else{
-           List<TimePeriod> intervalFilled  = findOverlappingInterval(scheduledAppointments);
+           List<TimePeriod> intervalFilled  = findOverlappingIntervalFromTimePeriod(scheduledAppointments);
 
            for(int i= 1 ; i< maxEventInParallel ; i++){
                intervalFilled = findOverlappingIntervalFromTimePeriod(intervalFilled);
