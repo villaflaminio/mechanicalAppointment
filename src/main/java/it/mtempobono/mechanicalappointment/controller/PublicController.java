@@ -106,14 +106,19 @@ public class PublicController {
         appointment3.setStartTime(LocalTime.of(15, 30));
 
         Appointment appointment4 = new Appointment();
-        appointment4.setInternalTime(new TimePeriod(LocalTime.of(14, 30), LocalTime.of(15, 0)));
+        appointment4.setInternalTime(new TimePeriod(LocalTime.of(14, 30), LocalTime.of(15, 30)));
         appointment4.setStartTime(LocalTime.of(14, 30));
+
+//        Appointment appointment5 = new Appointment();
+//        appointment5.setInternalTime(new TimePeriod(LocalTime.of(14, 30), LocalTime.of(16, 00)));
+//        appointment5.setStartTime(LocalTime.of(14, 30));
 
         ArrayList<Appointment> appointments = new ArrayList<>();
         appointments.add(appointment);
         appointments.add(appointment2);
         appointments.add(appointment3);
         appointments.add(appointment4);
+//        appointments.add(appointment5);
         openDay.setAppointments(appointments);
 
         MechanicalAction work = new MechanicalAction();
