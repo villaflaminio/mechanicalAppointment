@@ -95,19 +95,15 @@ public class PublicController {
 
         Appointment appointment = new Appointment();
         appointment.setInternalTime(new TimePeriod(LocalTime.of(14, 0), LocalTime.of(16, 0)));
-        appointment.setStartTime(LocalTime.of(14, 0));
 
         Appointment appointment2 = new Appointment();
         appointment2.setInternalTime(new TimePeriod(LocalTime.of(15, 0), LocalTime.of(16, 30)));
-        appointment2.setStartTime(LocalTime.of(15, 0));
 
         Appointment appointment3 = new Appointment();
         appointment3.setInternalTime(new TimePeriod(LocalTime.of(15, 30), LocalTime.of(17, 0)));
-        appointment3.setStartTime(LocalTime.of(15, 30));
 
         Appointment appointment4 = new Appointment();
         appointment4.setInternalTime(new TimePeriod(LocalTime.of(14, 30), LocalTime.of(15, 30)));
-        appointment4.setStartTime(LocalTime.of(14, 30));
 
 //        Appointment appointment5 = new Appointment();
 //        appointment5.setInternalTime(new TimePeriod(LocalTime.of(14, 30), LocalTime.of(16, 00)));

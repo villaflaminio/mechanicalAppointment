@@ -31,9 +31,6 @@ public class Appointment implements Comparable<Appointment> {
     @ManyToOne
     private MechanicalAction mechanicalAction;
 
-    @Column(name = "start_time")
-    private LocalTime startTime;
-
     private String comment;
 
     @ManyToOne
@@ -50,8 +47,16 @@ public class Appointment implements Comparable<Appointment> {
     @Convert(converter = JpaConverterJson.class)
     private TimePeriod internalTime;
 
+
+    //get start time from internal time
+    public LocalTime getStartTime() {
+        return internalTime.getStart();
+    }
+
+
+
     @Override
     public int compareTo(Appointment o) {
-        return this.startTime.compareTo(o.startTime);
+        return this.getStartTime().compareTo(o.getStartTime());
     }
 }
