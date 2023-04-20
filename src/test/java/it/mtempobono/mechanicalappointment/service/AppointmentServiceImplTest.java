@@ -136,5 +136,37 @@ class AppointmentServiceImplTest {
 
         assertThat(availableHours).doesNotContain(new TimePeriod(LocalTime.of(10, 0), LocalTime.of(11, 0)));
     }
+    @Test
+    void getAvailableHoursWithMaxOneParallelAppointments3() {
 
+        openDay.getWorkPlan().setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(17, 0)));
+        openDay.setMaxParallelAppointments(1);
+        Appointment appointment = new Appointment();
+        appointment.setInternalTime(new TimePeriod(LocalTime.of(8, 0), LocalTime.of(11, 0)));
+
+        Appointment appointment2 = new Appointment();
+        appointment2.setInternalTime(new TimePeriod(LocalTime.of(15, 0), LocalTime.of(16, 30)));
+
+        Appointment appointment3 = new Appointment();
+        appointment3.setInternalTime(new TimePeriod(LocalTime.of(10, 0), LocalTime.of(12, 0)));
+
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+        appointments.add(appointment);
+        appointments.add(appointment2);
+        appointments.add(appointment3);
+        openDay.setAppointments(appointments);
+
+
+        MechanicalAction work = new MechanicalAction();
+        work.setInternalDuration(Duration.ofMinutes(30));
+
+
+        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
+
+        assertEquals(availableHours.size(), 16);
+
+        assertThat(availableHours).doesNotContain(new TimePeriod(LocalTime.of(10, 0), LocalTime.of(10, 30)));
+        assertThat(availableHours).doesNotContain(new TimePeriod(LocalTime.of(10, 30), LocalTime.of(11, 0)));
+    }
 }
