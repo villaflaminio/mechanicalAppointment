@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
+import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,12 @@ public interface GarageController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = { @Content (
-                    array = @ArraySchema(schema = @Schema(implementation = GarageDto.class)),
+                    array = @ArraySchema(schema = @Schema(implementation = Garage.class)),
                     mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping
-    ResponseEntity<List<GarageDto>> findAll();
+    ResponseEntity<List<Garage>> findAll();
 
     /**
      * Get the garage by id
@@ -50,11 +51,11 @@ public interface GarageController {
             description = "Get a Garage object by specifying its id. The response is Garage object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GarageDto.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Garage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
-    ResponseEntity<GarageDto> findById(@PathVariable("id") Long id);
+    ResponseEntity<Garage> findById(@PathVariable("id") Long id);
 
     /**
      * Create a new garage
@@ -66,11 +67,11 @@ public interface GarageController {
             description = "Creates a new garage. The response is the created Garage object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GarageDto.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Garage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping
-    ResponseEntity<GarageDto> save(@RequestBody @Validated GarageDto garage);
+    ResponseEntity<Garage> save(@RequestBody @Validated GarageDto garage);
 
     /**
      * Update the garage
@@ -82,11 +83,11 @@ public interface GarageController {
             description = "Updates an existing garage. The response is the updated Garage object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = GarageDto.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Garage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PutMapping("/{id}")
-    ResponseEntity<GarageDto> update(@RequestBody GarageDto garage, @PathVariable("id") Long id);
+    ResponseEntity<Garage> update(@RequestBody GarageDto garage, @PathVariable("id") Long id);
 
     /**
      * Delete the garage

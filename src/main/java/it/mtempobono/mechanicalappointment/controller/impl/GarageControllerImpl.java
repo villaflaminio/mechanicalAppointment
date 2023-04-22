@@ -4,6 +4,7 @@ import it.mtempobono.mechanicalappointment.controller.GarageController;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.service.GarageService;
+import it.mtempobono.mechanicalappointment.service.impl.GarageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -28,62 +29,28 @@ public class GarageControllerImpl implements GarageController {
     // endregion Fields
 
     //region CRUD Methods
-    /**
-     * Get all the garages
-     *
-     * @return the list of garages
-     */
     @Override
-    public ResponseEntity<List<GarageDto>> findAll() {
+    public ResponseEntity<List<Garage>> findAll() {
         return garageService.findAll();
     }
 
-    /**
-     * Get the garage by id
-     *
-     * @param id the garage id
-     * @return the garage
-     */
     @Override
-    public ResponseEntity<GarageDto> findById(Long id) {
+    public ResponseEntity<Garage> findById(Long id) {
         return garageService.findById(id);
     }
 
-    /**
-     * Create a new garage
-     *
-     * @param garage the garage to create
-     * @return the created garage
-     */
     @Override
-    public ResponseEntity<GarageDto> save(GarageDto garage) {
-        logger.info("save() called with garage: {}", garage);
-        return null;
+    public ResponseEntity<Garage> save(GarageDto garage) {
+        return garageService.save(garage);
     }
 
-    /**
-     * Update the garage
-     *
-     * @param garage the garage to update
-     * @param id
-     * @return the updated garage
-     */
     @Override
-    public ResponseEntity<GarageDto> update(GarageDto garage, Long id) {
+    public ResponseEntity<Garage> update(GarageDto garage, Long id) {
         logger.info("update() called with garage: {} and id: {}", garage, id);
         return null;
     }
 
-    /**
-     * Delete the garage
-     *
-     * @param id the garage id
-     * @return the deleted garage
-     */
     @Override
-    public ResponseEntity<Void> delete(Long id) {
-        logger.info("delete() called with id: {}", id);
-        return null;
-    }
+    public ResponseEntity<Void> delete(Long id) { return garageService.delete(id);}
     //endregion CRUD Methods
 }

@@ -30,6 +30,4 @@ public class Place {
     @OneToMany(mappedBy = "place")
     @JsonBackReference
     private List<Garage> garage;
-
-
 }

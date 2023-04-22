@@ -29,7 +29,11 @@ public class Garage {
     private String address;
     private String cap;
     private String linkGoogleMaps;
+
+    @Column (name = "latitude")
     private Double latitude;
+
+    @Column (name = "longitude")
     private Double longitude;
 
     @Column(name = "phone")
@@ -44,7 +48,6 @@ public class Garage {
     @Column(name = "logo")
     @Lob
     private String logo;
-
 
     @OneToMany(mappedBy = "garage")
     private List<OpenDay> openDay;
