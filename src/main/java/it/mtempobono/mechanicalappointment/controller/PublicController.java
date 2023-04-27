@@ -64,7 +64,7 @@ public class PublicController {
 
             //create and popolate place with builder
             Place place = Place.builder()
-                    .istat(Long.parseLong(Istat))
+                    .istat(Integer.valueOf(Istat))
                     .municipality(Comune)
                     .province(Provincia)
                     .region(Regione)

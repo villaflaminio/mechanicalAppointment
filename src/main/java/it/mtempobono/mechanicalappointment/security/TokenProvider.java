@@ -97,7 +97,7 @@ public class TokenProvider {
             response.setCharacterEncoding("UTF-8");
 
             // Create the response object.
-            AuthResponseDto authResponseDto =  AuthResponseDto.builder()
+            AuthResponseDto authResponseDto = AuthResponseDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
                     .name(user.getName())

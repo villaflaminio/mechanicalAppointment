@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,16 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "garages")
-@Builder
 public class Garage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
     private String name;
 
     @ManyToOne
+    @JoinColumn(name="place_id")
     private Place place;
 
     private String address;

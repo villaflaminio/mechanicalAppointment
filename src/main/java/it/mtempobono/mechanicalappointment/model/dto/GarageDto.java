@@ -2,7 +2,6 @@ package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -12,7 +11,6 @@ import java.io.Serializable;
  * A DTO for the {@link Garage} entity
  */
 @Data
-@Builder
 public class GarageDto implements Serializable {
 
     private final Long id;
@@ -20,8 +18,8 @@ public class GarageDto implements Serializable {
     @Schema(description = "The garage name", example = "APs Garage", required = true)
     private final String name;
 
-    @Schema(description = "The linked Place", required = true)
-    private final PlaceDto place;
+    @Schema(description = "The linked Place", example = "0", required = true)
+    private final Long placeId;
 
     @Schema(description = "The address of the garage", example = "Strada Giacomo Leopardi, 7", required = true)
     private final String address;

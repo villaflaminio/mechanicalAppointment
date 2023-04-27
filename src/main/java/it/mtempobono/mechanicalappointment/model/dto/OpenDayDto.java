@@ -1,7 +1,6 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
 import it.mtempobono.mechanicalappointment.model.DayPlan;
-import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +11,6 @@ import java.util.List;
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.OpenDay} entity
  */
 @Data
-@Builder
 public class OpenDayDto implements Serializable {
     private final Long id;
     private final GarageDto garage;

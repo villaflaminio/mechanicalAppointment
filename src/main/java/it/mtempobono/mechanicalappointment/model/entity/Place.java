@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +17,19 @@ import java.util.List;
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    private Long istat;
+    @Column (name = "istat")
+    private Integer istat;
+
+    @Column (name = "municipality")
     private String municipality;
+
+    @Column (name = "province")
     private String province;
+
+    @Column (name = "region")
     private String region;
 
     //join to garage

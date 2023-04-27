@@ -1,22 +1,19 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.Place} entity
  */
 @Data
-@Builder
 public class PlaceDto implements Serializable {
     private final Long id;
 
     @Schema(description = "The ISTAT code of the place", example = "001001", required = true)
-    private final Long istat;
+    private final Integer istat;
 
     @Schema(description = "The municipality name of the place", example = "Roma", required = true)
     private final String municipality;

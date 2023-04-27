@@ -1,5 +1,6 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
+import it.mtempobono.mechanicalappointment.model.builders.GarageBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.dto.PlaceDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
@@ -7,15 +8,20 @@ import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.GarageRepository;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
 import it.mtempobono.mechanicalappointment.service.GarageService;
+import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Class that contains Garage business logics.
@@ -80,44 +86,20 @@ public class GarageServiceImpl implements GarageService {
             logger.info("save() called with garage: {}", garage);
 
             // Find linked Place
-            PlaceDto placeDto = garage.getPlace();
-            if (placeDto == null) {
+            Long placeId = garage.getPlaceId();
+            if (placeId == null || placeId == 0) {
                 logger.error("Place is null, you have to insert a valid one");
                 return ResponseEntity.badRequest().build();
             }
 
-            // PlaceDto has different fields, which are:
-            // istat -> the ISTAT code of the place -> UNIQUE KEY
-            // municipality -> the municipality name of the place
-            // province -> the province initials of the place
-            // region -> the region of the place
-
-//            // If the PlaceDto has the istat field, we can find the Place by istat
-//            Place place = null;
-//            if (placeDto.getIstat() != null) {
-//                place = placeRepository.findByIstat(placeDto.getIstat());
-//            }
-            Place place = null;
-
-            // If the PlaceDto has the municipality, province and region fields, we can find the
-            // Place by municipality, province and region
-            if (placeDto.getMunicipality() != null &&
-                placeDto.getProvince() != null &&
-                placeDto.getRegion() != null) {
-//                place = placeRepository.findByMunicipalityAndProvinceAndRegion(
-//                        placeDto.getMunicipality(),
-//                        placeDto.getProvince(),
-//                        placeDto.getRegion()
-//                );
-                place = placeRepository.findPlaceByMunicipalityContainingIgnoreCaseAndRegionContainingIgnoreCaseAndRegionContainingIgnoreCase(
-                        placeDto.getMunicipality(),
-                        placeDto.getProvince(),
-                        placeDto.getRegion()
-                );
+            Place place = placeRepository.findById(placeId).orElse(null);
+            if (place == null) {
+                logger.error("Place not found");
+                return ResponseEntity.badRequest().build();
             }
 
             // Maps the GarageDto to Garage building a new Garage object
-            Garage newGarage = Garage.builder()
+            Garage newGarage = GarageBuilder.aGarage()
                     .cap(garage.getCap())
                     .email(garage.getEmail())
                     .logo(garage.getLogo())
@@ -147,23 +129,30 @@ public class GarageServiceImpl implements GarageService {
      * @return the updated garage
      */
     @Override
-    public ResponseEntity<Garage> update(Garage garage, Long id){
+    public ResponseEntity<Garage> update(GarageDto garage, Long id){
         try {
             logger.info("update() called with garage: {}", garage);
 
             // Try to find the garage by id
-            Optional<Garage> garageToUpdate = garageRepository.findById(id);
+            Optional<Garage> garageToUpdateOptional = garageRepository.findById(id);
 
             // If the garage doesn't exist, return a 404 error
-            if (garageToUpdate.isEmpty()) {
+            if (garageToUpdateOptional.isEmpty()) {
                 logger.error("Garage not found");
                 return ResponseEntity.notFound().build();
             }
 
-            // Set the id of the garage to update
-            garage.setId(garageToUpdate.get().getId());
+            // Find if there is a linked Place
+            Long placeId = garage.getPlaceId();
+            Place place = null;
+            if (placeId != null && placeId != 0)
+                place = placeRepository.findById(placeId).orElse(null);
 
-            return ResponseEntity.ok(garageRepository.save(garage));
+            PropertyCheckerUtils.copyNonNullProperties(garage, garageToUpdateOptional.get());
+            if (place != null)
+                garageToUpdateOptional.get().setPlace(place);
+
+            return ResponseEntity.ok(garageRepository.save(garageToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());
         } finally {

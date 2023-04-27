@@ -46,8 +46,7 @@ public class GarageControllerImpl implements GarageController {
 
     @Override
     public ResponseEntity<Garage> update(GarageDto garage, Long id) {
-        logger.info("update() called with garage: {} and id: {}", garage, id);
-        return null;
+        return garageService.update(garage, id);
     }
 
     @Override

@@ -19,7 +19,7 @@ public interface GarageService {
 
     ResponseEntity<Garage> save(GarageDto garage);
 
-    ResponseEntity<Garage> update(Garage garage, Long id);
+    ResponseEntity<Garage> update(GarageDto garage, Long id);
 
     ResponseEntity<Void> delete(Long id);
 }
