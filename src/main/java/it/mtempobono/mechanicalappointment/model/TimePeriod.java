@@ -1,5 +1,7 @@
 package it.mtempobono.mechanicalappointment.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import it.mtempobono.mechanicalappointment.util.LocalTimeWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,40 +9,66 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 import java.util.Objects;
 
-
+/**
+ * Class to manage time periods in a working day
+ */
 public class TimePeriod implements Comparable<TimePeriod> {
+    // region Fields
+    @Schema(description = "The start time")
+    private LocalTimeWrapper start;
 
-    private LocalTime start;
-    private LocalTime end;
+    @Schema(description = "The end time")
+    private LocalTimeWrapper end;
+    // endregion Fields
 
+    // region Constructors
     public TimePeriod() {
-
     }
 
     public TimePeriod(LocalTime start, LocalTime end) {
-        this.start = start;
-        this.end = end;
+        LocalTimeWrapper localTimeWrapperStart = new LocalTimeWrapper(
+                start.getHour(),
+                start.getMinute(),
+                start.getSecond(),
+                start.getNano()
+        );
+
+        LocalTimeWrapper localTimeWrapperEnd = new LocalTimeWrapper(
+                end.getHour(),
+                end.getMinute(),
+                end.getSecond(),
+                end.getNano()
+        );
+
+        this.start = localTimeWrapperStart;
+        this.end = localTimeWrapperEnd;
     }
 
-    public LocalTime getStart() {
+    // endregion Constructors
+
+    // region Methods
+    public LocalTimeWrapper getStart() {
         return start;
     }
 
-    public void setStart(LocalTime start) {
+    public void setStart(LocalTimeWrapper start) {
         this.start = start;
     }
 
-    public LocalTime getEnd() {
+    public LocalTimeWrapper getEnd() {
         return end;
     }
 
-    public void setEnd(LocalTime end) {
+    public void setEnd(LocalTimeWrapper end) {
         this.end = end;
     }
 
+    // endregion Methods
+
+    // region Overrides
     @Override
     public int compareTo(TimePeriod o) {
-        return this.getStart().compareTo(o.getStart());
+        return this.getStart().getLocalTime().compareTo(o.getStart().getLocalTime());
     }
 
     @Override
@@ -65,6 +93,5 @@ public class TimePeriod implements Comparable<TimePeriod> {
                 ", end=" + end +
                 '}';
     }
-
-
+    // endregion Overrides
 }

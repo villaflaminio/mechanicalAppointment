@@ -50,9 +50,13 @@ public class Appointment implements Comparable<Appointment> {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "id_calendar_event")
+    private String idCalendarEvent;
+
+
     //get start time from internal time
     public LocalTime getStartTime() {
-        return internalTime.getStart();
+        return internalTime.getStart().getLocalTime();
     }
 
 

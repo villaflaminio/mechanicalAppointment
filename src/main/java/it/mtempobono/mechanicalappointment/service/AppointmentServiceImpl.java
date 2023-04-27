@@ -43,10 +43,10 @@ public class AppointmentServiceImpl {
                 TimePeriod interval1 = intervals.get(i);
                 TimePeriod interval2 = intervals.get(j);
                 // Check if the intervals overlap
-                if (interval1.getEnd().isAfter(interval2.getStart()) && interval2.getEnd().isAfter(interval1.getStart())) {
+                if (interval1.getEnd().getLocalTime().isAfter(interval2.getStart().getLocalTime()) && interval2.getEnd().getLocalTime().isAfter(interval1.getStart().getLocalTime())) {
                     // Find the start and end dates of the overlapping interval
-                    LocalTime overlapStart = interval1.getStart().isBefore(interval2.getStart()) ? interval2.getStart() : interval1.getStart();
-                    LocalTime overlapEnd = interval1.getEnd().isAfter(interval2.getEnd()) ? interval2.getEnd() : interval1.getEnd();
+                    LocalTime overlapStart = interval1.getStart().getLocalTime().isBefore(interval2.getStart().getLocalTime()) ? interval2.getStart().getLocalTime() : interval1.getStart().getLocalTime();
+                    LocalTime overlapEnd = interval1.getEnd().getLocalTime().isAfter(interval2.getEnd().getLocalTime()) ? interval2.getEnd().getLocalTime() : interval1.getEnd().getLocalTime();
                     TimePeriod overlapping = new TimePeriod(overlapStart, overlapEnd);
                     // Add the overlapping interval to the list only if it's not already present
                     if (!overlappingIntervals.contains(overlapping)) {
@@ -146,8 +146,8 @@ public class AppointmentServiceImpl {
         List<TimePeriod> availableHours = new ArrayList<>(availableTimePeriods.size() * 2);
         // On each available time period
         for (TimePeriod period : availableTimePeriods) {
-            LocalTime startTime = period.getStart();
-            LocalTime endTime = period.getEnd();
+            LocalTime startTime = period.getStart().getLocalTime();
+            LocalTime endTime = period.getEnd().getLocalTime();
             // Iterate over each interval of the work time that can fit within the period
             while (startTime.plusMinutes(work.getInternalDuration().toMinutes()).isBefore(endTime)) {
                 // Add the interval to the list of available hours
@@ -180,26 +180,28 @@ public class AppointmentServiceImpl {
         for (TimePeriod appointment : appointments) {
 
             // Create a copy of the appointment period to avoid modifying the original object
-            TimePeriod appointmentPeriod = new TimePeriod(appointment.getStart(), appointment.getEnd());
+            TimePeriod appointmentPeriod = new TimePeriod(appointment.getStart().getLocalTime(), appointment.getEnd().getLocalTime());
 
             // Loop through each period
             for (TimePeriod period : periods) {
 
                 // Case 1: appointment overlaps the start of the period
-                if ((appointment.getStart().isBefore(period.getStart()) || appointment.getStart().equals(period.getStart()))
-                        && appointment.getEnd().isAfter(period.getStart()) && appointment.getEnd().isBefore(period.getEnd())) {
+                if ((appointment.getStart().getLocalTime().isBefore(period.getStart().getLocalTime()) || appointment.getStart().equals(period.getStart()))
+                        && appointment.getEnd().getLocalTime().isAfter(period.getStart().getLocalTime()) &&
+                        appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
                     period.setStart(appointment.getEnd());
                 }
 
                 // Case 2: appointment overlaps the end of the period
-                if (appointment.getStart().isAfter(period.getStart()) && appointment.getStart().isBefore(period.getEnd())
-                        && (appointment.getEnd().isAfter(period.getEnd()) || appointment.getEnd().equals(period.getEnd()))) {
+                if (appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) &&
+                        appointment.getStart().getLocalTime().isBefore(period.getEnd().getLocalTime())
+                        && (appointment.getEnd().getLocalTime().isAfter(period.getEnd().getLocalTime()) || appointment.getEnd().equals(period.getEnd()))) {
                     period.setEnd(appointment.getStart());
                 }
 
                 // Case 3: appointment is within the period
-                if (appointment.getStart().isAfter(period.getStart()) && appointment.getEnd().isBefore(period.getEnd())) {
-                    toAdd.add(new TimePeriod(period.getStart(), appointment.getStart()));
+                if (appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) && appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
+                    toAdd.add(new TimePeriod(period.getStart().getLocalTime(), appointment.getStart().getLocalTime()));
                     period.setStart(appointment.getEnd());
                 }
             }

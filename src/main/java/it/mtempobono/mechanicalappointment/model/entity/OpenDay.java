@@ -24,7 +24,6 @@ public class OpenDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JsonBackReference
     private Garage garage;
