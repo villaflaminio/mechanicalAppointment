@@ -86,6 +86,9 @@ public class GoogleCalendarService {
                 new LocalServerReceiver()).authorize("user");
     }
 
+    /// <summary>
+    /// Get the config info from the config.txt file
+    /// </summary>
     private static String readConfig() {
         StringBuilder sb = new StringBuilder();
 
@@ -99,13 +102,7 @@ public class GoogleCalendarService {
         return sb.toString();
     }
 
-    public static GoogleCalendarAPI.ConfigInfo getConfig() {
-        String JSON = readConfig();
-        Gson gson = new Gson();
-        GoogleCalendarAPI.ConfigInfo ci = gson.fromJson(JSON, GoogleCalendarAPI.ConfigInfo.class);
 
-        return ci;
-    }
 
     private static Event createEvent(GoogleCalendarCreateEvent createEvent) {
         Event event = new Event();
@@ -122,6 +119,11 @@ public class GoogleCalendarService {
         return event;
     }
 
+    /**
+     * Build and return an authorized Calendar client service.
+     *
+     * @return an authorized Calendar client service
+     */
     private Calendar getCalendar() throws Exception{
         // initialize the transport
         httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -137,7 +139,7 @@ public class GoogleCalendarService {
                 httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME).build();
 
-        GoogleCalendarAPI.ConfigInfo configInfo = getConfig();
+        ConfigInfo configInfo = getConfig();
         com.google.api.services.calendar.model.Calendar calendar = client
                 .calendars().get(configInfo.account).execute();
         CalendarList feed = client.calendarList().list().execute();
@@ -154,14 +156,22 @@ public class GoogleCalendarService {
 
         Calendar calendar = getCalendar();
 
-        View.header("Add Event");
         Event event = createEvent(createEvent);
         Event result = client.events().insert(calendar.getId(), event).execute();
-        View.display(result);
        return result.getId();
 
     }
 
+    class ConfigInfo {
+        public String account = "";
+    }
+    public static ConfigInfo getConfig() {
+        String JSON = readConfig();
+        Gson gson = new Gson();
+        ConfigInfo ci = gson.fromJson(JSON, ConfigInfo.class);
+
+        return ci;
+    }
 
     public void removeEvent(String eventId) throws Exception {
 
@@ -179,7 +189,7 @@ public class GoogleCalendarService {
                 httpTransport, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME).build();
 
-        GoogleCalendarAPI.ConfigInfo configInfo = getConfig();
+        ConfigInfo configInfo = getConfig();
         com.google.api.services.calendar.model.Calendar calendar = client
                 .calendars().get(configInfo.account).execute();
         CalendarList feed = client.calendarList().list().execute();
