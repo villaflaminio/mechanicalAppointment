@@ -78,18 +78,58 @@ public class GarageServiceImpl implements GarageService {
     public ResponseEntity<Garage> save(GarageDto garage){
         try {
             logger.info("save() called with garage: {}", garage);
-            Garage newGarage = new Garage();
 
-            // Find linked Place by id
-            Place place = placeRepository.findById(garage.getPlaceId()).orElse(null);
-            if (place == null) {
-                logger.error("Place not found");
+            // Find linked Place
+            PlaceDto placeDto = garage.getPlace();
+            if (placeDto == null) {
+                logger.error("Place is null, you have to insert a valid one");
                 return ResponseEntity.badRequest().build();
             }
 
-            // Maps the GarageDto to Garage
-            BeanUtils.copyProperties(garage, newGarage);
-            newGarage.setPlace(place);
+            // PlaceDto has different fields, which are:
+            // istat -> the ISTAT code of the place -> UNIQUE KEY
+            // municipality -> the municipality name of the place
+            // province -> the province initials of the place
+            // region -> the region of the place
+
+//            // If the PlaceDto has the istat field, we can find the Place by istat
+//            Place place = null;
+//            if (placeDto.getIstat() != null) {
+//                place = placeRepository.findByIstat(placeDto.getIstat());
+//            }
+            Place place = null;
+
+            // If the PlaceDto has the municipality, province and region fields, we can find the
+            // Place by municipality, province and region
+            if (placeDto.getMunicipality() != null &&
+                placeDto.getProvince() != null &&
+                placeDto.getRegion() != null) {
+//                place = placeRepository.findByMunicipalityAndProvinceAndRegion(
+//                        placeDto.getMunicipality(),
+//                        placeDto.getProvince(),
+//                        placeDto.getRegion()
+//                );
+                place = placeRepository.findPlaceByMunicipalityContainingIgnoreCaseAndRegionContainingIgnoreCaseAndRegionContainingIgnoreCase(
+                        placeDto.getMunicipality(),
+                        placeDto.getProvince(),
+                        placeDto.getRegion()
+                );
+            }
+
+            // Maps the GarageDto to Garage building a new Garage object
+            Garage newGarage = Garage.builder()
+                    .cap(garage.getCap())
+                    .email(garage.getEmail())
+                    .logo(garage.getLogo())
+                    .name(garage.getName())
+                    .phone(garage.getPhone())
+                    .place(place)
+                    .address(garage.getAddress())
+                    .longitude(garage.getLongitude())
+                    .latitude(garage.getLatitude())
+                    .linkGoogleMaps(garage.getLinkGoogleMaps())
+                    .website(garage.getWebsite())
+                    .build();
 
             return ResponseEntity.ok(garageRepository.save(newGarage));
 
@@ -108,8 +148,28 @@ public class GarageServiceImpl implements GarageService {
      */
     @Override
     public ResponseEntity<Garage> update(Garage garage, Long id){
-        logger.info("update() called with garage: {}", garage);
-        return ResponseEntity.ok(garageRepository.save(garage));
+        try {
+            logger.info("update() called with garage: {}", garage);
+
+            // Try to find the garage by id
+            Optional<Garage> garageToUpdate = garageRepository.findById(id);
+
+            // If the garage doesn't exist, return a 404 error
+            if (garageToUpdate.isEmpty()) {
+                logger.error("Garage not found");
+                return ResponseEntity.notFound().build();
+            }
+
+            // Set the id of the garage to update
+            garage.setId(garageToUpdate.get().getId());
+
+            return ResponseEntity.ok(garageRepository.save(garage));
+        } catch (Exception e) {
+            logger.error("Error in update() method: {}", e.getMessage());
+        } finally {
+            logger.debug("Exit from update() method");
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     /**

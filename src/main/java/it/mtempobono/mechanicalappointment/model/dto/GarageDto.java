@@ -20,8 +20,8 @@ public class GarageDto implements Serializable {
     @Schema(description = "The garage name", example = "APs Garage", required = true)
     private final String name;
 
-    @Schema(description = "The id of the place", example = "7", required = true)
-    private final Long placeId;
+    @Schema(description = "The linked Place", required = true)
+    private final PlaceDto place;
 
     @Schema(description = "The address of the garage", example = "Strada Giacomo Leopardi, 7", required = true)
     private final String address;
