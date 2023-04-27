@@ -126,4 +126,16 @@ public class PublicController {
         System.out.println(availableHours);
 
     }
+
+
+    //test google calendar
+    @GetMapping("/testGoogle")
+    private void testGoogle() {
+
+
+    }
+
+
+
+
 }
