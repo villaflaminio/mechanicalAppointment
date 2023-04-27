@@ -1,126 +1,199 @@
-//package it.mtempobono.mechanicalappointment.service;
-//
-//import com.google.api.client.auth.oauth2.Credential;
-//import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-//import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-//import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-//import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-//import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-//import com.google.api.client.http.javanet.NetHttpTransport;
-//import com.google.api.client.json.JsonFactory;
-//import com.google.api.client.util.DateTime;
-//import com.google.api.client.util.store.FileDataStoreFactory;
-//import com.google.api.services.calendar.Calendar;
-//import com.google.api.services.calendar.CalendarScopes;
-//import com.google.api.services.calendar.model.Event;
-//import com.google.api.services.calendar.model.Events;
-//import org.springframework.stereotype.Service;
-//
-//import java.io.FileNotFoundException;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.security.GeneralSecurityException;
-//import java.util.Collections;
-//import java.util.List;
-//
-//
-//@Service
-//public class GoogleCalendarService {
-//
-////    GoogleCredential credential;
-////
-////    public GoogleCalendarService() {
-////        try {
-////            credential = GoogleCredential.fromStream(
-////                            GoogleCalendarService.class.
-////                                    getClassLoader().
-////                                    getResourceAsStream("client_secrets.json"))
-////                    .createScoped(Arrays.asList(CalendarScopes.CALENDAR, "https://www.googleapis.com/auth/calendar.events"));
-////        } catch (IOException e) {
-////            throw new RuntimeException(e);
-////        }
-////    }
-//
-//    /**
-//     * Application name.
-//     */
-//    public static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
-//    /**
-//     * Global instance of the JSON factory.
-//     */
-//    public static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-//    /**
-//     * Directory to store authorization tokens for this application.
-//     */
-//    public static final String TOKENS_DIRECTORY_PATH = "tokens";
-//
-//    /**
-//     * Global instance of the scopes required by this quickstart.
-//     * If modifying these scopes, delete your previously saved tokens/ folder.
-//     */
-//    public static final List<String> SCOPES =
-//            Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
-//    public static final String CREDENTIALS_FILE_PATH = "/credentials.json";
-//
-//    /**
-//     * Creates an authorized Credential object.
-//     *
-//     * @param HTTP_TRANSPORT The network HTTP Transport.
-//     * @return An authorized Credential object.
-//     * @throws IOException If the credentials.json file cannot be found.
-//     */
-//    public static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
-//            throws IOException {
-//        // Load client secrets.
-//        InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-//        if (in == null) {
-//            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-//        }
-//        GoogleClientSecrets clientSecrets =
-//                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-//
-//        // Build flow and trigger user authorization request.
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-//                .setAccessType("offline")
-//                .build();
-//        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-//        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-//        //returns an authorized Credential object.
-//        return credential;
-//    }
-//
-//    public void add() throws IOException, GeneralSecurityException {
-//        // Build a new authorized API client service.
-//        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//        Calendar service =
-//                new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-//                        .setApplicationName(APPLICATION_NAME)
-//                        .build();
-//
-//        // List the next 10 events from the primary calendar.
-//        DateTime now = new DateTime(System.currentTimeMillis());
-//        Events events = service.events().list("primary")
-//                .setMaxResults(10)
-//                .setTimeMin(now)
-//                .setOrderBy("startTime")
-//                .setSingleEvents(true)
-//                .execute();
-//        List<Event> items = events.getItems();
-//        if (items.isEmpty()) {
-//            System.out.println("No upcoming events found.");
-//        } else {
-//            System.out.println("Upcoming events");
-//            for (Event event : items) {
-//                DateTime start = event.getStart().getDateTime();
-//                if (start == null) {
-//                    start = event.getStart().getDate();
-//                }
-//                System.out.printf("%s (%s)\n", event.getSummary(), start);
-//            }
-//        }
-//    }
-//
-//}
+package it.mtempobono.mechanicalappointment.service;
+
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Lists;
+import com.google.api.client.util.store.DataStoreFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.*;
+import com.google.gson.Gson;
+import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
+import org.springframework.stereotype.Service;
+
+import java.io.*;
+import java.util.Collections;
+
+
+@Service
+public class GoogleCalendarService {
+    /**
+     * Be sure to specify the name of your application. If the application name
+     * is {@code null} or blank, the application will log a warning. Suggested
+     * format is "MyCompany-ProductName/1.0".
+     */
+    private static final String APPLICATION_NAME = "MechanicalAppointment";
+
+    /**
+     * Directory to store user credentials.
+     */
+    private static final java.io.File DATA_STORE_DIR = new java.io.File(
+            System.getProperty("user.home"), ".store/calendar_sample");
+
+    /**
+     * Global instance of the {@link DataStoreFactory}. The best practice is to
+     * make it a single globally shared instance across your application.
+     */
+    private static FileDataStoreFactory dataStoreFactory;
+
+    /**
+     * Global instance of the HTTP transport.
+     */
+    private static HttpTransport httpTransport;
+
+    /**
+     * Global instance of the JSON factory.
+     */
+    private static final JsonFactory JSON_FACTORY = JacksonFactory
+            .getDefaultInstance();
+
+    private static com.google.api.services.calendar.Calendar client;
+
+    static final java.util.List<com.google.api.services.calendar.model.Calendar> addedCalendarsUsingBatch = Lists
+            .newArrayList();
+
+    /**
+     * Authorizes the installed application to access user's protected data.
+     */
+    private static Credential authorize() throws Exception {
+        // load client secrets
+
+        InputStreamReader in = new InputStreamReader(new FileInputStream("src/main/resources/client_secret_apps.googleusercontent.com.json"));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
+                JSON_FACTORY, in);
+        if (clientSecrets.getDetails().getClientId().startsWith("Enter")
+                || clientSecrets.getDetails().getClientSecret()
+                .startsWith("Enter ")) {
+            System.out
+                    .println("Enter Client ID and Secret from https://code.google.com/apis/console/?api=calendar "
+                            + "into calendar-cmdline-sample/src/main/resources/client_secrets.json");
+            System.exit(1);
+        }
+        // set up authorization code flow
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                httpTransport, JSON_FACTORY, clientSecrets,
+                Collections.singleton(CalendarScopes.CALENDAR))
+                .setDataStoreFactory(dataStoreFactory).build();
+        // authorize
+        return new AuthorizationCodeInstalledApp(flow,
+                new LocalServerReceiver()).authorize("user");
+    }
+
+    private static String readConfig() {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+
+            sb.append("{\"account\": \"mtempobono@gmail.com\"}");
+        } catch (Exception e) {
+            System.err.println("Please create your config.txt with your gmail address in JSON format:");
+            System.err.println("{\"account\": \"mtempobono@gmail.com\"}");
+        }
+        return sb.toString();
+    }
+
+    public static GoogleCalendarAPI.ConfigInfo getConfig() {
+        String JSON = readConfig();
+        Gson gson = new Gson();
+        GoogleCalendarAPI.ConfigInfo ci = gson.fromJson(JSON, GoogleCalendarAPI.ConfigInfo.class);
+
+        return ci;
+    }
+
+    private static Event createEvent(GoogleCalendarCreateEvent createEvent) {
+        Event event = new Event();
+        // Set event summary
+        event.setSummary(createEvent.getSummary());
+
+        // Set event start time
+        event.setStart(new EventDateTime().setDateTime(createEvent.getStartTime()));
+        // Set event end time
+        event.setEnd(new EventDateTime().setDateTime(createEvent.getEndTime()));
+
+        event.setDescription(createEvent.getDescription());
+        event.setLocation(createEvent.getLocation());
+        return event;
+    }
+
+    private Calendar getCalendar() throws Exception{
+        // initialize the transport
+        httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+
+        // initialize the data store factory
+        dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
+
+        // authorization
+        Credential credential = authorize();
+
+        // set up global Calendar instance
+        client = new com.google.api.services.calendar.Calendar.Builder(
+                httpTransport, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME).build();
+
+        GoogleCalendarAPI.ConfigInfo configInfo = getConfig();
+        com.google.api.services.calendar.model.Calendar calendar = client
+                .calendars().get(configInfo.account).execute();
+        CalendarList feed = client.calendarList().list().execute();
+
+        for (CalendarListEntry entry : feed.getItems()) {
+            if (entry.getSummary().equals("Mechanical Appointment")) {
+             return   calendar = client.calendars().get(entry.getId()).execute();
+            }
+        }
+        throw new Exception("Calendar not found");
+    }
+
+    public String addEvent(GoogleCalendarCreateEvent createEvent) throws Exception {
+
+        Calendar calendar = getCalendar();
+
+        View.header("Add Event");
+        Event event = createEvent(createEvent);
+        Event result = client.events().insert(calendar.getId(), event).execute();
+        View.display(result);
+       return result.getId();
+
+    }
+
+
+    public void removeEvent(String eventId) throws Exception {
+
+        // initialize the transport
+        httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+
+        // initialize the data store factory
+        dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
+
+        // authorization
+        Credential credential = authorize();
+
+        // set up global Calendar instance
+        client = new com.google.api.services.calendar.Calendar.Builder(
+                httpTransport, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME).build();
+
+        GoogleCalendarAPI.ConfigInfo configInfo = getConfig();
+        com.google.api.services.calendar.model.Calendar calendar = client
+                .calendars().get(configInfo.account).execute();
+        CalendarList feed = client.calendarList().list().execute();
+
+        for (CalendarListEntry entry : feed.getItems()) {
+            System.out.println(entry.getSummary());
+            if (entry.getSummary().equals("Mechanical Appointment")) {
+                 calendar = client.calendars().get(entry.getId()).execute();
+            }
+        }
+
+        client.events().delete(calendar.getId(), eventId).execute();
+
+    }
+
+
+}

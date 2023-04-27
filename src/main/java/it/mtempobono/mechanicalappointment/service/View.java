@@ -6,9 +6,6 @@ import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
-/**
- * @author Yaniv Inbar
- */
 public class View {
 
 	static void header(String name) {

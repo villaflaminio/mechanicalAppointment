@@ -1,6 +1,8 @@
 package it.mtempobono.mechanicalappointment.controller;
 
+import com.google.api.client.util.DateTime;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
@@ -8,6 +10,7 @@ import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
 import it.mtempobono.mechanicalappointment.service.AppointmentServiceImpl;
+import it.mtempobono.mechanicalappointment.service.GoogleCalendarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,9 @@ public class PublicController {
 
     @Autowired
     private AppointmentServiceImpl appointmentService;
+
+    @Autowired
+    private GoogleCalendarService googleCalendarService;
 
     private List<String> getRecordFromLine(String line) {
         List<String> values = new ArrayList<String>();
@@ -129,12 +135,23 @@ public class PublicController {
 
 
     //test google calendar
-    @GetMapping("/testGoogle")
-    private void testGoogle() {
+    @GetMapping("/testAddToCalendar")
+    private void testGoogle() throws Exception {
+        GoogleCalendarCreateEvent googleCalendarCreateEvent = new GoogleCalendarCreateEvent();
+        googleCalendarCreateEvent.setSummary("test");
+        googleCalendarCreateEvent.setLocation("test");
+        googleCalendarCreateEvent.setDescription("test");
+        googleCalendarCreateEvent.setStartTime(new DateTime("2023-04-27T10:00:00+02:00"));
+        googleCalendarCreateEvent.setEndTime(new DateTime("2023-04-27T13:00:00+02:00"));
 
-
+        System.out.println(googleCalendarService.addEvent(googleCalendarCreateEvent));
     }
 
+
+    @GetMapping("/testRemoveFromCalendar")
+    private void testRemoveFromCalendar() throws Exception {
+        googleCalendarService.removeEvent("ige73uam2pmac6447ccklft6p4");
+    }
 
 
 
