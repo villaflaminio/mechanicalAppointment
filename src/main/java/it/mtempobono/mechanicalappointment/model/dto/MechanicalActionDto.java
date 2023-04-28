@@ -1,11 +1,10 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.mtempobono.mechanicalappointment.util.DurationWrapper;
+import it.mtempobono.mechanicalappointment.util.wrappers.DurationWrapper;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.Duration;
 
 /**
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.MechanicalAction} entity

@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.util;
+package it.mtempobono.mechanicalappointment.util.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

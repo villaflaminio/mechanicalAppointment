@@ -1,10 +1,7 @@
 package it.mtempobono.mechanicalappointment.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.mtempobono.mechanicalappointment.util.LocalTimeWrapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import it.mtempobono.mechanicalappointment.util.wrappers.LocalTimeWrapper;
 
 import java.io.Serializable;
 import java.time.LocalTime;

@@ -1,5 +1,6 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
+import it.mtempobono.mechanicalappointment.util.converters.DurationConverter;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,10 +31,10 @@ public class MechanicalAction {
     private Boolean isActive;
 
     @Column(name = "internal_duration")
-    @Convert(converter = it.mtempobono.mechanicalappointment.util.DurationConverter.class)
+    @Convert(converter = DurationConverter.class)
     private Duration internalDuration;
 
     @Column(name = "external_duration")
-    @Convert(converter = it.mtempobono.mechanicalappointment.util.DurationConverter.class)
+    @Convert(converter = DurationConverter.class)
     private Duration externalDuration;
 }

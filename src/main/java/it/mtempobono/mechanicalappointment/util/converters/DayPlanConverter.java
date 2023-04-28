@@ -1,9 +1,8 @@
-package it.mtempobono.mechanicalappointment.util;
+package it.mtempobono.mechanicalappointment.util.converters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
-import it.mtempobono.mechanicalappointment.service.impl.OpenDayServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

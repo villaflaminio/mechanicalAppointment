@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.util;
+package it.mtempobono.mechanicalappointment.util.converters;
 
 
 import org.slf4j.Logger;

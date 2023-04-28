@@ -2,7 +2,7 @@ package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
-import it.mtempobono.mechanicalappointment.util.DayPlanConverter;
+import it.mtempobono.mechanicalappointment.util.converters.DayPlanConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
