@@ -1,7 +1,6 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;

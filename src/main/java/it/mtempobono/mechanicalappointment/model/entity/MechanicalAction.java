@@ -1,9 +1,6 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -29,18 +26,14 @@ public class MechanicalAction {
     @Column(name = "price")
     private Double price;
 
-//    @Column(name = "internal_duration")
-//    private Integer internalDuration;
-//
-//    @Column(name = "external_duration")
-//    private Integer externalDuration;
-
     @Column(name = "is_active")
     private Boolean isActive;
 
     @Column(name = "internal_duration")
-    Duration internalDuration ;
+    @Convert(converter = it.mtempobono.mechanicalappointment.util.DurationConverter.class)
+    private Duration internalDuration;
 
     @Column(name = "external_duration")
-    Duration externalDuration;
+    @Convert(converter = it.mtempobono.mechanicalappointment.util.DurationConverter.class)
+    private Duration externalDuration;
 }
