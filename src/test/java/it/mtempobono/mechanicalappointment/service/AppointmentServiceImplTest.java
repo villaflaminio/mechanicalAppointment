@@ -5,6 +5,7 @@ import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
+import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

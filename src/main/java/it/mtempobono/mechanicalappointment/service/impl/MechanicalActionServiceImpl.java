@@ -29,8 +29,6 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
     @Autowired
     private MechanicalActionRepository mechanicalActionRepository;
 
-    @Autowired
-    private PlaceRepository placeRepository;
     // endregion Fields
 
     // region Methods

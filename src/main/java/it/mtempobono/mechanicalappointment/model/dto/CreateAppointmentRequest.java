@@ -11,7 +11,6 @@ public class CreateAppointmentRequest {
     public Long mechanicalActionId;
     public Long vehicleId;
     public String comment;
-
     public LocalDate startTime;
 
 }

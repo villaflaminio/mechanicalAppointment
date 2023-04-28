@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Class to manage time periods in a working day
  */
-public class TimePeriod implements Comparable<TimePeriod>, Serializable {
+public class TimePeriod implements Comparable<TimePeriod>, Serializable{
     // region Fields
     @Schema(description = "The start time")
     private LocalTimeWrapper start;

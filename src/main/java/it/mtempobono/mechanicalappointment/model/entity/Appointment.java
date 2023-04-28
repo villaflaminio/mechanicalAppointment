@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.mtempobono.mechanicalappointment.util.converters.DayPlanConverter;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
+import it.mtempobono.mechanicalappointment.util.converters.TimePeriodConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,10 +41,12 @@ public class Appointment implements Comparable<Appointment> {
     @Column(name = "status")
     private AppointmentStatus status;
 
-    @Convert(converter = DayPlanConverter.class)
+    @Column(name = "external_time")
+    @Convert(converter = TimePeriodConverter.class)
     private TimePeriod externalTime;
 
-    @Convert(converter = DayPlanConverter.class)
+    @Column(name = "internal_time")
+    @Convert(converter = TimePeriodConverter.class)
     private TimePeriod internalTime;
 
     @Column(name = "price")

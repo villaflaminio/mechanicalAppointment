@@ -7,7 +7,7 @@ import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
-import it.mtempobono.mechanicalappointment.service.AppointmentServiceImpl;
+import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
