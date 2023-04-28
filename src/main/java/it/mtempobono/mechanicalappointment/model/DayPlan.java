@@ -4,13 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class DayPlan {
+public class DayPlan implements Serializable {
     @Schema(description = "The working hours")
     private TimePeriod workingHours;
 

@@ -14,7 +14,6 @@ import java.util.List;
  */
 @Data
 public class OpenDayDto implements Serializable {
-    private final Long id;
 
     @Schema(description = "The garage id", example = "1")
     private final Long garageId;

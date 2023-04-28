@@ -97,7 +97,7 @@ public class OpenDayServiceImpl implements OpenDayService {
                     .garage(garage)
                     .maxParallelAppointments(openDay.getMaxParallelAppointments())
                     .date(openDay.getDate())
-//                    .workPlan(openDay.getWorkPlan())
+                    .workPlan(openDay.getWorkPlan())
                     .build();
 
             return ResponseEntity.ok(openDayRepository.save(newOpenDay));
