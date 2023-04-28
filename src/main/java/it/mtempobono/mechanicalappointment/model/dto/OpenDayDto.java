@@ -1,6 +1,8 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,10 +14,16 @@ import java.util.List;
  */
 @Data
 public class OpenDayDto implements Serializable {
-    private final Long id;
-    private final GarageDto garage;
+
+    @Schema(description = "The garage id", example = "1")
+    private final Long garageId;
+
+    @Schema(description = "The date of the open day", example = "2021-01-01")
     private final LocalDate date;
+
+    @Schema(description = "The max number of parallel appointments", example = "10")
     private final Integer maxParallelAppointments;
-    private final List<AppointmentDto> appointments;
+
+    @Schema(description = "The list of appointments")
     private final DayPlan workPlan;
 }

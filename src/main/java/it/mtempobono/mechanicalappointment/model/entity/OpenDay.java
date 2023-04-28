@@ -2,7 +2,7 @@ package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
-import it.mtempobono.mechanicalappointment.model.JpaConverterJson;
+import it.mtempobono.mechanicalappointment.util.DayPlanConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,6 @@ public class OpenDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JsonBackReference
     private Garage garage;
@@ -37,7 +36,7 @@ public class OpenDay {
     @OneToMany(mappedBy = "openDay")
     private List<Appointment> appointments;
 
-    @Convert(converter = JpaConverterJson.class)
+    @Convert(converter = DayPlanConverter.class)
     private DayPlan workPlan;
 
 }

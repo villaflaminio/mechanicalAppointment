@@ -83,6 +83,7 @@ public class PublicController {
 
         DayPlan dayPlan = new DayPlan();
         dayPlan.setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(17, 0)));
+        dayPlan.setWorkingHours(new TimePeriod(LocalTime.of(6, 0), LocalTime.of(17, 0)));
         List<TimePeriod> breaks = new ArrayList<>();
         breaks.add(new TimePeriod(LocalTime.of(12, 0), LocalTime.of(14, 0)));
         dayPlan.setBreaks(breaks);
