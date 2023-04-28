@@ -71,14 +71,14 @@ class AppointmentServiceImplTest {
         List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 3);
-        assertEquals(availableHours.get(0).getStart(), LocalTime.of(11, 0));
-        assertEquals(availableHours.get(0).getEnd(), LocalTime.of(12, 0));
+        assertEquals(availableHours.get(0).getStart().getLocalTime(), LocalTime.of(11, 0));
+        assertEquals(availableHours.get(0).getEnd().getLocalTime(), LocalTime.of(12, 0));
 
-        assertEquals(availableHours.get(1).getStart(), LocalTime.of(14, 0));
-        assertEquals(availableHours.get(1).getEnd(), LocalTime.of(15, 0));
+        assertEquals(availableHours.get(1).getStart().getLocalTime(), LocalTime.of(14, 0));
+        assertEquals(availableHours.get(1).getEnd().getLocalTime(), LocalTime.of(15, 0));
 
-        assertEquals(availableHours.get(2).getStart(), LocalTime.of(16, 0));
-        assertEquals(availableHours.get(2).getEnd(), LocalTime.of(17, 0));
+        assertEquals(availableHours.get(2).getStart().getLocalTime(), LocalTime.of(16, 0));
+        assertEquals(availableHours.get(2).getEnd().getLocalTime(), LocalTime.of(17, 0));
     }
     @Test
     void getAvailableHoursWithMaxOneParallelAppointments1() {
