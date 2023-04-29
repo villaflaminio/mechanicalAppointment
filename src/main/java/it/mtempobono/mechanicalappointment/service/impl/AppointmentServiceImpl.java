@@ -1,10 +1,14 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
+import com.google.api.client.util.DateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.builders.AppointmentBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CreateAppointmentRequest;
+import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.*;
 import it.mtempobono.mechanicalappointment.repository.AppointmentRepository;
 import it.mtempobono.mechanicalappointment.repository.MechanicalActionRepository;
@@ -12,19 +16,20 @@ import it.mtempobono.mechanicalappointment.repository.OpenDayRepository;
 import it.mtempobono.mechanicalappointment.repository.VehicleRepository;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
 import it.mtempobono.mechanicalappointment.service.EmailService;
+import it.mtempobono.mechanicalappointment.service.GoogleCalendarService;
+import it.mtempobono.mechanicalappointment.util.PropertiesHelper;
 import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -46,6 +51,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private GoogleCalendarService googleCalendarService;
     //endregion
 
     // region Public Methods
@@ -269,14 +277,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 //        return peroids;
 //    }
 
-    public void createAppointment(CreateAppointmentRequest request) {
 
-        OpenDay openDay = openDayRepository.findById(request.getOpenDayId()).orElseThrow(() -> new RuntimeException("OpenDay not found"));
-
-        List<Appointment> appointments = appointmentRepository.findByOpenDay(openDay);
-
-
-    }
     // endregion Public Methods
 
     // region CRUD Methods
@@ -319,6 +320,25 @@ public class AppointmentServiceImpl implements AppointmentService {
         return ResponseEntity.notFound().build();
     }
 
+    private String createCalendarEvent(OpenDay openDay, AppointmentDto appointmentDto, Vehicle vehicle, MechanicalAction mechanicalAction) throws Exception {
+        GoogleCalendarCreateEvent googleCalendarCreateEvent = new GoogleCalendarCreateEvent();
+        googleCalendarCreateEvent.setSummary("Appointment");
+        googleCalendarCreateEvent.setDescription("Appointment for " + vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getPlate() + " for " + mechanicalAction.getName());
+
+        LocalDate day = openDay.getDate();
+        LocalTime startTime = appointmentDto.getTimeSlotSelected().getStart().getLocalTime();
+        LocalTime endTime = appointmentDto.getTimeSlotSelected().getEnd().getLocalTime();
+
+        DateTime startCalendarTime = new DateTime(new Date(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), startTime.getHour(), startTime.getMinute()));
+        DateTime endCalendarTime = new DateTime(new Date(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), endTime.getHour(), endTime.getMinute()));
+
+        googleCalendarCreateEvent.setStartTime(startCalendarTime);
+        googleCalendarCreateEvent.setEndTime(endCalendarTime);
+        googleCalendarCreateEvent.setLocation(openDay.getGarage().getAddress());
+
+        return googleCalendarService.addEvent(googleCalendarCreateEvent);
+    }
+
     /**
      * Create a new appointment
      *
@@ -345,8 +365,15 @@ public class AppointmentServiceImpl implements AppointmentService {
             // Check that appointment status is not null and valid.
             AppointmentStatus appointmentStatus = AppointmentStatus.AWAITING_APPROVAL;
 
+            Appointment newAppointment;
+            if (appointmentDto.getIsMechanicalActionCustom()) {
+                newAppointment = appointmentRepository.save(createCustomAppointment(appointmentDto, openDay, vehicle, appointmentStatus));
+            } else {
+                newAppointment = appointmentRepository.save(createStockAppointment(appointmentDto, openDay, vehicle, appointmentStatus));
+            }
+
             // Save the appointment
-            Appointment savedAppointment = appointmentRepository.save(createStockAppointment(appointmentDto, openDay, vehicle, appointmentStatus));
+            Appointment savedAppointment = appointmentRepository.save(newAppointment);
             emailService.sendNewAppointmentMail(savedAppointment);
 
             return ResponseEntity.ok(savedAppointment);
@@ -359,7 +386,25 @@ public class AppointmentServiceImpl implements AppointmentService {
         return ResponseEntity.badRequest().build();
     }
 
-    public Appointment createStockAppointment(AppointmentDto appointmentDto, OpenDay openDay, Vehicle vehicle, AppointmentStatus appointmentStatus) {
+    private Appointment createCustomAppointment(AppointmentDto appointmentDto, OpenDay openDay, Vehicle vehicle, AppointmentStatus appointmentStatus) {
+        MechanicalAction mechanicalAction = mechanicalActionRepository.findByName("CUSTOM");
+
+        // Create the appointment using dto data and builder class
+        return AppointmentBuilder.anAppointment()
+                .openDay(openDay)
+                .comment(appointmentDto.getComment())
+                .price(mechanicalAction.getPrice())
+                .mechanicalAction(mechanicalAction)
+                .vehicle(vehicle)
+                .status(appointmentStatus)
+                .internalTime(new TimePeriod(LocalTime.of(0, 0), LocalTime.of(0, 0)))
+                .externalTime(new TimePeriod(LocalTime.of(0, 0), LocalTime.of(0, 0)))
+                .idCalendarEvent(null)
+                .build();
+
+    }
+
+    public Appointment createStockAppointment(AppointmentDto appointmentDto, OpenDay openDay, Vehicle vehicle, AppointmentStatus appointmentStatus) throws Exception {
         // Retrieve the linked mechanical action by id
         MechanicalAction mechanicalAction = mechanicalActionRepository.findById(appointmentDto.getMechanicalActionId()).orElseThrow(() -> new RuntimeException("Mechanical action not found"));
 
@@ -380,23 +425,79 @@ public class AppointmentServiceImpl implements AppointmentService {
         TimePeriod externalTime = appointmentDto.getTimeSlotSelected();
 
         // Create the appointment using dto data and builder class
-        return  AppointmentBuilder.anAppointment()
+        return AppointmentBuilder.anAppointment()
                 .openDay(openDay)
                 .comment(appointmentDto.getComment())
-                .price(appointmentDto.getPrice())
+                .price(mechanicalAction.getPrice())
                 .mechanicalAction(mechanicalAction)
                 .vehicle(vehicle)
                 .status(appointmentStatus)
                 .internalTime(internalTime)
                 .externalTime(externalTime)
-                .idCalendarEvent(appointmentDto.getIdCalendarEvent())
+                .idCalendarEvent(createCalendarEvent(openDay, appointmentDto, vehicle, mechanicalAction))
                 .build();
     }
 
 
+    public ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation) {
+
+        Appointment appointment = appointmentRepository.findById(customAppointmentEvaluation.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        if (customAppointmentEvaluation.isApproved()) {
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
+            appointment.setInternalTime(customAppointmentEvaluation.getInternalTime());
+            appointment.setExternalTime(customAppointmentEvaluation.getExternalTime());
+            appointment.setPrice(customAppointmentEvaluation.getPrice());
+
+            emailService.sendCustomAppointmentApprovedMail(appointment);
+            return ResponseEntity.ok(appointmentRepository.save(appointment));
+        } else {
+            appointment.setStatus(AppointmentStatus.REJECTED);
+            appointmentRepository.save(appointment);
+            emailService.sendCustomAppointmentRejectedMail(appointment);
+            return ResponseEntity.ok(appointment);
+        }
+    }
+
+    /**
+     * Update the status of an appointment
+     *
+     * @param status        the new status
+     * @param appointmentId the id of the appointment to update
+     * @return the updated appointment
+     */
+    @Schema(example = "CONFIRMED", description = "The new status of the appointment")
+    public ResponseEntity<Appointment> appointmentStateUpdate(String status, Long appointmentId) {
+
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        return ResponseEntity.ok(appointmentRepository.save(setStatus(status, appointment)));
+    }
+
+
+    private Appointment setStatus(String status, Appointment appointment) {
+        if (status.equals("CONFIRMED")) {
+            appointment.setStatus(AppointmentStatus.CONFIRMED);
+            emailService.sendStockAppointmentApprove(appointment);
+
+        } else if (status.equals("FINISHED")) {
+            appointment.setStatus(AppointmentStatus.FINISHED);
+            emailService.sendFinishedAppointmentData(appointment);
+
+        } else if (status.equals("REJECTED")) {
+            appointment.setStatus(AppointmentStatus.REJECTED);
+            emailService.sendStockAppointmentReject(appointment);
+
+        } else {
+            throw new RuntimeException("Status not found");
+        }
+        return appointment;
+    }
+
     /**
      * Update the appointment
-     *
+     * Is possible to update the vehicle, the comment , the status and the time slot
+     * To modify the oder data is necessary to delete the appointment and create a new one
      * @param appointmentDto the appointment to update
      * @return the updated appointment
      */
@@ -406,129 +507,55 @@ public class AppointmentServiceImpl implements AppointmentService {
             logger.info("update() called with appointment: {} and id {}", appointmentDto, id);
 
             // Try to find the appointment by id
-            Optional<Appointment> appointmentToUpdateOptional = appointmentRepository.findById(id);
-
-            // If the appointment doesn't exist, return a 404 error
-            if (appointmentToUpdateOptional.isEmpty()) {
-                logger.error("Appointment not found");
-                return ResponseEntity.notFound().build();
-            }
-
-            PropertyCheckerUtils.copyNonNullProperties(appointmentDto, appointmentToUpdateOptional.get());
-
-            // Retrieve the linked open day by id
-            if (appointmentDto.getOpenDayId() != null) {
-                OpenDay openDay = openDayRepository.findById(appointmentDto.getOpenDayId()).orElse(null);
-
-                // Check that open day exists
-                if (openDay != null) {
-                    appointmentToUpdateOptional.get().setOpenDay(openDay);
-                }
-            }
-
-            // Retrieve the linked mechanical action by id
-            if (appointmentDto.getMechanicalActionId() != null) {
-                MechanicalAction mechanicalAction = mechanicalActionRepository.findById(appointmentDto.getMechanicalActionId()).orElse(null);
-
-                // Check that mechanical action exists
-                if (mechanicalAction != null) {
-                    appointmentToUpdateOptional.get().setMechanicalAction(mechanicalAction);
-                }
-            }
+            Appointment appointmentToUpdate = appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Appointment not found"));
 
             // Retrieve the linked vehicle by id
             if (appointmentDto.getVehicleId() != null) {
-                Vehicle vehicle = vehicleRepository.findById(appointmentDto.getVehicleId()).orElse(null);
-
-                // Check that vehicle exists
-                if (vehicle != null) {
-                    appointmentToUpdateOptional.get().setVehicle(vehicle);
-                }
+                Vehicle vehicle = vehicleRepository.findById(appointmentDto.getVehicleId()).orElseThrow(() -> new RuntimeException("Vehicle not found"));
+                appointmentToUpdate.setVehicle(vehicle);
             }
 
-            // Check that appointment status is not null and valid.
-            AppointmentStatus appointmentStatus = null;
+            if (appointmentDto.getComment() != null) {
+                appointmentToUpdate.setComment(appointmentDto.getComment());
+            }
+
+
             if (appointmentDto.getStatus() != null) {
-                try {
-                    appointmentStatus = AppointmentStatus.valueOf(appointmentDto.getStatus());
-                } catch (IllegalArgumentException e) {
-                    logger.error("Appointment status is not valid");
-                    return ResponseEntity.badRequest().build();
+                appointmentToUpdate.setStatus(setStatus(appointmentDto.getStatus(), appointmentToUpdate).getStatus());
+            }
+
+            if (appointmentDto.getTimeSlotSelected() != null) {
+                appointmentToUpdate.setInternalTime(appointmentDto.getTimeSlotSelected());
+                // Retrieve the linked mechanical action by id
+                MechanicalAction mechanicalAction = appointmentToUpdate.getMechanicalAction();
+
+                // Check that internal time is not null and that the start time is before the end time
+                if (appointmentDto.getTimeSlotSelected().getStart() != null || appointmentDto.getTimeSlotSelected().getEnd() != null) {
+
+                    List<TimePeriod> availableHours = getAvailableAppointments(appointmentToUpdate.getOpenDay(), mechanicalAction);
+
+                    if (availableHours.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
+                        logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
+                        throw new RuntimeException("Appointment internal time is not valid. Could be null or start after the end time.");
+                    }
                 }
+                //internal time = external time start + mechanical action duration
+                TimePeriod internalTime = new TimePeriod(appointmentDto.getTimeSlotSelected().getStart().getLocalTime(),
+                        appointmentDto.getTimeSlotSelected().getStart().getLocalTime().plus(mechanicalAction.getInternalDuration().toMinutes(), ChronoUnit.MINUTES));
+
+                TimePeriod externalTime = appointmentDto.getTimeSlotSelected();
+
+                appointmentToUpdate.setInternalTime(internalTime);
+                appointmentToUpdate.setExternalTime(externalTime);
+
+                googleCalendarService.removeEvent(appointmentToUpdate.getIdCalendarEvent());
+                appointmentToUpdate.setIdCalendarEvent(createCalendarEvent(appointmentToUpdate.getOpenDay(), appointmentDto, appointmentToUpdate.getVehicle(), mechanicalAction));
             }
 
-            // Check that internal time is not null and that the start time is before the end time
-            // Case 0: start and end are null -> do nothing
-            // Case 1: start is not null and end is null -> check if start is before the current end
-            // Case 2: start is null and end is not null -> check if end is after the current start
-            // Case 3: start is not null and end is not null -> check if start is before end
-
-            // Case 1
-            if (appointmentDto.getInternalTime().getStart() != null && appointmentDto.getInternalTime().getEnd() == null &&
-                    appointmentToUpdateOptional.get().getInternalTime().getEnd().getLocalTime()
-                            .isBefore(appointmentDto.getInternalTime().getStart().getLocalTime())) {
-                // The end MUST not be changed, then set it to the current DTO value.
-                appointmentDto.getInternalTime().setEnd(appointmentToUpdateOptional.get().getInternalTime().getEnd());
-                appointmentToUpdateOptional.get().setInternalTime(appointmentDto.getInternalTime());
-            }
-
-            // Case 2
-            if (appointmentDto.getInternalTime().getStart() == null && appointmentDto.getInternalTime().getEnd() != null &&
-                    appointmentToUpdateOptional.get().getInternalTime().getStart().getLocalTime()
-                            .isAfter(appointmentDto.getInternalTime().getEnd().getLocalTime())) {
-                // The start MUST not be changed, then set it to the current DTO value.
-                appointmentDto.getInternalTime().setStart(appointmentToUpdateOptional.get().getInternalTime().getStart());
-                appointmentToUpdateOptional.get().setInternalTime(appointmentDto.getInternalTime());
-            }
-
-            // Case 3
-            if (appointmentDto.getInternalTime().getStart() != null && appointmentDto.getInternalTime().getEnd() != null &&
-                    appointmentDto.getInternalTime().getStart().getLocalTime()
-                            .isAfter(appointmentDto.getInternalTime().getEnd().getLocalTime())) {
-                appointmentToUpdateOptional.get().setInternalTime(appointmentDto.getInternalTime());
-            }
-
-            // Check that external time is not null and that the start time is before the end time
-            // Case 0: start and end are null -> do nothing
-            // Case 1: start is not null and end is null -> check if start is before the current end
-            // Case 2: start is null and end is not null -> check if end is after the current start
-            // Case 3: start is not null and end is not null -> check if start is before end
-
-            // Case 1
-            if (appointmentDto.getExternalTime().getStart() != null && appointmentDto.getExternalTime().getEnd() == null &&
-                    appointmentToUpdateOptional.get().getExternalTime().getEnd().getLocalTime()
-                            .isBefore(appointmentDto.getExternalTime().getStart().getLocalTime())) {
-                // The end MUST not be changed, then set it to the current DTO value.
-                appointmentDto.getExternalTime().setEnd(appointmentToUpdateOptional.get().getExternalTime().getEnd());
-                appointmentToUpdateOptional.get().setExternalTime(appointmentDto.getExternalTime());
-            }
-
-            // Case 2
-            if (appointmentDto.getExternalTime().getStart() == null && appointmentDto.getExternalTime().getEnd() != null &&
-                    appointmentToUpdateOptional.get().getExternalTime().getStart().getLocalTime()
-                            .isAfter(appointmentDto.getExternalTime().getEnd().getLocalTime())) {
-                // The start MUST not be changed, then set it to the current DTO value.
-                appointmentDto.getExternalTime().setStart(appointmentToUpdateOptional.get().getExternalTime().getStart());
-                appointmentToUpdateOptional.get().setExternalTime(appointmentDto.getExternalTime());
-            }
-
-            // Case 3
-            if (appointmentDto.getExternalTime().getStart() != null && appointmentDto.getExternalTime().getEnd() != null &&
-                    appointmentDto.getExternalTime().getStart().getLocalTime()
-                            .isAfter(appointmentDto.getExternalTime().getEnd().getLocalTime())) {
-                appointmentToUpdateOptional.get().setExternalTime(appointmentDto.getExternalTime());
-            }
-
-            Appointment appointment = appointmentToUpdateOptional.get();
-            appointment.setId(id);
-
-            return ResponseEntity.ok(appointmentRepository.save(appointment));
-        } catch (Exception e) {
-            logger.error("Error in update() method: {}", e.getMessage());
-        } finally {
-            logger.debug("Exit from update() method");
+            return ResponseEntity.ok(appointmentRepository.save(appointmentToUpdate));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**

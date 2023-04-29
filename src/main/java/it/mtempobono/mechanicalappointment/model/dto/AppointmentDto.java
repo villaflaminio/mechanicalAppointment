@@ -14,25 +14,22 @@ import java.io.Serializable;
 public class AppointmentDto implements Serializable {
 
     @Schema (description = "The open day id", example = "1")
-    private final Long openDayId;
+    private final Long openDayId;//
 
     @Schema (description = "The mechanical action id", example = "1")
-    private final Long mechanicalActionId;
+    private final Long mechanicalActionId;//
 
     @Schema (description = "The comment", example = "I need to change the tires")
-    private final String comment;
+    private final String comment;//
 
     @Schema (description = "The vehicle id", example = "1")
-    private final Long vehicleId;
+    private final Long vehicleId;//
 
     @Schema (description = "The timeSlot selected by user")
     private final TimePeriod timeSlotSelected;
 
-    @Schema (description = "The price", example = "100.0")
-    private final Double price;
-
-    @Schema (description = "The id calendar event", example = "ABC123")
-    private final String idCalendarEvent;
+    @Schema (description = "The status of the appointment", example = "SCHEDULED")
+    private final String status;//
 
     @Schema (description = "Is mechanical action custom", example = "true")
     private final Boolean isMechanicalActionCustom;

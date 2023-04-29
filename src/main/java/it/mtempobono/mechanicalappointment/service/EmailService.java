@@ -77,6 +77,21 @@ public class EmailService {
         );
         return sendEmail(to, subject, model, "newAppointment");
     }
+
+    public void sendCustomAppointmentApprovedMail(Appointment appointment) {
+    }
+
+    public void sendCustomAppointmentRejectedMail(Appointment appointment) {
+    }
+
+    public void sendFinishedAppointmentData(Appointment appointment) {
+    }
+
+    public void sendStockAppointmentApprove(Appointment appointment) {
+    }
+
+    public void sendStockAppointmentReject(Appointment appointment) {
+    }
 }
 
 
