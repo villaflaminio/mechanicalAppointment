@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.controller.impl;
 
 import it.mtempobono.mechanicalappointment.controller.AppointmentController;
+import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
@@ -37,6 +38,11 @@ public class AppointmentControllerImpl implements AppointmentController {
     @Override
     public ResponseEntity<Appointment> findById(Long id) {
         return appointmentService.findById(id);
+    }
+
+    @Override
+    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId) {
+       return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId);
     }
 
     @Override

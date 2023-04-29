@@ -1,5 +1,6 @@
 package it.mtempobono.mechanicalappointment.service;
 
+import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import org.springframework.http.ResponseEntity;
@@ -19,4 +20,6 @@ public interface AppointmentService {
     ResponseEntity<Appointment> update(AppointmentDto appointment, Long id);
 
     ResponseEntity<Void> delete(Long id);
+
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId);
 }

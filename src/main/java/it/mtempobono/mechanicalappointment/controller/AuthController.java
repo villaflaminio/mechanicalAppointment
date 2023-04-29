@@ -6,6 +6,7 @@ import it.mtempobono.mechanicalappointment.exception.BadRequestException;
 import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
 import it.mtempobono.mechanicalappointment.model.dto.*;
 import it.mtempobono.mechanicalappointment.model.entity.*;
+import it.mtempobono.mechanicalappointment.repository.MechanicalActionRepository;
 import it.mtempobono.mechanicalappointment.repository.PasswordResetTokenRepository;
 import it.mtempobono.mechanicalappointment.repository.RoleRepository;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -34,6 +36,8 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @Autowired
+    private MechanicalActionRepository mechanicalActionRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -189,6 +193,15 @@ public class AuthController {
         // Save the user in the database.
         userRepository.save(user);
 
+        MechanicalAction mechanicalAction = new MechanicalAction();
+        mechanicalAction.setName("CUSTOM");
+        mechanicalAction.setDescription("CUSTOM");
+        mechanicalAction.setPrice(0.0);
+        mechanicalAction.setIsActive(true);
+        mechanicalAction.setInternalDuration(Duration.ZERO);
+        mechanicalAction.setExternalDuration(Duration.ZERO);
+
+        mechanicalActionRepository.save(mechanicalAction);
         // Return the created user.
         return ResponseEntity.ok(user);
     }

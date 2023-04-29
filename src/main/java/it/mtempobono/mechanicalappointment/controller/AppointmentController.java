@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,21 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
     ResponseEntity<Appointment> findById(@PathVariable("id") Long id);
+
+    //getAvailableAppointments
+    @Operation(
+            summary = "Retrieve all available Appointments",
+            description = "Get all available Appointments objects. The response is a list of Appointments objects."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content (
+                    array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
+                    mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/availableTimeSlots")
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId , Long mechanicalActionId);
+
 
     /**
      * Create a new appointment

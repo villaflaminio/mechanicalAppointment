@@ -5,6 +5,7 @@ import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
+import it.mtempobono.mechanicalappointment.service.impl.AppointmentCore;
 import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ class AppointmentServiceImplTest {
 
     @InjectMocks
     AppointmentServiceImpl appointmentService = new AppointmentServiceImpl();
+    private AppointmentCore appointmentCore = new AppointmentCore();
 
     OpenDay openDay = new OpenDay();
 
@@ -68,7 +70,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 3);
         assertEquals(availableHours.get(0).getStart().getLocalTime(), LocalTime.of(11, 0));
@@ -101,7 +103,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 9);
     }
@@ -131,7 +133,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 8);
 
@@ -163,7 +165,7 @@ class AppointmentServiceImplTest {
         work.setInternalDuration(Duration.ofMinutes(30));
 
 
-        List<TimePeriod> availableHours = appointmentService.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, work);
 
         assertEquals(availableHours.size(), 16);
 

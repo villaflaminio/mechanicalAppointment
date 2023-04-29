@@ -8,6 +8,7 @@ import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
+import it.mtempobono.mechanicalappointment.service.impl.AppointmentCore;
 import it.mtempobono.mechanicalappointment.service.impl.GoogleCalendarService;
 import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Scanner;
 @RequestMapping("api/public")
 public class PublicController {
 
+    private AppointmentCore appointmentCore = new AppointmentCore();
     @Autowired
     private PlaceRepository placeRepository;
 
@@ -127,7 +129,7 @@ public class PublicController {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = this.appointmentService.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = this.appointmentCore.getAvailableAppointments(openDay, work);
 
         System.out.println(availableHours);
 

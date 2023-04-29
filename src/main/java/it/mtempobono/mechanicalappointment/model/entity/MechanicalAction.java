@@ -37,6 +37,4 @@ public class MechanicalAction {
     @Column(name = "external_duration")
     @Convert(converter = DurationConverter.class)
     private Duration externalDuration;
-
-
 }
