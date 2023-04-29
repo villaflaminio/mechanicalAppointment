@@ -12,7 +12,7 @@ import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import it.mtempobono.mechanicalappointment.security.CurrentUser;
 import it.mtempobono.mechanicalappointment.security.RefreshTokenService;
 import it.mtempobono.mechanicalappointment.security.TokenProvider;
-import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
+import it.mtempobono.mechanicalappointment.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

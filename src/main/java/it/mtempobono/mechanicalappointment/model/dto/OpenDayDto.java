@@ -21,7 +21,7 @@ public class OpenDayDto implements Serializable {
     @Schema(description = "The date of the open day", example = "2021-01-01")
     private final LocalDate date;
 
-    @Schema(description = "The max number of parallel appointments", example = "10")
+    @Schema(description = "The max number of parallel appointments", example = "2")
     private final Integer maxParallelAppointments;
 
     @Schema(description = "The list of appointments")

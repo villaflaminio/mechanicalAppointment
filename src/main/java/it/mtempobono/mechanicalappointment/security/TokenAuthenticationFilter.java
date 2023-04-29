@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.security;
 
-import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
+import it.mtempobono.mechanicalappointment.service.impl.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

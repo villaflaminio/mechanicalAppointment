@@ -6,7 +6,7 @@ import it.mtempobono.mechanicalappointment.security.oauth2.CustomOAuth2UserServi
 import it.mtempobono.mechanicalappointment.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import it.mtempobono.mechanicalappointment.security.oauth2.OAuth2AuthenticationFailureHandler;
 import it.mtempobono.mechanicalappointment.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
+import it.mtempobono.mechanicalappointment.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

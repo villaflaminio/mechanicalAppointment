@@ -5,7 +5,7 @@ import it.mtempobono.mechanicalappointment.model.entity.User;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import it.mtempobono.mechanicalappointment.security.CurrentUser;
-import it.mtempobono.mechanicalappointment.service.CustomUserDetailsService;
+import it.mtempobono.mechanicalappointment.service.impl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -13,12 +13,10 @@ import java.io.Serializable;
 @Data
 public class GarageDto implements Serializable {
 
-    private final Long id;
-
     @Schema(description = "The garage name", example = "APs Garage", required = true)
     private final String name;
 
-    @Schema(description = "The linked Place", example = "0", required = true)
+    @Schema(description = "The linked Place", example = "5908", required = true)
     private final Long placeId;
 
     @Schema(description = "The address of the garage", example = "Strada Giacomo Leopardi, 7", required = true)

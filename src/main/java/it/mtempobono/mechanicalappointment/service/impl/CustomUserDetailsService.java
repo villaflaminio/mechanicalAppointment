@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.service;
+package it.mtempobono.mechanicalappointment.service.impl;
 
 
 import it.mtempobono.mechanicalappointment.exception.BadRequestException;
