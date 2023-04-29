@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,7 +53,21 @@ public class AppointmentServiceImpl implements AppointmentService {
     //endregion
 
     // region Public Methods
+    @Override
+    public ResponseEntity<List<Appointment>> findByUserPrincipal(UserPrincipal userPrincipal) {
+        try {
+            logger.info("Enter into findByUserPrincipal() method");
 
+            // Retrieve the appointments of the current user by email.
+            List<Appointment> appointments = appointmentRepository.findByUserEmail(userPrincipal.getEmail());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            logger.info("Exit from findByUserPrincipal() method");
+        }
+        return null;
+    }
     // endregion Public Methods
 
     // region CRUD Methods
@@ -368,5 +384,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return ResponseEntity.ok(appointmentCore.getAvailableAppointments(openDay, mechanicalAction));
     }
+
+
     // endregion CRUD Methods
 }

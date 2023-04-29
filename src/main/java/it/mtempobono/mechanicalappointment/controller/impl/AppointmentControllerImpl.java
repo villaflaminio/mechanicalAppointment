@@ -4,6 +4,7 @@ import it.mtempobono.mechanicalappointment.controller.AppointmentController;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
 import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,6 @@ public class AppointmentControllerImpl implements AppointmentController {
         return appointmentService.findById(id);
     }
 
-    @Override
-    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId) {
-       return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId);
-    }
 
     @Override
     public ResponseEntity<Appointment> save(AppointmentDto appointment) {
@@ -58,4 +55,14 @@ public class AppointmentControllerImpl implements AppointmentController {
     @Override
     public ResponseEntity<Void> delete(Long id) { return appointmentService.delete(id);}
     //endregion CRUD Methods
+
+    @Override
+    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId) {
+        return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId);
+    }
+
+    @Override
+    public ResponseEntity<List<Appointment>> findByUserPrincipal(UserPrincipal userPrincipal) {
+        return appointmentService.findByUserPrincipal(userPrincipal);
+    }
 }

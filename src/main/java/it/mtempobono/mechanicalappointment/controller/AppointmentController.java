@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -120,5 +121,24 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
+
+    /**
+     * Get the appointments by user principal
+     * @return the list of appointments linked to the user principal
+     */
+    @Operation(
+            summary = "Retrieve all Appointments by user principal",
+            description = "Get all Appointments objects by user principal. The response is a list of Appointments objects." +
+                    "The user principal is the user that is logged in."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content (
+                    array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
+                    mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/findByUserPrincipal")
+    ResponseEntity<List<Appointment>> findByUserPrincipal(UserPrincipal userPrincipal);
+
 
 }
