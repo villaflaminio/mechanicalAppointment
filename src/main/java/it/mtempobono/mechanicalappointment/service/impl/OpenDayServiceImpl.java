@@ -140,6 +140,7 @@ public class OpenDayServiceImpl implements OpenDayService {
             PropertyCheckerUtils.copyNonNullProperties(openDay, openDayToUpdateOptional.get());
 
             openDayToUpdateOptional.get().setGarage(garage);
+            openDayToUpdateOptional.get().setAppointments(null);
 
             return ResponseEntity.ok(openDayRepository.save(openDayToUpdateOptional.get()));
         } catch (Exception e) {
