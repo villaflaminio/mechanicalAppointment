@@ -26,7 +26,6 @@ import java.util.*;
         @UniqueConstraint(columnNames = "email")
 })
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
