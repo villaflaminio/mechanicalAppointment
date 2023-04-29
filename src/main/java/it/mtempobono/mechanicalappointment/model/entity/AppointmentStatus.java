@@ -1,13 +1,8 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 public enum AppointmentStatus {
-    SCHEDULED,
+    AWAITING_APPROVAL,
     FINISHED,
     CONFIRMED,
-    INVOICED,
-    CANCELED,
-    DENIED,
-    REJECTION_REQUESTED,
     REJECTED,
-    EXCHANGE_REQUESTED
 }

@@ -1,6 +1,5 @@
 package it.mtempobono.mechanicalappointment.controller;
 
-import com.google.api.client.util.DateTime;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
 import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
@@ -9,6 +8,7 @@ import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
+import it.mtempobono.mechanicalappointment.service.GoogleCalendarService;
 import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -141,8 +141,8 @@ public class PublicController {
         googleCalendarCreateEvent.setSummary("test");
         googleCalendarCreateEvent.setLocation("test");
         googleCalendarCreateEvent.setDescription("test");
-        googleCalendarCreateEvent.setStartTime(new DateTime("2023-04-27T10:00:00+02:00"));
-        googleCalendarCreateEvent.setEndTime(new DateTime("2023-04-27T13:00:00+02:00"));
+        googleCalendarCreateEvent.setStartTime(new com.google.api.client.util.DateTime("2023-04-27T10:00:00+02:00"));
+        googleCalendarCreateEvent.setEndTime(new com.google.api.client.util.DateTime("2023-04-27T13:00:00+02:00"));
 
         System.out.println(googleCalendarService.addEvent(googleCalendarCreateEvent));
     }

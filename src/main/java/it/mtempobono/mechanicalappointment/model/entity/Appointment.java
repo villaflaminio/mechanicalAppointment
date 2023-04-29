@@ -55,7 +55,7 @@ public class Appointment implements Comparable<Appointment> {
     @Column(name = "id_calendar_event")
     private String idCalendarEvent;
 
-
+    private Boolean isMechanicalActionCustom;
     //get start time from internal time
     public LocalTime getStartTime() {
         return internalTime.getStart().getLocalTime();

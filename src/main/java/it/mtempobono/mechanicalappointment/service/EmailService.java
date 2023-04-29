@@ -4,6 +4,7 @@ import it.mtempobono.mechanicalappointment.model.dto.MailResponse;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -64,6 +65,17 @@ public class EmailService {
         }
 
         return response;
+    }
+
+    //-------------------[send new Appointment mail]----------------------
+    public MailResponse sendNewAppointmentMail(Appointment appointment){
+        String to = appointment.getVehicle().getUser().getEmail();
+        String subject = "Nuovo appuntamento";
+        //todo creare modello email
+        Map<String, Object> model = Map.of(
+                "appointment", appointment
+        );
+        return sendEmail(to, subject, model, "newAppointment");
     }
 }
 
