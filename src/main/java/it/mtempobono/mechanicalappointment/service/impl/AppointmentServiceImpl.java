@@ -189,6 +189,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         // Retrieve the linked mechanical action by id
         MechanicalAction mechanicalAction = mechanicalActionRepository.findById(appointmentDto.getMechanicalActionId()).orElseThrow(() -> new RuntimeException("Mechanical action not found"));
 
+        if(mechanicalAction.getName().equals("CUSTOM")) throw new Exception("Mechanical action not found");
+
         // Check that internal time is not null and that the start time is before the end time
         if (appointmentDto.getTimeSlotSelected().getStart() != null || appointmentDto.getTimeSlotSelected().getEnd() != null) {
 

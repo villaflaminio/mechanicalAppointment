@@ -99,9 +99,9 @@ public class AppointmentCore {
         } else {
             List<TimePeriod> intervalFilled = findOverlappingIntervals(scheduledAppointments);
             List<TimePeriod> intervalToExclude = new ArrayList<>();
-            for (int i = 1; i < maxEventInParallel; i++) {
-                intervalFilled = findOverlappingIntervals(intervalFilled);
-            }
+//            for (int i = 1; i < maxEventInParallel; i++) {
+//                intervalFilled = findOverlappingIntervals(intervalFilled);
+//            }
 
             Map<TimePeriod, Integer> frequencyMap = new HashMap<>();
             for (TimePeriod number : intervalFilled) {
@@ -145,6 +145,9 @@ public class AppointmentCore {
     private CalculatedTimeslots calculateAvailableHours(List<TimePeriod> availableTimePeriods, MechanicalAction work, OpenDay openDay) {
         List<TimePeriod> availableHoursOnInteralTime = new ArrayList<>(availableTimePeriods.size() * 2);
         List<TimePeriod> availableHoursOnExternalTime = new ArrayList<>(availableTimePeriods.size() * 2);
+
+        if (work.getInternalDuration().toMinutes() <= 0 || work.getExternalDuration().toMinutes() <= 0)
+            throw new IllegalArgumentException("Duration must be greater than 0");
 
         // On each available time period
         for (TimePeriod period : availableTimePeriods) {
