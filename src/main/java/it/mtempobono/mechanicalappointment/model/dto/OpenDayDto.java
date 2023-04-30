@@ -24,6 +24,6 @@ public class OpenDayDto implements Serializable {
     @Schema(description = "The max number of parallel appointments", example = "2")
     private final Integer maxParallelAppointments;
 
-    @Schema(description = "The list of appointments")
+    @Schema(description = "The linked day plan")
     private final DayPlan workPlan;
 }

@@ -31,6 +31,7 @@ public class Appointment implements Comparable<Appointment> {
     @ManyToOne
     private MechanicalAction mechanicalAction;
 
+    @Column(name = "comment")
     private String comment;
 
     @ManyToOne

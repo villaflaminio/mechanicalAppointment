@@ -31,6 +31,7 @@ public class OpenDay {
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "max_parallel_appointments")
     private Integer maxParallelAppointments;
 
     @OneToMany(mappedBy = "openDay")
