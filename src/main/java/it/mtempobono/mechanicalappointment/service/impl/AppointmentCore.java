@@ -5,6 +5,8 @@ import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
+import it.mtempobono.mechanicalappointment.util.CalculatedTimeslots;
+import lombok.Data;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -84,8 +86,7 @@ public class AppointmentCore {
 //    }
 
 
-    public List<TimePeriod> getAvailableAppointments(OpenDay openDay, MechanicalAction work) {
-//        OpenDay openDay = openDayRepository.findById(openDayId).orElseThrow(() -> new RuntimeException("OpenDay not found"));
+    public CalculatedTimeslots getAvailableAppointments(OpenDay openDay, MechanicalAction work) {
 
         DayPlan day = openDay.getWorkPlan();
 
@@ -108,7 +109,7 @@ public class AppointmentCore {
         }
 
 
-        return calculateAvailableHours(availablePeroids, work);
+        return calculateAvailableHours(availablePeroids, work,openDay);
     }
 
 //    public List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeroids, MechanicalAction work) {
@@ -124,6 +125,8 @@ public class AppointmentCore {
 //        return availableHours;
 //    }
 
+
+
     /**
      * Calculates the available hours for a MechanicalAction within a list of TimePeriods.
      *
@@ -131,8 +134,10 @@ public class AppointmentCore {
      * @param work                 the MechanicalAction to schedule
      * @return a list of TimePeriods representing the available hours for the MechanicalAction
      */
-    private List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeriods, MechanicalAction work) {
-        List<TimePeriod> availableHours = new ArrayList<>(availableTimePeriods.size() * 2);
+    private CalculatedTimeslots calculateAvailableHours(List<TimePeriod> availableTimePeriods, MechanicalAction work, OpenDay openDay) {
+        List<TimePeriod> availableHoursOnInteralTime = new ArrayList<>(availableTimePeriods.size() * 2);
+        List<TimePeriod> availableHoursOnExternalTime = new ArrayList<>(availableTimePeriods.size() * 2);
+
         // On each available time period
         for (TimePeriod period : availableTimePeriods) {
             LocalTime startTime = period.getStart().getLocalTime();
@@ -140,15 +145,28 @@ public class AppointmentCore {
             // Iterate over each interval of the work time that can fit within the period
             while (startTime.plusMinutes(work.getInternalDuration().toMinutes()).isBefore(endTime)) {
                 // Add the interval to the list of available hours
-                availableHours.add(new TimePeriod(startTime, startTime.plusMinutes(work.getInternalDuration().toMinutes())));
+                availableHoursOnInteralTime.add(new TimePeriod(startTime, startTime.plusMinutes(work.getInternalDuration().toMinutes())));
+
+                //if the external duration is not null and the external duration is less than the end time of the work plan
+                // then add the external duration to the available hours
+                if(startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())){
+                    availableHoursOnExternalTime.add(new TimePeriod(startTime, startTime.plusMinutes(work.getExternalDuration().toMinutes())));
+                }
+
+
                 startTime = startTime.plusMinutes(work.getInternalDuration().toMinutes());
             }
             // Add any remaining time as a separate interval
             if (startTime.isBefore(endTime)) {
-                availableHours.add(new TimePeriod(startTime, endTime));
+                availableHoursOnInteralTime.add(new TimePeriod(startTime, endTime));
+
+                if(startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())){
+                    availableHoursOnExternalTime.add(new TimePeriod(startTime, startTime.plusMinutes(work.getExternalDuration().toMinutes())));
+                }
             }
         }
-        return availableHours;
+
+        return new CalculatedTimeslots(availableHoursOnInteralTime, availableHoursOnExternalTime);
     }
 
     /**

@@ -185,7 +185,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         // Check that internal time is not null and that the start time is before the end time
         if (appointmentDto.getTimeSlotSelected().getStart() != null || appointmentDto.getTimeSlotSelected().getEnd() != null) {
 
-            List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, mechanicalAction);
+            List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(openDay, mechanicalAction).getAvailableHoursOnExternalTime();
 
             if (availableHours.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
                 logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
@@ -307,7 +307,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 // Check that internal time is not null and that the start time is before the end time
                 if (appointmentDto.getTimeSlotSelected().getStart() != null || appointmentDto.getTimeSlotSelected().getEnd() != null) {
 
-                    List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(appointmentToUpdate.getOpenDay(), mechanicalAction);
+                    List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(appointmentToUpdate.getOpenDay(), mechanicalAction).getAvailableHoursOnExternalTime();
 
                     if (availableHours.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
                         logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
@@ -366,7 +366,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         OpenDay openDay = openDayRepository.findById(opendayId).orElseThrow(() -> new RuntimeException("OpenDay not found"));
         MechanicalAction mechanicalAction = mechanicalActionRepository.findById(mechanicalActionId).orElseThrow(() -> new RuntimeException("MechanicalAction not found"));
 
-        return ResponseEntity.ok(appointmentCore.getAvailableAppointments(openDay, mechanicalAction));
+        return ResponseEntity.ok(appointmentCore.getAvailableAppointments(openDay, mechanicalAction).getAvailableHoursOnExternalTime());
     }
     // endregion CRUD Methods
 }

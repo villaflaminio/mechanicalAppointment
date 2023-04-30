@@ -129,7 +129,7 @@ public class PublicController {
         work.setInternalDuration(Duration.ofHours(1));
 
 
-        List<TimePeriod> availableHours = this.appointmentCore.getAvailableAppointments(openDay, work);
+        List<TimePeriod> availableHours = this.appointmentCore.getAvailableAppointments(openDay, work).getAvailableHoursOnInteralTime();
 
         System.out.println(availableHours);
 
