@@ -53,7 +53,7 @@ public class PublicController {
     @GetMapping("/populate")
     private void populate() throws IOException {
 
-
+        List<Place> places = new ArrayList<>();
         List<List<String>> records = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/listacomuni.txt", StandardCharsets.ISO_8859_1))) {
             String line = br.readLine();
@@ -77,8 +77,9 @@ public class PublicController {
                     .region(Regione)
                     .build();
             System.out.println("add place: " + place);
-            placeRepository.save(place);
+            places.add((place));
         }
+        placeRepository.saveAll(places);
 
     }
 
@@ -154,7 +155,6 @@ public class PublicController {
     private void testRemoveFromCalendar() throws Exception {
         googleCalendarService.removeEvent("ige73uam2pmac6447ccklft6p4");
     }
-
 
 
 }

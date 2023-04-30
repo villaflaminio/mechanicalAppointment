@@ -362,7 +362,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 logger.error("Appointment not found");
                 return ResponseEntity.notFound().build();
             }
-
+            googleCalendarService.removeEvent(appointmentRepository.findById(id).get().getIdCalendarEvent());
             appointmentRepository.deleteById(id);
 
             return ResponseEntity.ok().build();
