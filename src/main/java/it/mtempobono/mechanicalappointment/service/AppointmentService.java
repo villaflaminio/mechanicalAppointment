@@ -15,7 +15,7 @@ public interface AppointmentService {
 
     ResponseEntity<Appointment> findById(Long id);
 
-    ResponseEntity<Appointment> save(AppointmentDto appointment);
+    ResponseEntity<Appointment> save(AppointmentDto appointment) throws Exception;
 
     ResponseEntity<Appointment> update(AppointmentDto appointment, Long id);
 

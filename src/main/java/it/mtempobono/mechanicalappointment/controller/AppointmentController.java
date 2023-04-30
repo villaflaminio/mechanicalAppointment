@@ -87,7 +87,7 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping
-    ResponseEntity<Appointment> save(@RequestBody @Validated AppointmentDto appointment);
+    ResponseEntity<Appointment> save(@RequestBody @Validated AppointmentDto appointment) throws Exception;
 
     /**
      * Update the appointment

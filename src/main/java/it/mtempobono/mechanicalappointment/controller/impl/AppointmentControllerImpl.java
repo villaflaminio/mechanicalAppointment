@@ -46,7 +46,7 @@ public class AppointmentControllerImpl implements AppointmentController {
     }
 
     @Override
-    public ResponseEntity<Appointment> save(AppointmentDto appointment) {
+    public ResponseEntity<Appointment> save(AppointmentDto appointment) throws Exception {
         return appointmentService.save(appointment);
     }
 

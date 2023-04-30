@@ -127,7 +127,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return the created appointment
      */
     @Override
-    public ResponseEntity<Appointment> save(AppointmentDto appointmentDto) {
+    public ResponseEntity<Appointment> save(AppointmentDto appointmentDto) throws Exception {
         try {
             logger.info("save() called with appointment: {}", appointmentDto);
 
@@ -161,10 +161,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         } catch (Exception e) {
             logger.error("Error in save() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from save() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     private Appointment createCustomAppointment(AppointmentDto appointmentDto, OpenDay openDay, Vehicle vehicle, AppointmentStatus appointmentStatus) {
