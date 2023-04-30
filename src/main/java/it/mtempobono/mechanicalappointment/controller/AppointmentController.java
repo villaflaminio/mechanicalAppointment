@@ -70,7 +70,7 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/availableTimeSlots")
-    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId , Long mechanicalActionId);
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId , Long mechanicalActionId, boolean externalTimeslot);
 
 
     /**

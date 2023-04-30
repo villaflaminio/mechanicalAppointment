@@ -21,5 +21,5 @@ public interface AppointmentService {
 
     ResponseEntity<Void> delete(Long id);
 
-    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId);
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot);
 }

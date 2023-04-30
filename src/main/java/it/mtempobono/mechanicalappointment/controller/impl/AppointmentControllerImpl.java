@@ -41,8 +41,8 @@ public class AppointmentControllerImpl implements AppointmentController {
     }
 
     @Override
-    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId) {
-       return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId);
+    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot) {
+       return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId,externalTimeslot);
     }
 
     @Override

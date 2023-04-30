@@ -9,9 +9,7 @@ import it.mtempobono.mechanicalappointment.util.CalculatedTimeslots;
 import lombok.Data;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class AppointmentCore {
 
@@ -40,9 +38,9 @@ public class AppointmentCore {
                     LocalTime overlapEnd = interval1.getEnd().getLocalTime().isAfter(interval2.getEnd().getLocalTime()) ? interval2.getEnd().getLocalTime() : interval1.getEnd().getLocalTime();
                     TimePeriod overlapping = new TimePeriod(overlapStart, overlapEnd);
                     // Add the overlapping interval to the list only if it's not already present
-                    if (!overlappingIntervals.contains(overlapping)) {
-                        overlappingIntervals.add(overlapping);
-                    }
+//                    if (!overlappingIntervals.contains(overlapping)) {
+                    overlappingIntervals.add(overlapping);
+//                    }
                 }
             }
         }
@@ -85,7 +83,6 @@ public class AppointmentCore {
 //        return overlappingInterval;
 //    }
 
-
     public CalculatedTimeslots getAvailableAppointments(OpenDay openDay, MechanicalAction work) {
 
         DayPlan day = openDay.getWorkPlan();
@@ -97,19 +94,31 @@ public class AppointmentCore {
         Integer maxEventInParallel = openDay.getMaxParallelAppointments();
 
         if (maxEventInParallel == 0) {
-            availablePeroids = excludeAppointmentsFromTimePeriods(availablePeroids, scheduledAppointments);
+            availablePeroids = excludeAppointmentsFromTimePeriods(availablePeroids, scheduledAppointments, work);
 
         } else {
             List<TimePeriod> intervalFilled = findOverlappingIntervals(scheduledAppointments);
-
+            List<TimePeriod> intervalToExclude = new ArrayList<>();
             for (int i = 1; i < maxEventInParallel; i++) {
                 intervalFilled = findOverlappingIntervals(intervalFilled);
             }
-            availablePeroids = excludeAppointmentsFromTimePeriods(availablePeroids, intervalFilled);
+
+            Map<TimePeriod, Integer> frequencyMap = new HashMap<>();
+            for (TimePeriod number : intervalFilled) {
+                frequencyMap.put(number, frequencyMap.getOrDefault(number, 0) + 1);
+            }
+
+            for (Map.Entry<TimePeriod, Integer> entry : frequencyMap.entrySet()) {
+                if (entry.getValue() > maxEventInParallel) {
+                    intervalToExclude.add(entry.getKey());
+                }
+            }
+
+            availablePeroids = excludeAppointmentsFromTimePeriods(availablePeroids, intervalToExclude, work);
         }
 
 
-        return calculateAvailableHours(availablePeroids, work,openDay);
+        return calculateAvailableHours(availablePeroids, work, openDay);
     }
 
 //    public List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeroids, MechanicalAction work) {
@@ -124,7 +133,6 @@ public class AppointmentCore {
 //        }
 //        return availableHours;
 //    }
-
 
 
     /**
@@ -149,7 +157,7 @@ public class AppointmentCore {
 
                 //if the external duration is not null and the external duration is less than the end time of the work plan
                 // then add the external duration to the available hours
-                if(startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())){
+                if (startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())) {
                     availableHoursOnExternalTime.add(new TimePeriod(startTime, startTime.plusMinutes(work.getExternalDuration().toMinutes())));
                 }
 
@@ -160,7 +168,7 @@ public class AppointmentCore {
             if (startTime.isBefore(endTime)) {
                 availableHoursOnInteralTime.add(new TimePeriod(startTime, endTime));
 
-                if(startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())){
+                if (startTime.plusMinutes(work.getExternalDuration().toMinutes()).isBefore(openDay.getWorkPlan().getWorkingHours().getEnd().getLocalTime())) {
                     availableHoursOnExternalTime.add(new TimePeriod(startTime, startTime.plusMinutes(work.getExternalDuration().toMinutes())));
                 }
             }
@@ -176,7 +184,7 @@ public class AppointmentCore {
      * @param appointments the list of time periods representing appointments to be excluded
      * @return a list of time periods that represent the resulting availability after excluding the appointments
      */
-    private List<TimePeriod> excludeAppointmentsFromTimePeriods(List<TimePeriod> periods, List<TimePeriod> appointments) {
+    private List<TimePeriod> excludeAppointmentsFromTimePeriods(List<TimePeriod> periods, List<TimePeriod> appointments, MechanicalAction work) {
 
         List<TimePeriod> toAdd = new ArrayList<>();
 
@@ -208,8 +216,13 @@ public class AppointmentCore {
 
                 // Case 3: appointment is within the period
                 if (appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) && appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
-                    toAdd.add(new TimePeriod(period.getStart().getLocalTime(), appointment.getStart().getLocalTime()));
+                    TimePeriod time = new TimePeriod(period.getStart().getLocalTime(), appointment.getStart().getLocalTime());
+
+                    if (work.getInternalDuration() != null && work.getInternalDuration().toMinutes() <= time.getDuration().toMinutes()) {
+                        toAdd.add(time);
+                    }
                     period.setStart(appointment.getEnd());
+
                 }
             }
         }

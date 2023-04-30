@@ -80,10 +80,12 @@ public class GoogleCalendarService {
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 httpTransport, JSON_FACTORY, clientSecrets,
                 Collections.singleton(CalendarScopes.CALENDAR))
-                .setDataStoreFactory(dataStoreFactory).build();
+                .setDataStoreFactory(dataStoreFactory)
+                .build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(5093).build();
         // authorize
         return new AuthorizationCodeInstalledApp(flow,
-                new LocalServerReceiver()).authorize("user");
+                receiver).authorize("user");
     }
 
     /// <summary>

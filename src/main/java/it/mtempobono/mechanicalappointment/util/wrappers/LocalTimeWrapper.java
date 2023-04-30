@@ -21,7 +21,6 @@ public class LocalTimeWrapper implements Serializable {
     private int second;
     @Schema(example = "0")
     private int nano;
-
     @JsonIgnore
     public LocalTime getLocalTime() {
         return LocalTime.of(hour, minute, second, nano);

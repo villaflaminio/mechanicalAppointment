@@ -1,9 +1,11 @@
 package it.mtempobono.mechanicalappointment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.util.wrappers.LocalTimeWrapper;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -42,6 +44,10 @@ public class TimePeriod implements Comparable<TimePeriod>, Serializable{
         this.end = localTimeWrapperEnd;
     }
 
+    @JsonIgnore
+    public Duration getDuration() {
+        return Duration.between(this.start.getLocalTime(), this.end.getLocalTime());
+    }
     // endregion Constructors
 
     // region Methods
