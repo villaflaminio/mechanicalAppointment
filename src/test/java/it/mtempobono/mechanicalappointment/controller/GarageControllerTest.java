@@ -26,6 +26,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -48,32 +49,12 @@ class GarageControllerTest {
     JSONParser parser = new JSONParser();
 
 
-
-
-//    @Test
-//    void should_create_one_user() throws Exception {
-//        final File jsonFile = new ClassPathResource("init/idea.json").getFile();
-//        final String ideaToCreate = Files.readString(jsonFile.toPath());
-//
-//        this.mockMvc.perform(post("/api/ideas")
-//                        .contentType(APPLICATION_JSON)
-//                        .content(ideaToCreate))
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$").isMap());
-//
-//        assertThat(this.repository.findAll()).hasSize(13);
-//
-//    }
-//
-
-    //test create company
     @Test
     void should_create_one_garage() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
-        MvcResult result =  this.mockMvc.perform(post("/api/garages")
+        MvcResult result = this.mockMvc.perform(post("/api/garages")
                         .contentType(APPLICATION_JSON)
                         .content(companyToCreate))
                 .andDo(print())
@@ -173,13 +154,12 @@ class GarageControllerTest {
         repository.delete(garage);
     }
 
-    //get garages
     @Test
     void should_get_all_garages() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
-        MvcResult creation =  this.mockMvc.perform(post("/api/garages")
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
                         .contentType(APPLICATION_JSON)
                         .content(companyToCreate))
                 .andDo(print())
@@ -195,7 +175,7 @@ class GarageControllerTest {
         Garage garage = repository.findById(Long.parseLong(jsonObject.get("id").toString())).get();
 
 
-        MvcResult resultGet =  this.mockMvc.perform(get("/api/garages")
+        MvcResult resultGet = this.mockMvc.perform(get("/api/garages")
                         .contentType(APPLICATION_JSON)
                         .content(companyToCreate))
                 .andDo(print())
@@ -214,5 +194,88 @@ class GarageControllerTest {
         assertThat(garages).hasSize(lenght);
 
         repository.delete(garage);
+    }
+
+
+    @Test
+    void should_get_one_garage_by_id() throws Exception {
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String content = creation.getResponse().getContentAsString();
+        JSONObject jsonObject = (JSONObject) parser.parse(content);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        Garage garage = repository.findById(Long.parseLong(jsonObject.get("id").toString())).get();
+
+        MvcResult resultGet = this.mockMvc.perform(get("/api/garages/" + garage.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONObject jsonResult = (JSONObject) parser.parse(contentGet);
+        GarageDto garageDto = mapper.readValue(jsonResult.toString(), GarageDto.class);
+
+        List<String> compareGetters = new ArrayList<>();
+        compareGetters.add("name");
+        compareGetters.add("address");
+        compareGetters.add("cap");
+        compareGetters.add("linkGoogleMaps");
+        compareGetters.add("latitude");
+        compareGetters.add("longitude");
+        compareGetters.add("phone");
+        compareGetters.add("email");
+        compareGetters.add("website");
+        compareGetters.add("logo");
+
+        //compare with modifyCompanyRequest
+        List<String> garageDifferences = MyReflectionTestUtils.compareGetters(garage, garageDto, compareGetters);
+        assertThat(garageDifferences).isEmpty();
+
+        repository.delete(garage);
+    }
+
+    @Test
+    void should_delete_one_garage_by_id() throws Exception {
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String content = creation.getResponse().getContentAsString();
+        JSONObject jsonObject = (JSONObject) parser.parse(content);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        Garage garage = repository.findById(Long.parseLong(jsonObject.get("id").toString())).get();
+
+        MvcResult resultGet = this.mockMvc.perform(delete("/api/garages/" + garage.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        Optional<Garage> garageOptional = repository.findById(garage.getId());
+        assertThat(garageOptional).isEmpty();
     }
 }
