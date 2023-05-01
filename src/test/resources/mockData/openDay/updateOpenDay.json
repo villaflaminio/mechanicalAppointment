@@ -1,0 +1,37 @@
+{
+  "garageId": 1,
+  "date": "2024-05-01",
+  "maxParallelAppointments": 5,
+  "workPlan": {
+    "workingHours": {
+      "start": {
+        "hour": 7,
+        "minute": 30,
+        "second": 0,
+        "nano": 0
+      },
+      "end": {
+        "hour": 19,
+        "minute": 30,
+        "second": 0,
+        "nano": 0
+      }
+    },
+    "breaks": [
+      {
+        "start": {
+          "hour": 11,
+          "minute": 30,
+          "second": 0,
+          "nano": 0
+        },
+        "end": {
+          "hour": 15,
+          "minute": 30,
+          "second": 0,
+          "nano": 0
+        }
+      }
+    ]
+  }
+}

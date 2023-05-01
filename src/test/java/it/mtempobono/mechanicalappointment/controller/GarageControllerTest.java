@@ -93,7 +93,6 @@ class GarageControllerTest {
     @Test
     void should_update_one_garage() throws Exception {
 
-        //create company
         final File createCompany = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(createCompany.toPath());
 
@@ -109,12 +108,12 @@ class GarageControllerTest {
         Long garageId = Long.parseLong(jsonResultCompanyCreation.get("id").toString());
         Garage oldGarage = repository.findById(garageId).orElseThrow(() -> new Exception("Garage not found"));
 
-        final File updateCompany = new ClassPathResource("mockData/garage/updateGarage.json").getFile();
-        final String companyToUpdate = Files.readString(updateCompany.toPath());
+        final File updateGarage = new ClassPathResource("mockData/garage/updateGarage.json").getFile();
+        final String GarageToUpdate = Files.readString(updateGarage.toPath());
 
         MvcResult result = this.mockMvc.perform(put("/api/garages/" + garageId)
                         .contentType(APPLICATION_JSON)
-                        .content(companyToUpdate))
+                        .content(GarageToUpdate))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
