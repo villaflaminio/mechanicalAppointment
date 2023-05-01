@@ -4,6 +4,7 @@ package it.mtempobono.mechanicalappointment.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Getter
@@ -25,8 +26,13 @@ public class Garage {
     @JoinColumn(name="place_id")
     private Place place;
 
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "cap")
     private String cap;
+
+    @Column(name = "link_google_maps")
     private String linkGoogleMaps;
 
     @Column (name = "latitude")
@@ -45,7 +51,6 @@ public class Garage {
     private String website;
 
     @Column(name = "logo")
-    @Lob
     private String logo;
 
     @OneToMany(mappedBy = "garage")
