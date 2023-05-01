@@ -2,7 +2,6 @@ package it.mtempobono.mechanicalappointment.service.impl;
 
 import it.mtempobono.mechanicalappointment.model.builders.GarageBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
-import it.mtempobono.mechanicalappointment.model.dto.PlaceDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.GarageRepository;
@@ -11,17 +10,12 @@ import it.mtempobono.mechanicalappointment.service.GarageService;
 import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Class that contains Garage business logics.
@@ -38,7 +32,7 @@ public class GarageServiceImpl implements GarageService {
     private PlaceRepository placeRepository;
     // endregion Fields
 
-    // region Methods
+    // region CRUD Methods
     /**
      * Get all the garages
      * @return the list of garages
@@ -188,5 +182,79 @@ public class GarageServiceImpl implements GarageService {
         return ResponseEntity.badRequest().build();
     }
 
-    // endregion Methods
+    // endregion CRUD Methods
+
+    // region Custom Methods
+
+    /**
+     * Find all the garages by place municipality starts with
+     * @param municipality the place municipality to search
+     * @return the list of garages which place municipality starts with
+     */
+    public ResponseEntity<List<Garage>> findGarageByPlaceMunicipalityStartsWith(String municipality){
+        try {
+            logger.info("findGarageByPlaceMunicipalityStartsWith() called with municipality: {}", municipality);
+
+            List<Garage> garages = garageRepository.findGarageByPlaceMunicipalityStartsWith(municipality);
+
+            if (garages.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(garages);
+        } catch (Exception e) {
+            logger.error("Error in findGarageByPlaceMunicipalityStartsWith() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from findGarageByPlaceMunicipalityStartsWith() method");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Find all the garages by place province starts with
+     * @param province the place province to search
+     * @return the list of garages which place province starts with
+     */
+    public ResponseEntity<List<Garage>> findGarageByPlaceProvinceStartsWith(String province){
+        try {
+            logger.info("findGarageByPlaceProvinceStartsWith() called with municipality: {}", province);
+
+            List<Garage> garages = garageRepository.findGarageByPlaceProvinceStartsWith(province);
+
+            if (garages.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(garages);
+        } catch (Exception e) {
+            logger.error("Error in findGarageByPlaceProvinceStartsWith() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from findGarageByPlaceProvinceStartsWith() method");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Find all the garages by place region starts with
+     * @param region the place region to search
+     * @return the list of garages which place region starts with
+     */
+    public ResponseEntity<List<Garage>> findGarageByPlaceRegionStartsWith(String region){
+        try {
+            logger.info("findGarageByPlaceRegionStartsWith() called with municipality: {}", region);
+
+            List<Garage> garages = garageRepository.findGarageByPlaceRegionStartsWith(region);
+
+            if (garages.isEmpty())
+                return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(garages);
+        } catch (Exception e) {
+            logger.error("Error in findGarageByPlaceRegionStartsWith() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from findGarageByPlaceRegionStartsWith() method");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    // endregion Custom Methods
 }

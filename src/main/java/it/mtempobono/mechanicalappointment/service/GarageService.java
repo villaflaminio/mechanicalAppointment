@@ -3,9 +3,6 @@ package it.mtempobono.mechanicalappointment.service;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -22,4 +19,10 @@ public interface GarageService {
     ResponseEntity<Garage> update(GarageDto garage, Long id);
 
     ResponseEntity<Void> delete(Long id);
+
+    ResponseEntity<List<Garage>> findGarageByPlaceMunicipalityStartsWith(String municipality);
+
+    ResponseEntity<List<Garage>> findGarageByPlaceProvinceStartsWith(String province);
+
+    ResponseEntity<List<Garage>> findGarageByPlaceRegionStartsWith(String region);
 }

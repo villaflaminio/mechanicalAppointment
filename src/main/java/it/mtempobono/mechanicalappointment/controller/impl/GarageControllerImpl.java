@@ -4,13 +4,10 @@ import it.mtempobono.mechanicalappointment.controller.GarageController;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.service.GarageService;
-import it.mtempobono.mechanicalappointment.service.impl.GarageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GarageControllerImpl implements GarageController {
 
     // region Fields
-    private static final Logger logger = LoggerFactory.getLogger(GarageController.class);
 
     @Autowired
     private GarageService garageService;
@@ -52,4 +48,21 @@ public class GarageControllerImpl implements GarageController {
     @Override
     public ResponseEntity<Void> delete(Long id) { return garageService.delete(id);}
     //endregion CRUD Methods
+
+    //region Custom Methods
+    @Override
+    public ResponseEntity<List<Garage>> findGarageByPlaceMunicipalityStartsWith(String municipality) {
+        return garageService.findGarageByPlaceMunicipalityStartsWith(municipality);
+    }
+
+    @Override
+    public ResponseEntity<List<Garage>> findGarageByPlaceProvinceStartsWith(String province) {
+        return garageService.findGarageByPlaceProvinceStartsWith(province);
+    }
+
+    @Override
+    public ResponseEntity<List<Garage>> findGarageByPlaceRegionStartsWith(String region) {
+        return garageService.findGarageByPlaceRegionStartsWith(region);
+    }
+    //endregion Custom Methods
 }
