@@ -8,6 +8,7 @@ import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.repository.GarageRepository;
 import it.mtempobono.mechanicalappointment.utils.MyReflectionTestUtils;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,8 +29,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -169,6 +169,49 @@ class GarageControllerTest {
 
         garageDifferences.clear();
         compareGetters.clear();
+
+        repository.delete(garage);
+    }
+
+    //get garages
+    @Test
+    void should_get_all_garages() throws Exception {
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation =  this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String content = creation.getResponse().getContentAsString();
+        JSONObject jsonObject = (JSONObject) parser.parse(content);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        Garage garage = repository.findById(Long.parseLong(jsonObject.get("id").toString())).get();
+
+
+        MvcResult resultGet =  this.mockMvc.perform(get("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONArray jsonArray = (JSONArray) parser.parse(contentGet);
+        List<GarageDto> garages = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            garages.add(mapper.readValue(jsonArray.get(i).toString(), GarageDto.class));
+        }
+
+        int lenght = (int) repository.count();
+        assertThat(garages).hasSize(lenght);
 
         repository.delete(garage);
     }
