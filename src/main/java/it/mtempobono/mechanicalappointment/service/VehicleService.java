@@ -19,4 +19,6 @@ public interface VehicleService {
     ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id);
 
     ResponseEntity<Void> delete(Long id);
+
+    ResponseEntity<List<Vehicle>> findByUserId(Long id);
 }

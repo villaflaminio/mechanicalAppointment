@@ -100,13 +100,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     /**
      * Update the vehicle
-     * @param vehicle the vehicle to update
+     * @param vehicleDto the vehicle to update
      * @return the updated vehicle
      */
     @Override
-    public ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id){
+    public ResponseEntity<Vehicle> update(VehicleDto vehicleDto, Long id){
         try {
-            logger.info("update() called with vehicle: {}", vehicle);
+            logger.info("update() called with vehicle: {}", vehicleDto);
 
             // Try to find the vehicle by id
             Optional<Vehicle> vehicleToUpdateOptional = vehicleRepository.findById(id);
@@ -117,10 +117,8 @@ public class VehicleServiceImpl implements VehicleService {
                 return ResponseEntity.notFound().build();
             }
 
-            PropertyCheckerUtils.copyNonNullProperties(vehicle, vehicleToUpdateOptional.get());
+            PropertyCheckerUtils.copyNonNullProperties(vehicleDto, vehicleToUpdateOptional.get());
             vehicleToUpdateOptional.get().setId(id);
-
-            // TODO: Perform the update operation
 
             return ResponseEntity.ok(vehicleRepository.save(vehicleToUpdateOptional.get()));
         } catch (Exception e) {
@@ -158,5 +156,25 @@ public class VehicleServiceImpl implements VehicleService {
         return ResponseEntity.badRequest().build();
     }
 
+    /**
+     * Get the vehicles by user id
+     * @param id the user id
+     * @return the list of vehicles
+     */
+    @Override
+    public ResponseEntity<List<Vehicle>> findByUserId(Long id){
+        try {
+            logger.info("findByUserId() called with id: {}", id);
+            return ResponseEntity.ok(vehicleRepository.findByUserId(id));
+        } catch (Exception e) {
+            logger.error("Error in findByUserId() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from findByUserId() method");
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     // endregion Methods
+
+
 }

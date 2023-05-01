@@ -52,4 +52,12 @@ public class VehicleControllerImpl implements VehicleController {
     @Override
     public ResponseEntity<Void> delete(Long id) { return vehicleService.delete(id);}
     //endregion CRUD Methods
+
+
+    //region Public Methods
+    @Override
+    public ResponseEntity<List<Vehicle>> findByUserId(Long id) {
+        return vehicleService.findByUserId(id);
+    }
+    //endregion Public Methods
 }

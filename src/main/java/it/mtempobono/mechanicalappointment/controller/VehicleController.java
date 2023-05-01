@@ -105,4 +105,22 @@ public interface VehicleController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
+
+    /**
+     * Get the vehicle list by user id
+     * @param id the user id
+     * @return the vehicle list linked to the user id
+     */
+    @Operation(
+            summary = "Retrieve a list of Vehicles by User Id",
+            description = "Get a list of Vehicles objects by specifying its user id. The response is a list of Vehicle objects."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Vehicle.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/user/{id}")
+    ResponseEntity<List<Vehicle>> findByUserId(@PathVariable("id") Long id);
+
+
 }
