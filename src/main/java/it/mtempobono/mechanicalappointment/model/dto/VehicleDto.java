@@ -10,19 +10,21 @@ import java.io.Serializable;
  */
 @Data
 public class VehicleDto implements Serializable {
-    @Schema (description = "The user id", example = "1")
-    private final Long userId;
-    @Schema (description = "The plate", example = "AA123BB")
+    @Schema(description = "Unique identifier of the Vehicle.", example = "GJ123AA")
     private final String plate;
-    @Schema (description = "The model", example = "Panda")
-    private final String model;
-    @Schema (description = "The brand", example = "Fiat")
-    private final String brand;
-    @Schema (description = "The year", example = "2010")
-    private final Integer year;
-    @Schema (description = "The fuel", example = "Diesel")
-    private final String fuel;
-    @Schema (description = "Is active", example = "true")
-    private final Boolean isActive;
 
+    @Schema(description = "Model of the Vehicle.", example = "Urus")
+    private final String model;
+
+    @Schema(description = "Brand of the Vehicle.", example = "Lamborghini")
+    private final String brand;
+
+    @Schema(description = "Year of the Vehicle.", example = "2020")
+    private final Integer year;
+
+    @Schema(description = "Fuel of the Vehicle.", example = "Gasoline")
+    private final String fuel;
+
+    @Schema(description = "Is the Vehicle active.", example = "true")
+    private final Boolean isActive;
 }
