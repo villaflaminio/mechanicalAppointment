@@ -27,4 +27,7 @@ public class VehicleDto implements Serializable {
 
     @Schema(description = "Is the Vehicle active.", example = "true")
     private final Boolean isActive;
+
+    @Schema(description = "User id of the Vehicle.", example = "1")
+    private final Long userId;
 }

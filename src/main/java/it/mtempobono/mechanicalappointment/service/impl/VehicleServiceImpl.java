@@ -2,7 +2,9 @@ package it.mtempobono.mechanicalappointment.service.impl;
 
 import it.mtempobono.mechanicalappointment.model.builders.VehicleBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.VehicleDto;
+import it.mtempobono.mechanicalappointment.model.entity.User;
 import it.mtempobono.mechanicalappointment.model.entity.Vehicle;
+import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import it.mtempobono.mechanicalappointment.repository.VehicleRepository;
 import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
 import it.mtempobono.mechanicalappointment.service.VehicleService;
@@ -28,6 +30,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // endregion Fields
 
@@ -78,6 +83,15 @@ public class VehicleServiceImpl implements VehicleService {
         try {
             logger.info("save() called with vehicle: {}", vehicleDto);
 
+            // Find user linked to the vehicle
+            Optional<User> userOptional = userRepository.findById(vehicleDto.getUserId());
+
+            // If the user doesn't exist, return a 404 error
+            if (userOptional.isEmpty()) {
+                logger.error("User not found");
+                return ResponseEntity.notFound().build();
+            }
+
             // Create a new vehicle using fields from vehicleDto
             Vehicle newVehicle = VehicleBuilder.aVehicle()
                     .plate(vehicleDto.getPlate())
@@ -86,6 +100,7 @@ public class VehicleServiceImpl implements VehicleService {
                     .year(vehicleDto.getYear())
                     .fuel(vehicleDto.getFuel())
                     .isActive(vehicleDto.getIsActive())
+                    .user(userOptional.get())
                     .build();
 
             return ResponseEntity.ok(vehicleRepository.save(newVehicle));
