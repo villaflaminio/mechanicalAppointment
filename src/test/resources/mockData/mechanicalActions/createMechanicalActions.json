@@ -1,0 +1,14 @@
+{
+  "name": "Change oil",
+  "description": "Change the oil of the car",
+  "price": 50,
+  "isActive": true,
+  "internalDuration": {
+    "hours": 1,
+    "minutes": 0
+  },
+  "externalDuration": {
+    "hours": 2,
+    "minutes": 30
+  }
+}
