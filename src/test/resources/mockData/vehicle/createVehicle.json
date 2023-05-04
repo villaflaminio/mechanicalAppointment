@@ -1,0 +1,9 @@
+{
+  "plate": "GJ123AA",
+  "model": "Urus",
+  "brand": "Lamborghini",
+  "year": 2020,
+  "fuel": "Gasoline",
+  "isActive": true,
+  "userId": 1
+}
