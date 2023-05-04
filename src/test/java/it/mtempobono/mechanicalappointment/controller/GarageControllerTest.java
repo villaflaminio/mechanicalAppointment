@@ -19,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -30,6 +32,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,7 +53,10 @@ class GarageControllerTest {
 
 
     @Test
-    void should_create_one_garage() throws Exception {
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })    void should_create_one_garage() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -91,7 +97,10 @@ class GarageControllerTest {
 
 
     @Test
-    void should_update_one_garage() throws Exception {
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })    void should_update_one_garage() throws Exception {
 
         final File createCompany = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(createCompany.toPath());
@@ -154,7 +163,10 @@ class GarageControllerTest {
     }
 
     @Test
-    void should_get_all_garages() throws Exception {
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })    void should_get_all_garages() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -197,7 +209,10 @@ class GarageControllerTest {
 
 
     @Test
-    void should_get_one_garage_by_id() throws Exception {
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })    void should_get_one_garage_by_id() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -247,7 +262,10 @@ class GarageControllerTest {
     }
 
     @Test
-    void should_delete_one_garage_by_id() throws Exception {
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })    void should_delete_one_garage_by_id() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 

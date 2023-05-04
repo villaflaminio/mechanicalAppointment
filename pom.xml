@@ -223,6 +223,18 @@
             <artifactId>sqlite-dialect</artifactId>
             <version>0.1.2</version>
         </dependency>
+
+        <!-- javers -->
+        <dependency>
+            <groupId>org.javers</groupId>
+            <artifactId>javers-spring-boot-starter-sql</artifactId>
+            <version>6.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <repositories>

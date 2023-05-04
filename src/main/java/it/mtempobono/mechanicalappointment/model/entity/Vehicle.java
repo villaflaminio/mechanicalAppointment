@@ -1,10 +1,7 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "vehicles")
 public class Vehicle {
@@ -29,7 +27,7 @@ public class Vehicle {
     @Column(name = "brand")
     private String brand;
 
-    @Column(name = "year")
+    @Column(name = "year_car")
     private Integer year;
 
     @Column(name = "fuel")
