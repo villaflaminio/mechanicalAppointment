@@ -1,0 +1,22 @@
+{
+  "openDayId": 1,
+  "mechanicalActionId": 2,
+  "comment": "I need to change the tires",
+  "vehicleId": 1,
+  "timeSlotSelected": {
+    "start": {
+      "hour": 8,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    },
+    "end": {
+      "hour": 12,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    }
+  },
+  "status": "SCHEDULED",
+  "isMechanicalActionCustom":false
+}

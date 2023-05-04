@@ -2,7 +2,8 @@ package it.mtempobono.mechanicalappointment.service.impl;
 
 import com.google.api.client.util.DateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentSearchDto;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.builders.AppointmentBuilder;
@@ -102,25 +103,34 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private String createCalendarEvent(OpenDay openDay, AppointmentDto appointmentDto, Vehicle vehicle, MechanicalAction mechanicalAction) throws Exception {
-        GoogleCalendarCreateEvent googleCalendarCreateEvent = new GoogleCalendarCreateEvent();
-        googleCalendarCreateEvent.setSummary("Appointment");
-        googleCalendarCreateEvent.setDescription("Appointment for " + vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getPlate() + " for " + mechanicalAction.getName());
+        try {
 
-        LocalDate day = openDay.getDate();
-        LocalTime startTime = appointmentDto.getTimeSlotSelected().getStart().getLocalTime();
-        LocalTime endTime = appointmentDto.getTimeSlotSelected().getEnd().getLocalTime();
+            GoogleCalendarCreateEvent googleCalendarCreateEvent = new GoogleCalendarCreateEvent();
+            googleCalendarCreateEvent.setSummary("Appointment");
+            googleCalendarCreateEvent.setDescription("Appointment for " + vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getPlate() + " for " + mechanicalAction.getName());
 
-        DateTime startCalendarTime = new DateTime(
-                (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), startTime.getHour(), startTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
+            LocalDate day = openDay.getDate();
+            LocalTime startTime = appointmentDto.getTimeSlotSelected().getStart().getLocalTime();
+            LocalTime endTime = appointmentDto.getTimeSlotSelected().getEnd().getLocalTime();
 
-        DateTime endCalendarTime = new DateTime(
-                (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), endTime.getHour(), endTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
+            DateTime startCalendarTime = new DateTime(
+                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), startTime.getHour(), startTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
 
-        googleCalendarCreateEvent.setStartTime(startCalendarTime);
-        googleCalendarCreateEvent.setEndTime(endCalendarTime);
-        googleCalendarCreateEvent.setLocation(openDay.getGarage().getAddress());
+            DateTime endCalendarTime = new DateTime(
+                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), endTime.getHour(), endTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
 
-        return googleCalendarService.addEvent(googleCalendarCreateEvent);
+            googleCalendarCreateEvent.setStartTime(startCalendarTime);
+            googleCalendarCreateEvent.setEndTime(endCalendarTime);
+            googleCalendarCreateEvent.setLocation(openDay.getGarage().getAddress());
+
+            return googleCalendarService.addEvent(googleCalendarCreateEvent);
+        } catch (Exception e) {
+            logger.warn("Error in createCalendarEvent() method: {}", e.getMessage());
+
+        } finally {
+            logger.debug("Exit from createCalendarEvent() method");
+        }
+        return "";
     }
 
     /**
@@ -347,11 +357,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentToUpdate.setComment(appointmentDto.getComment());
             }
 
-
-            if (appointmentDto.getStatus() != null) {
-                appointmentToUpdate.setStatus(setStatus(appointmentDto.getStatus(), appointmentToUpdate).getStatus());
-            }
-
             if (appointmentDto.getTimeSlotSelected() != null) {
                 appointmentToUpdate.setInternalTime(appointmentDto.getTimeSlotSelected());
                 // Retrieve the linked mechanical action by id
@@ -360,11 +365,15 @@ public class AppointmentServiceImpl implements AppointmentService {
                 // Check that internal time is not null and that the start time is before the end time
                 if (appointmentDto.getTimeSlotSelected().getStart() != null || appointmentDto.getTimeSlotSelected().getEnd() != null) {
 
-                    List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(appointmentToUpdate.getOpenDay(), mechanicalAction).getAvailableHoursOnExternalTime();
+                    try {
+                        List<TimePeriod> availableHours = appointmentCore.getAvailableAppointments(appointmentToUpdate.getOpenDay(), mechanicalAction).getAvailableHoursOnExternalTime();
 
-                    if (availableHours.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
-                        logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
-                        throw new RuntimeException("Appointment internal time is not valid. Could be null or start after the end time.");
+                        if (availableHours.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
+                            logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
+                            throw new RuntimeException("Appointment internal time is not valid. Could be null or start after the end time.");
+                        }
+                    } catch (Exception e) {
+                        // do nothing
                     }
                 }
                 //internal time = external time start + mechanical action duration
@@ -376,7 +385,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentToUpdate.setInternalTime(internalTime);
                 appointmentToUpdate.setExternalTime(externalTime);
 
-                googleCalendarService.removeEvent(appointmentToUpdate.getIdCalendarEvent());
+                try {
+                    googleCalendarService.removeEvent(appointmentToUpdate.getIdCalendarEvent());
+                } catch (Exception e) {
+                    logger.warn("Appointment not found in google calendar");
+                }
                 appointmentToUpdate.setIdCalendarEvent(createCalendarEvent(appointmentToUpdate.getOpenDay(), appointmentDto, appointmentToUpdate.getVehicle(), mechanicalAction));
             }
 
@@ -402,7 +415,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 logger.error("Appointment not found");
                 return ResponseEntity.notFound().build();
             }
-            googleCalendarService.removeEvent(appointmentRepository.findById(id).get().getIdCalendarEvent());
+            try {
+                googleCalendarService.removeEvent(appointmentRepository.findById(id).get().getIdCalendarEvent());
+            }catch (Exception e){
+                logger.warn("Appointment not found in google calendar");
+            }
             appointmentRepository.deleteById(id);
 
             return ResponseEntity.ok().build();
@@ -416,11 +433,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot) {
-        OpenDay openDay = openDayRepository.findById(opendayId).orElseThrow(() -> new RuntimeException("OpenDay not found"));
-        MechanicalAction mechanicalAction = mechanicalActionRepository.findById(mechanicalActionId).orElseThrow(() -> new RuntimeException("MechanicalAction not found"));
+    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(AppointmentSearchDto appointmentSearchDto) {
+        OpenDay openDay = openDayRepository.findById(appointmentSearchDto.getOpendayId()).orElseThrow(() -> new RuntimeException("OpenDay not found"));
+        MechanicalAction mechanicalAction = mechanicalActionRepository.findById(appointmentSearchDto.getMechanicalActionId()).orElseThrow(() -> new RuntimeException("MechanicalAction not found"));
 
-        if (externalTimeslot)
+        if (appointmentSearchDto.isExternalTimeslot())
             return ResponseEntity.ok(appointmentCore.getAvailableAppointments(openDay, mechanicalAction).getAvailableHoursOnExternalTime());
 
         return ResponseEntity.ok(appointmentCore.getAvailableAppointments(openDay, mechanicalAction).getAvailableHoursOnInteralTime());

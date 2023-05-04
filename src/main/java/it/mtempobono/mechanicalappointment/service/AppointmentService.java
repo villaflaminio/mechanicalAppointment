@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.service;
 
-import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentSearchDto;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
@@ -25,7 +26,7 @@ public interface AppointmentService {
 
     ResponseEntity<Void> delete(Long id);
 
-    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot);
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(AppointmentSearchDto appointmentSearchDto);
 
     ResponseEntity<List<Appointment>> findAllByUserPrincipal(UserPrincipal userPrincipal);
 

@@ -58,6 +58,7 @@ public class Garage {
     private List<OpenDay> openDay;
 
     @OneToMany(mappedBy = "garage")
-    @JsonManagedReference(value="garage-appointment")
+    @JsonManagedReference(value="garage-vote")
     private List<Vote> votes;
+
 }

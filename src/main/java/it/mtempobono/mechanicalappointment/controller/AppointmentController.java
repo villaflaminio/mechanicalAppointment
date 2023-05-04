@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentSearchDto;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
@@ -75,8 +77,8 @@ public interface AppointmentController {
                     mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
-    @GetMapping("/availableTimeSlots")
-    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot);
+    @PostMapping("/availableTimeSlots")
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots( @RequestBody AppointmentSearchDto appointmentSearchDto);
 
     //get all appointments by user principal
     @Operation(

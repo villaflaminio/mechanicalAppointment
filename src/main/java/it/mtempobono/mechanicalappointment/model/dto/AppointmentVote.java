@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.controller;
+package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,9 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @Data
 public class AppointmentVote implements java.io.Serializable {
+
+    private Long id;
+
     @Schema(example = "4")
     @Max(value = 5, message = "The rating must be between 0 and 5")
     @Min(value = 0, message = "The rating must be between 0 and 5")

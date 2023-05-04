@@ -1,7 +1,8 @@
 package it.mtempobono.mechanicalappointment.controller.impl;
 
 import it.mtempobono.mechanicalappointment.controller.AppointmentController;
-import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentSearchDto;
+import it.mtempobono.mechanicalappointment.model.dto.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
@@ -44,8 +45,8 @@ public class AppointmentControllerImpl implements AppointmentController {
     }
 
     @Override
-    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot) {
-       return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId,externalTimeslot);
+    public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(AppointmentSearchDto appointmentSearchDto) {
+       return appointmentService.getAvailableAppointmentsTimeSlots(appointmentSearchDto);
     }
 
     @Override
