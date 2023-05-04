@@ -6,7 +6,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
+import it.mtempobono.mechanicalappointment.model.entity.Place;
 import it.mtempobono.mechanicalappointment.repository.GarageRepository;
+import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
 import it.mtempobono.mechanicalappointment.utils.MyReflectionTestUtils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -48,6 +50,10 @@ class GarageControllerTest {
     private GarageRepository repository;
 
     @Autowired
+    private PlaceRepository placeRepository;
+
+
+    @Autowired
     private MockMvc mockMvc;
     JSONParser parser = new JSONParser();
 
@@ -56,7 +62,8 @@ class GarageControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_create_one_garage() throws Exception {
+    })
+    void should_create_one_garage() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -100,7 +107,8 @@ class GarageControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_update_one_garage() throws Exception {
+    })
+    void should_update_one_garage() throws Exception {
 
         final File createCompany = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(createCompany.toPath());
@@ -166,7 +174,8 @@ class GarageControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_get_all_garages() throws Exception {
+    })
+    void should_get_all_garages() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -212,7 +221,8 @@ class GarageControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_get_one_garage_by_id() throws Exception {
+    })
+    void should_get_one_garage_by_id() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -265,7 +275,8 @@ class GarageControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_delete_one_garage_by_id() throws Exception {
+    })
+    void should_delete_one_garage_by_id() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -295,4 +306,133 @@ class GarageControllerTest {
         Optional<Garage> garageOptional = repository.findById(garage.getId());
         assertThat(garageOptional).isEmpty();
     }
+
+    @Test
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    void should_retrive_garage_from_PlaceProvinceStartsWith() throws Exception {
+
+        Place place = placeRepository.findById(1L).get();
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+
+        MvcResult resultGet = this.mockMvc.perform(get("/api/garages/findGarageByPlaceProvinceStartsWith")
+                        .contentType(APPLICATION_JSON)
+                        .param("province", place.getProvince()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONArray jsonArray = (JSONArray) parser.parse(contentGet);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<GarageDto> garages = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            garages.add(mapper.readValue(jsonArray.get(i).toString(), GarageDto.class));
+        }
+
+        assertThat(garages).hasSize(1);
+
+    }
+
+
+    @Test
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    void should_retrive_garage_from_PlaceRegionStartsWith() throws Exception {
+
+        Place place = placeRepository.findById(1L).get();
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+
+        MvcResult resultGet = this.mockMvc.perform(get("/api/garages/findGarageByPlaceRegionStartsWith")
+                        .contentType(APPLICATION_JSON)
+                        .param("region", place.getRegion()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONArray jsonArray = (JSONArray) parser.parse(contentGet);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<GarageDto> garages = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            garages.add(mapper.readValue(jsonArray.get(i).toString(), GarageDto.class));
+        }
+
+        assertThat(garages).hasSize(1);
+
+    }
+
+
+    @Test
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    void should_retrive_garage_from_PlaceMunicipalityStartsWith() throws Exception {
+
+        Place place = placeRepository.findById(1L).get();
+        final File jsonFile = new ClassPathResource("mockData/garage/createGarage.json").getFile();
+        final String companyToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult creation = this.mockMvc.perform(post("/api/garages")
+                        .contentType(APPLICATION_JSON)
+                        .content(companyToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+
+        MvcResult resultGet = this.mockMvc.perform(get("/api/garages/findGarageByPlaceMunicipalityStartsWith")
+                        .contentType(APPLICATION_JSON)
+                        .param("municipality", place.getMunicipality()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONArray jsonArray = (JSONArray) parser.parse(contentGet);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<GarageDto> garages = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            garages.add(mapper.readValue(jsonArray.get(i).toString(), GarageDto.class));
+        }
+
+        assertThat(garages).hasSize(1);
+
+    }
+
 }

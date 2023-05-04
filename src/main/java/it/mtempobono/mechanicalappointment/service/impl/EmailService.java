@@ -62,7 +62,6 @@ public class EmailService {
         } catch (MessagingException | IOException | TemplateException e) {
             response.setMessage(ftlFileName + "Mail Sending failure : "+e.getMessage());
             response.setStatus(Boolean.FALSE);
-            throw new RuntimeException(e);
         }
 
         return response;
