@@ -102,7 +102,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
-    private String createCalendarEvent(OpenDay openDay, AppointmentDto appointmentDto, Vehicle vehicle, MechanicalAction mechanicalAction) throws Exception {
+    private String createCalendarEvent(OpenDay openDay, AppointmentDto appointmentDto, Vehicle vehicle, MechanicalAction mechanicalAction){
         try {
 
             GoogleCalendarCreateEvent googleCalendarCreateEvent = new GoogleCalendarCreateEvent();
@@ -114,10 +114,10 @@ public class AppointmentServiceImpl implements AppointmentService {
             LocalTime endTime = appointmentDto.getTimeSlotSelected().getEnd().getLocalTime();
 
             DateTime startCalendarTime = new DateTime(
-                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), startTime.getHour(), startTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
+                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), startTime.getHour(), startTime.getMinute(), 0).format(DateTimeFormatter.ISO_DATE_TIME)));
 
             DateTime endCalendarTime = new DateTime(
-                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), endTime.getHour(), endTime.getMinute(), 00).format(DateTimeFormatter.ISO_DATE_TIME)));
+                    (LocalDateTime.of(day.getYear(), day.getMonthValue(), day.getDayOfMonth(), endTime.getHour(), endTime.getMinute(), 0).format(DateTimeFormatter.ISO_DATE_TIME)));
 
             googleCalendarCreateEvent.setStartTime(startCalendarTime);
             googleCalendarCreateEvent.setEndTime(endCalendarTime);
@@ -251,12 +251,12 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment.setExternalTime(customAppointmentEvaluation.getExternalTime());
             appointment.setPrice(customAppointmentEvaluation.getPrice());
 
-            emailService.sendCustomAppointmentApprovedMail(appointment);
+            emailService.sendAppointmentApprovedMail(appointment.getId());
             return ResponseEntity.ok(appointmentRepository.save(appointment));
         } else {
             appointment.setStatus(AppointmentStatus.REJECTED);
             appointmentRepository.save(appointment);
-            emailService.sendCustomAppointmentRejectedMail(appointment);
+            emailService.sendAppointmentRejectedMail(appointment.getId());
             return ResponseEntity.ok(appointment);
         }
     }
@@ -313,20 +313,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     private Appointment setStatus(String status, Appointment appointment) {
-        if (status.equals("CONFIRMED")) {
-            appointment.setStatus(AppointmentStatus.CONFIRMED);
-            emailService.sendStockAppointmentApprove(appointment);
-
-        } else if (status.equals("FINISHED")) {
-            appointment.setStatus(AppointmentStatus.FINISHED);
-            emailService.sendFinishedAppointmentData(appointment);
-
-        } else if (status.equals("REJECTED")) {
-            appointment.setStatus(AppointmentStatus.REJECTED);
-            emailService.sendStockAppointmentReject(appointment);
-
-        } else {
-            throw new RuntimeException("Status not found");
+        switch (status) {
+            case "CONFIRMED" -> {
+                appointment.setStatus(AppointmentStatus.CONFIRMED);
+                emailService.sendAppointmentApprovedMail(appointment.getId());
+            }
+            case "FINISHED" -> {
+                appointment.setStatus(AppointmentStatus.FINISHED);
+                emailService.sendFinishedAppointmentData(appointment.getId());
+            }
+            case "REJECTED" -> {
+                appointment.setStatus(AppointmentStatus.REJECTED);
+                emailService.sendAppointmentRejectedMail(appointment.getId());
+            }
+            default -> throw new RuntimeException("Status not found");
         }
         return appointment;
     }
