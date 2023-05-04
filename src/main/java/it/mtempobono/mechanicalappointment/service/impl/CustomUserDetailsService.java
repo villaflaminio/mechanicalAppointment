@@ -11,7 +11,6 @@ import it.mtempobono.mechanicalappointment.model.dto.MailResponse;
 import it.mtempobono.mechanicalappointment.repository.PasswordResetTokenRepository;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import it.mtempobono.mechanicalappointment.security.TokenProvider;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,6 @@ import java.util.*;
  * Service to handle user details.
  */
 @Service
-@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
@@ -40,6 +38,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private EmailService emailService;
     @Autowired
     private TokenProvider tokenProvider;
+
+    public CustomUserDetailsService(UserRepository userRepository, Environment env, PasswordResetTokenRepository passwordResetTokenRepository, EmailService emailService, TokenProvider tokenProvider) {
+        this.userRepository = userRepository;
+        this.env = env;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.emailService = emailService;
+        this.tokenProvider = tokenProvider;
+    }
 
     /**
      * Load user by email.

@@ -6,7 +6,6 @@ import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.util.CalculatedTimeslots;
-import lombok.Data;
 
 import java.time.LocalTime;
 import java.util.*;

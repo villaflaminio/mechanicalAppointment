@@ -1,20 +1,20 @@
 package it.mtempobono.mechanicalappointment.util.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 
-@Data
-@NoArgsConstructor
-@Builder
+
 public class DurationWrapper {
 
+    //region Fields
     private int hours;
     private int minutes;
+    //endregion
+
+    //region Constructors
+    public DurationWrapper() {
+    }
 
     public DurationWrapper(int hours, int minutes) {
         this.hours = hours;
@@ -32,9 +32,28 @@ public class DurationWrapper {
         this.minutes = (int) durationDate.minusHours(this.hours).toMinutes();
     }
 
-
     @JsonIgnore
     public Duration getDuration() {
         return Duration.ofHours(hours).plusMinutes(minutes);
     }
+    //endregion
+
+    // region Getters and Setters
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+    //endregion
 }

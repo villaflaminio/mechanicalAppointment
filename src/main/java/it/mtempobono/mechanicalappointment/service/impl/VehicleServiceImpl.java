@@ -100,7 +100,7 @@ public class VehicleServiceImpl implements VehicleService {
                     .brand(vehicleDto.getBrand())
                     .year(vehicleDto.getYear())
                     .fuel(vehicleDto.getFuel())
-                    .isActive(vehicleDto.getIsActive())
+                    .isActive(vehicleDto.getActive())
                     .user(userOptional.get())
                     .build();
 

@@ -2,7 +2,6 @@ package it.mtempobono.mechanicalappointment.config;
 
 import it.mtempobono.mechanicalappointment.repository.PasswordResetTokenRepository;
 import it.mtempobono.mechanicalappointment.repository.RefreshTokenRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,11 +15,16 @@ import java.util.Objects;
  */
 @Configuration
 @EnableScheduling
-@AllArgsConstructor
 public class CronConfiguration {
     private RefreshTokenRepository refreshTokenRepository;
     private Environment env;
     private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    public CronConfiguration(RefreshTokenRepository refreshTokenRepository, Environment env, PasswordResetTokenRepository passwordResetTokenRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.env = env;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
+    }
 
     // Ogni 27, 28, 1, 2, 3 e 4 del mese (1,2,3,4 successivo) ore 8.30
     @Scheduled(cron = "0 30 8 1,2,3,4,27,28 * ? ")
