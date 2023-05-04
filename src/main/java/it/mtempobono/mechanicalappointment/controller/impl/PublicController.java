@@ -3,6 +3,7 @@ package it.mtempobono.mechanicalappointment.controller.impl;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
 import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
+import it.mtempobono.mechanicalappointment.model.builder.PlaceBuilder;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
@@ -70,7 +71,7 @@ public class PublicController {
             String Regione = record.get(3);
 
             //create and popolate place with builder
-            Place place = Place.builder()
+            Place place = PlaceBuilder.aPlace()
                     .istat(Integer.valueOf(Istat))
                     .municipality(Comune)
                     .province(Provincia)

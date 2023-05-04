@@ -2,11 +2,12 @@ package it.mtempobono.mechanicalappointment.service.impl;
 
 import com.google.api.client.util.DateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
+import it.mtempobono.mechanicalappointment.model.builder.VoteBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentSearchDto;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
-import it.mtempobono.mechanicalappointment.model.builders.AppointmentBuilder;
+import it.mtempobono.mechanicalappointment.model.builder.AppointmentBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.*;
@@ -280,7 +281,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public ResponseEntity<Vote> voteAppointment(AppointmentVote appointmentVote) {
         Appointment appointment = appointmentRepository.findById(appointmentVote.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        Vote vote = Vote.builder()
+        Vote vote = VoteBuilder.aVote()
                 .appointment(appointment)
                 .comment(appointmentVote.getComment())
                 .rating(appointmentVote.getRating())

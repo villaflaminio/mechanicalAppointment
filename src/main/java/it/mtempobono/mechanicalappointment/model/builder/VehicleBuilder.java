@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model.builders;
+package it.mtempobono.mechanicalappointment.model.builder;
 
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.User;
@@ -77,7 +77,7 @@ public final class VehicleBuilder {
         vehicle.setBrand(brand);
         vehicle.setYear(year);
         vehicle.setFuel(fuel);
-        vehicle.setIsActive(isActive);
+        vehicle.setActive(isActive);
         vehicle.setUser(user);
         vehicle.setReservation(reservation);
         return vehicle;

@@ -14,6 +14,8 @@ public final class AppointmentBuilder {
     private TimePeriod internalTime;
     private Double price;
 
+    private String idCalendarEvent;
+
     private AppointmentBuilder() {
     }
 
@@ -66,6 +68,11 @@ public final class AppointmentBuilder {
         return this;
     }
 
+    public AppointmentBuilder idCalendarEvent(String idCalendarEvent) {
+        this.idCalendarEvent = idCalendarEvent;
+        return this;
+    }
+
     public Appointment build() {
         Appointment appointment = new Appointment();
         appointment.setId(id);
@@ -77,6 +84,7 @@ public final class AppointmentBuilder {
         appointment.setExternalTime(externalTime);
         appointment.setInternalTime(internalTime);
         appointment.setPrice(price);
+        appointment.setIdCalendarEvent(idCalendarEvent);
         return appointment;
     }
 }

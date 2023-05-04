@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
-import it.mtempobono.mechanicalappointment.model.builders.GarageBuilder;
+import it.mtempobono.mechanicalappointment.model.builder.GarageBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.GarageDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.model.entity.Place;

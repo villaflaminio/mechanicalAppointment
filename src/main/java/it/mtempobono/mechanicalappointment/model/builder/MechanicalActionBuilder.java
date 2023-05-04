@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model.builders;
+package it.mtempobono.mechanicalappointment.model.builder;
 
 import it.mtempobono.mechanicalappointment.model.entity.MechanicalAction;
 
@@ -61,7 +61,7 @@ public final class MechanicalActionBuilder {
         mechanicalAction.setName(name);
         mechanicalAction.setDescription(description);
         mechanicalAction.setPrice(price);
-        mechanicalAction.setIsActive(isActive);
+        mechanicalAction.setActive(isActive);
         mechanicalAction.setInternalDuration(internalDuration);
         mechanicalAction.setExternalDuration(externalDuration);
         return mechanicalAction;

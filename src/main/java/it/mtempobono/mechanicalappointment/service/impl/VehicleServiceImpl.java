@@ -1,22 +1,19 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
-import it.mtempobono.mechanicalappointment.model.builders.VehicleBuilder;
+import it.mtempobono.mechanicalappointment.model.builder.VehicleBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.VehicleDto;
 import it.mtempobono.mechanicalappointment.model.entity.User;
 import it.mtempobono.mechanicalappointment.model.entity.Vehicle;
 import it.mtempobono.mechanicalappointment.repository.UserRepository;
 import it.mtempobono.mechanicalappointment.repository.VehicleRepository;
-import it.mtempobono.mechanicalappointment.repository.PlaceRepository;
 import it.mtempobono.mechanicalappointment.service.VehicleService;
 import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.xml.datatype.Duration;
 import java.util.List;
 import java.util.Optional;
 

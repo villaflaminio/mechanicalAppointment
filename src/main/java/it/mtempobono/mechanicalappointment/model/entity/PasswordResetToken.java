@@ -1,9 +1,5 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -11,12 +7,9 @@ import java.time.Instant;
  * The type Password reset token.
  */
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class PasswordResetToken {
 
+    //region Fields
     // The constant EXPIRATION.
     private static final long EXPIRATION = 60 * 24;
 
@@ -31,6 +24,11 @@ public class PasswordResetToken {
     private User user;
 
     private Instant expiryDate;
+    //endregion
+
+    //region Constructors
+    public PasswordResetToken() {
+    }
 
     /**
      * Instantiates a new Password reset token.
@@ -42,6 +40,41 @@ public class PasswordResetToken {
         this.user = user;
         expiryDate = date;
     }
+    //endregion
 
+    //region Getters & Setters methods
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Instant getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Instant expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    //endregion
 }

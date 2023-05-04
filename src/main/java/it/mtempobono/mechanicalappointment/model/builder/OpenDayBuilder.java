@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.model.builders;
+package it.mtempobono.mechanicalappointment.model.builder;
 
 import it.mtempobono.mechanicalappointment.model.DayPlan;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;

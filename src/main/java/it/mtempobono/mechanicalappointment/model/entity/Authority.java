@@ -1,7 +1,5 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,21 +8,28 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-@Data
 @Entity
 @Table(name = "AUTHORITY")
-@NoArgsConstructor
 public class Authority {
+    //region Constructors
+    public Authority() {
 
+    }
+    public Authority(String name) {
+        this.name = name;
+    }
+    //endregion
+
+    //region Fields
     @Id
     @Column(name = "NAME", length = 50)
     @NotNull
     private String name;
 
-    public Authority(String name) {
-        this.name = name;
-    }
 
+    //endregion
+
+    //region Methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,4 +49,15 @@ public class Authority {
                 "name=" + name +
                 '}';
     }
+    //endregion
+
+    //region Getters & Setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    //endregion
 }

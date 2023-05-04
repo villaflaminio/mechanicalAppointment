@@ -2,10 +2,6 @@ package it.mtempobono.mechanicalappointment.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.mtempobono.mechanicalappointment.model.dto.AuthProvider;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,7 +13,7 @@ import java.util.*;
 /**
  * The type User.
  */
-@Entity
+
 
 /**
  * Define table name and unique constraints.
@@ -25,10 +21,9 @@ import java.util.*;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class User {
+    //region Fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -89,5 +84,121 @@ public class User {
         }
         return list;
     }
+    //endregion
 
+    //region Constructors
+    public User() {
+    }
+
+    public User(Long id, String name, String email, String imageUrl, Boolean emailVerified, String password, AuthProvider provider, String providerId, Set<Vote> votes, List<Vehicle> vehicle, Collection<Role> roles, Set<GrantedAuthority> authorities) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.emailVerified = emailVerified;
+        this.password = password;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.votes = votes;
+        this.vehicle = vehicle;
+        this.roles = roles;
+        this.authorities = authorities;
+    }
+    //endregion
+
+    //region Getters & Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
+    }
+
+    public List<Vehicle> getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(List<Vehicle> vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setAuthorities(Set<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    //endregion
 }

@@ -1,62 +1,34 @@
 package it.mtempobono.mechanicalappointment.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+
 public class DayPlan implements Serializable {
+    //region Fields
     @Schema(description = "The working hours")
     private TimePeriod workingHours;
 
     @Schema(description = "The list of breaks")
     private List<TimePeriod> breaks;
+    //endregion
 
+    // region Constructors
     public DayPlan() {
         breaks = new ArrayList<>();
     }
 
-    /*TODO  @deprecated
-        public List<TimePeriod> timePeroidsWithBreaksExcluded() {
-        ArrayList<TimePeriod> timePeroidsWithBreaksExcluded = new ArrayList<>();
-        timePeroidsWithBreaksExcluded.add(new TimePeriod(getWorkingHours().getStart(), getWorkingHours().getEnd()));
-        List<TimePeriod> breaks = getBreaks();
+    public DayPlan(TimePeriod workingHours, List<TimePeriod> breaks) {
+        this.workingHours = workingHours;
+        this.breaks = breaks;
+    }
+    // endregion
 
-        if (!breaks.isEmpty()) {
-            ArrayList<TimePeriod> toAdd = new ArrayList();
-            for (TimePeriod break1 : breaks) {
-                if (break1.getStart().isBefore(workingHours.getStart())) {
-                    break1.setStart(workingHours.getStart());
-                }
-                if (break1.getEnd().isAfter(workingHours.getEnd())) {
-                    break1.setEnd(workingHours.getEnd());
-                }
-                for (TimePeriod peroid : timePeroidsWithBreaksExcluded) {
-                    if (break1.getStart().equals(peroid.getStart()) && break1.getEnd().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
-                        peroid.setStart(break1.getEnd());
-                    }
-                    if (break1.getStart().isAfter(peroid.getStart()) && break1.getStart().isBefore(peroid.getEnd()) && break1.getEnd().equals(peroid.getEnd())) {
-                        peroid.setEnd(break1.getStart());
-                    }
-                    if (break1.getStart().isAfter(peroid.getStart()) && break1.getEnd().isBefore(peroid.getEnd())) {
-                        toAdd.add(new TimePeriod(peroid.getStart(), break1.getStart()));
-                        peroid.setStart(break1.getEnd());
-                    }
-                }
-            }
-            timePeroidsWithBreaksExcluded.addAll(toAdd);
-            Collections.sort(timePeroidsWithBreaksExcluded);
-        }
-
-
-        return timePeroidsWithBreaksExcluded;
-    }*/
+    //region Methods
 
     public List<TimePeriod> timePeriodsWithBreaksExcluded() {
         // Create a new list for time periods without breaks and add the working hours
@@ -103,5 +75,25 @@ public class DayPlan implements Serializable {
 
         return timePeriodsWithBreaksExcluded;
     }
+    //endregion
 
+    //region Getters & Setters
+
+
+    public TimePeriod getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(TimePeriod workingHours) {
+        this.workingHours = workingHours;
+    }
+
+    public List<TimePeriod> getBreaks() {
+        return breaks;
+    }
+
+    public void setBreaks(List<TimePeriod> breaks) {
+        this.breaks = breaks;
+    }
+    //endregion
 }

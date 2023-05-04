@@ -1,7 +1,7 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
 import it.mtempobono.mechanicalappointment.model.dto.FilterDay;
-import it.mtempobono.mechanicalappointment.model.builders.OpenDayBuilder;
+import it.mtempobono.mechanicalappointment.model.builder.OpenDayBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
