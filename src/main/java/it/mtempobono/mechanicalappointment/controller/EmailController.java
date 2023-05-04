@@ -29,24 +29,6 @@ public interface EmailController {
     @GetMapping("/sendCustomAppointmentRejectedMail/{appointmentId}")
     ResponseEntity<Void> sendAppointmentRejectedMail(@PathVariable("appointmentId") Long appointmentId);
 
-//    /**
-//     * Email the customer with the appointment details for the stock appointment approval.
-//     * @param appointmentId the appointment details
-//     * @return 200 OK if the email has been sent
-//     */
-//    @Operation(summary = "Email the customer with the appointment details for the stock appointment approval")
-//    @GetMapping ("/sendStockAppointmentApprove/{appointmentId}")
-//    ResponseEntity<Void> sendStockAppointmentApprove(@PathVariable("appointmentId") Long appointmentId);
-//
-//    /**
-//     * Email the customer with the appointment details for the stock appointment rejection.
-//     * @param appointmentId the appointment details
-//     * @return 200 OK if the email has been sent
-//     */
-//    @Operation(summary = "Email the customer with the appointment details for the stock appointment rejection.")
-//    @GetMapping ("/sendStockAppointmentReject/{appointmentId}")
-//    ResponseEntity<Void> sendStockAppointmentReject(@PathVariable("appointmentId") Long appointmentId);
-
     /**
      * Email the customer with the finished appointment details .
      * @param appointmentId the appointment details
@@ -55,5 +37,23 @@ public interface EmailController {
     @Operation(summary = "Email the customer with the finished appointment details")
     @GetMapping("/sendFinishedAppointmentData/{appointmentId}")
     ResponseEntity<Void> sendFinishedAppointmentData(@PathVariable("appointmentId") Long appointmentId);
+
+    /**
+     * Email the customer with the just created appointment details .
+     * @param appointmentId the appointment details
+     * @return 200 OK if the email has been sent
+     */
+    @Operation(summary = "Email the customer with the just created appointment details .")
+    @GetMapping("/sendNewAppointmentMail/{appointmentId}")
+    ResponseEntity<Void> sendNewAppointmentMail(@PathVariable("appointmentId") Long appointmentId);
+
+    /**
+     * Email the customer with the deleted appointment details .
+     * @param appointmentId the appointment details
+     * @return 200 OK if the email has been sent
+     */
+    @Operation(summary = "Email the customer with the deleted appointment details")
+    @GetMapping("/sendDeletedAppointmentData/{appointmentId}")
+    ResponseEntity<Void> sendDeletedAppointmentData(@PathVariable("appointmentId") Long appointmentId);
 
 }

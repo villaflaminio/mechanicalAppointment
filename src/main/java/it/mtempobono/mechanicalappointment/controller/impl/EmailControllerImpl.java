@@ -25,18 +25,18 @@ public class EmailControllerImpl implements EmailController {
         return emailService.sendAppointmentRejectedMail(appointmentId);
     }
 
-//    @Override
-//    public ResponseEntity<Void> sendStockAppointmentApprove(Long appointmentId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ResponseEntity<Void> sendStockAppointmentReject(Long appointmentId) {
-//        return null;
-//    }
-
     @Override
     public ResponseEntity<Void> sendFinishedAppointmentData(Long appointmentId) {
         return emailService.sendFinishedAppointmentData(appointmentId);
+    }
+
+    @Override
+    public ResponseEntity<Void> sendNewAppointmentMail(Long appointmentId) {
+        return emailService.sendNewAppointmentMail(appointmentId);
+    }
+
+    @Override
+    public ResponseEntity<Void> sendDeletedAppointmentData(Long appointmentId) {
+        return emailService.sendDeletedAppointmentData(appointmentId);
     }
 }

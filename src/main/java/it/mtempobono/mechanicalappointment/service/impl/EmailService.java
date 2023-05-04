@@ -74,14 +74,54 @@ public class EmailService {
         return response;
     }
 
-    public MailResponse sendNewAppointmentMail(Appointment appointment){
-        String to = appointment.getVehicle().getUser().getEmail();
-        String subject = "Nuovo appuntamento";
-        //todo creare modello email
-        Map<String, Object> model = Map.of(
-                "appointment", appointment
-        );
-        return sendEmail(to, subject, model, "newAppointment");
+    public ResponseEntity<Void> sendNewAppointmentMail(Long appointmentId){
+        try {
+            logger.info("sendNewAppointmentMail() called with appointment: {}", appointmentId);
+
+            // Retrieve the appointment linked to the id
+            Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+
+            if (appointment == null) {
+                logger.error("Appointment not found. Cannot be able to send sendNewAppointmentMail. ");
+                return ResponseEntity.notFound().build();
+            }
+
+            String to = appointment.getVehicle().getUser().getEmail();
+
+            String startTime = appointment.getExternalTime().getStart().getHour() + ":" + appointment.getExternalTime().getStart().getMinute();
+            String endTime = appointment.getExternalTime().getEnd().getHour() + ":" + appointment.getExternalTime().getEnd().getMinute();
+
+            String appointmentDate = appointment.getOpenDay().getDate().getDayOfMonth() + "/" + appointment.getOpenDay().getDate().getMonthValue() + "/" + appointment.getOpenDay().getDate().getYear();
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("customerName", appointment.getVehicle().getUser().getName());
+            model.put("appointmentTime", startTime + " - " + endTime);
+            model.put("appointmentDate", appointmentDate);
+            model.put("comment", appointment.getComment());
+            model.put("price", "€" + appointment.getPrice());
+            model.put("mechanicalAction", appointment.getMechanicalAction().getName());
+            model.put("contactEmail", username);
+
+            MailResponse mailResponse = sendEmail(to, EmailSubjects.APPOINTMENT_CREATED,
+                    model, "appointmentCreated");
+
+            if (mailResponse.getStatus()) {
+                logger.info("Email sent to: " + to);
+                logger.info(mailResponse.getMessage());
+                return ResponseEntity.ok().build();
+
+            } else {
+                logger.error("Email sending failed to: " + to);
+                logger.error(mailResponse.getMessage());
+                return ResponseEntity.badRequest().build();
+            }
+
+        } catch (Exception e) {
+            logger.error("Error in sendNewAppointmentMail() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from sendNewAppointmentMail() method");
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity<Void> sendAppointmentApprovedMail(Long appointmentId) {
@@ -229,6 +269,56 @@ public class EmailService {
             logger.error("Error in sendFinishedAppointmentData() method: {}", e.getMessage());
         }finally {
             logger.debug("Exit from sendFinishedAppointmentData() method");
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    public ResponseEntity<Void> sendDeletedAppointmentData(Long appointmentId) {
+        try {
+            logger.info("sendDeletedAppointmentData() called with appointment: {}", appointmentId);
+
+            // Retrieve the appointment linked to the id
+            Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+
+            if (appointment == null) {
+                logger.error("Appointment not found. Cannot be able to send sendDeletedAppointmentData. ");
+                return ResponseEntity.notFound().build();
+            }
+
+            String to = appointment.getVehicle().getUser().getEmail();
+
+            String startTime = appointment.getExternalTime().getStart().getHour() + ":" + appointment.getExternalTime().getStart().getMinute();
+            String endTime = appointment.getExternalTime().getEnd().getHour() + ":" + appointment.getExternalTime().getEnd().getMinute();
+
+            String appointmentDate = appointment.getOpenDay().getDate().getDayOfMonth() + "/" + appointment.getOpenDay().getDate().getMonthValue() + "/" + appointment.getOpenDay().getDate().getYear();
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("customerName", appointment.getVehicle().getUser().getName());
+            model.put("appointmentTime", startTime + " - " + endTime);
+            model.put("appointmentDate", appointmentDate);
+            model.put("comment", appointment.getComment());
+            model.put("price", "€" + appointment.getPrice());
+            model.put("mechanicalAction", appointment.getMechanicalAction().getName());
+            model.put("contactEmail", username);
+
+            MailResponse mailResponse = sendEmail(to, EmailSubjects.APPOINTMENT_DELETED,
+                    model, "appointmentDeleted");
+
+            if (mailResponse.getStatus()) {
+                logger.info("Email sent to: " + to);
+                logger.info(mailResponse.getMessage());
+                return ResponseEntity.ok().build();
+
+            } else {
+                logger.error("Email sending failed to: " + to);
+                logger.error(mailResponse.getMessage());
+                return ResponseEntity.badRequest().build();
+            }
+
+        } catch (Exception e) {
+            logger.error("Error in sendDeletedAppointmentData() method: {}", e.getMessage());
+        }finally {
+            logger.debug("Exit from sendDeletedAppointmentData() method");
         }
         return ResponseEntity.badRequest().build();
     }

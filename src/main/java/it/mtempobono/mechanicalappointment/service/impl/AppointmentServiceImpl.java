@@ -168,7 +168,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             // Save the appointment
             Appointment savedAppointment = appointmentRepository.save(newAppointment);
-            emailService.sendNewAppointmentMail(savedAppointment);
+            emailService.sendNewAppointmentMail(savedAppointment.getId());
 
             return ResponseEntity.ok(savedAppointment);
 
