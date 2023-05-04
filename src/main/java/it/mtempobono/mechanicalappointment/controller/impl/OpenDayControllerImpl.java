@@ -1,11 +1,12 @@
 package it.mtempobono.mechanicalappointment.controller.impl;
 
+import it.mtempobono.mechanicalappointment.controller.FilterDay;
 import it.mtempobono.mechanicalappointment.controller.OpenDayController;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.service.OpenDayService;
-import it.mtempobono.mechanicalappointment.service.impl.OpenDayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -37,6 +38,16 @@ public class OpenDayControllerImpl implements OpenDayController {
     @Override
     public ResponseEntity<OpenDay> findById(Long id) {
         return openDayService.findById(id);
+    }
+
+    @Override
+    public ResponseEntity<List<OpenDay>> findByGarageId(Long id) {
+        return openDayService.findByGarageId(id);
+    }
+
+    @Override
+    public ResponseEntity<Page<OpenDay>> findFilterByDays(FilterDay filterDay, Integer page, Integer size, String sortField, String sortDirection) {
+        return  openDayService.findFilterByDays(filterDay, page, size, sortField, sortDirection);
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,35 @@ public interface OpenDayController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/{id}")
     ResponseEntity<OpenDay> findById(@PathVariable("id") Long id);
+
+    //find by garage id
+    @Operation(
+            summary = "Retrieve a OpenDay by Garage Id",
+            description = "Get a OpenDay object by specifying its garage id. The response is OpenDay object."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = OpenDay.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/garage/{id}")
+    ResponseEntity<List<OpenDay>> findByGarageId(@PathVariable("id") Long id);
+
+    //find opendays by garage id and days
+    @Operation(
+            summary = "Retrieve a OpenDay by Garage Id and Days",
+            description = "Get a OpenDay object by specifying its garage id and days. The response is OpenDay object."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = OpenDay.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @PostMapping("/filterDays")
+    ResponseEntity<Page<OpenDay>> findFilterByDays(@RequestBody  FilterDay filterDay,
+                                                   @RequestParam(required = false, defaultValue = "0", name = "page")  Integer page,
+                                                   @RequestParam(required = false, defaultValue = "10", name = "size") Integer size,
+                                                   @RequestParam(required = false, name = "sortField") String sortField,
+                                                   @RequestParam(required = false, name = "sortDirection") String sortDirection);
+
 
     /**
      * Create a new open day

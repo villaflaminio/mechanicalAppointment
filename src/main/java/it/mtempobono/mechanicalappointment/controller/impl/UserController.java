@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.controller;
+package it.mtempobono.mechanicalappointment.controller.impl;
 
 import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
 import it.mtempobono.mechanicalappointment.model.entity.User;

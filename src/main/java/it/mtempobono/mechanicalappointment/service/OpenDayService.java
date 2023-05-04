@@ -1,11 +1,10 @@
 package it.mtempobono.mechanicalappointment.service;
 
+import it.mtempobono.mechanicalappointment.controller.FilterDay;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -22,4 +21,8 @@ public interface OpenDayService {
     ResponseEntity<OpenDay> update(OpenDayDto garage, Long id);
 
     ResponseEntity<Void> delete(Long id);
+
+    ResponseEntity<List<OpenDay>> findByGarageId(Long id);
+
+    ResponseEntity<Page<OpenDay>> findFilterByDays(FilterDay filterDay, Integer page, Integer size, String sortField, String sortDirection);
 }
