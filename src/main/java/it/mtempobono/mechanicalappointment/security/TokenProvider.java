@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.security;
 
 import it.mtempobono.mechanicalappointment.config.AppProperties;
+import it.mtempobono.mechanicalappointment.model.builder.AuthResponseDtoBuilder;
 import it.mtempobono.mechanicalappointment.model.entity.RefreshToken;
 import it.mtempobono.mechanicalappointment.model.entity.Role;
 import it.mtempobono.mechanicalappointment.model.entity.User;
@@ -97,7 +98,7 @@ public class TokenProvider {
             response.setCharacterEncoding("UTF-8");
 
             // Create the response object.
-            AuthResponseDto authResponseDto = AuthResponseDto.builder()
+            AuthResponseDto authResponseDto = AuthResponseDtoBuilder.anAuthResponseDto()
                     .id(user.getId())
                     .email(user.getEmail())
                     .name(user.getName())
@@ -154,7 +155,7 @@ public class TokenProvider {
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
         try{
             // Prepare repsonse to send to FE with username, authorities and duration of the token.
-            return AuthResponseDto.builder()
+            return AuthResponseDtoBuilder.anAuthResponseDto()
                     .id(user.getId())
                     .email(user.getEmail())
                     .name(user.getName())

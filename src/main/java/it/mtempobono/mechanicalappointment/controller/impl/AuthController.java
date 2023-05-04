@@ -4,6 +4,7 @@ package it.mtempobono.mechanicalappointment.controller.impl;
 import it.mtempobono.mechanicalappointment.config.AppProperties;
 import it.mtempobono.mechanicalappointment.exception.BadRequestException;
 import it.mtempobono.mechanicalappointment.exception.ResourceNotFoundException;
+import it.mtempobono.mechanicalappointment.model.builder.AuthResponseDtoBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.*;
 import it.mtempobono.mechanicalappointment.model.entity.*;
 import it.mtempobono.mechanicalappointment.repository.MechanicalActionRepository;
@@ -141,7 +142,7 @@ public class AuthController {
         TokenRefreshResponse tokenRefreshResponse = new TokenRefreshResponse(token, newRefreshToken.getToken());
 
         // Create the authentication response.
-        AuthResponseDto authResponseDto =  AuthResponseDto.builder()
+        AuthResponseDto authResponseDto = AuthResponseDtoBuilder.anAuthResponseDto()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())

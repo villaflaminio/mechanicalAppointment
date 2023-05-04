@@ -161,7 +161,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             AppointmentStatus appointmentStatus = AppointmentStatus.AWAITING_APPROVAL;
 
             Appointment newAppointment;
-            if (appointmentDto.getIsMechanicalActionCustom()) {
+            if (appointmentDto.getMechanicalActionCustom()) {
                 newAppointment = appointmentRepository.save(createCustomAppointment(appointmentDto, openDay, vehicle, appointmentStatus));
             } else {
                 newAppointment = appointmentRepository.save(createStockAppointment(appointmentDto, openDay, vehicle, appointmentStatus));

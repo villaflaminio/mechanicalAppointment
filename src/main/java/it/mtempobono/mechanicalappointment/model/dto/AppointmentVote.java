@@ -1,18 +1,13 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 public class AppointmentVote implements java.io.Serializable {
 
+    //region Fields
     private Long id;
 
     @Schema(example = "4")
@@ -23,4 +18,53 @@ public class AppointmentVote implements java.io.Serializable {
     private String comment;
     @Schema(example = "1")
     private Long appointmentId;
+    //endregion
+
+    //region Constructors
+    public AppointmentVote() {
+    }
+
+    public AppointmentVote(Long id, Integer rating, String comment, Long appointmentId) {
+        this.id = id;
+        this.rating = rating;
+        this.comment = comment;
+        this.appointmentId = appointmentId;
+    }
+    //endregion
+
+    //region Getters and Setters
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+    //endregion
 }

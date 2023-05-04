@@ -2,20 +2,15 @@ package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.Appointment} entity
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class AppointmentDto implements Serializable {
 
+    //region Fields
     @Schema (description = "The open day id", example = "1")
     private  Long openDayId;
 
@@ -36,4 +31,80 @@ public class AppointmentDto implements Serializable {
 
     @Schema (description = "Is mechanical action custom", example = "true")
     private  Boolean isMechanicalActionCustom;
+    //endregion
+
+    //region Constructors
+    public AppointmentDto() {
+    }
+
+    public AppointmentDto(Long openDayId, Long mechanicalActionId, String comment, Long vehicleId, TimePeriod timeSlotSelected, String status, Boolean isMechanicalActionCustom) {
+        this.openDayId = openDayId;
+        this.mechanicalActionId = mechanicalActionId;
+        this.comment = comment;
+        this.vehicleId = vehicleId;
+        this.timeSlotSelected = timeSlotSelected;
+        this.status = status;
+        this.isMechanicalActionCustom = isMechanicalActionCustom;
+    }
+    //endregion
+
+    //region Getters and Setters
+
+    public Long getOpenDayId() {
+        return openDayId;
+    }
+
+    public void setOpenDayId(Long openDayId) {
+        this.openDayId = openDayId;
+    }
+
+    public Long getMechanicalActionId() {
+        return mechanicalActionId;
+    }
+
+    public void setMechanicalActionId(Long mechanicalActionId) {
+        this.mechanicalActionId = mechanicalActionId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public TimePeriod getTimeSlotSelected() {
+        return timeSlotSelected;
+    }
+
+    public void setTimeSlotSelected(TimePeriod timeSlotSelected) {
+        this.timeSlotSelected = timeSlotSelected;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean getMechanicalActionCustom() {
+        return isMechanicalActionCustom;
+    }
+
+    public void setMechanicalActionCustom(Boolean mechanicalActionCustom) {
+        isMechanicalActionCustom = mechanicalActionCustom;
+    }
+
+    //endregion
 }

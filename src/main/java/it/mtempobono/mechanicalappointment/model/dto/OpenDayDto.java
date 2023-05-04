@@ -2,10 +2,6 @@ package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.DayPlan;
-import it.mtempobono.mechanicalappointment.model.entity.Appointment;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,12 +10,9 @@ import java.util.List;
 /**
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.OpenDay} entity
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Schema(description = "The OpenDay DTO")
 public class OpenDayDto implements Serializable {
 
+    //region Fields
     @Schema(description = "The garage id", example = "1")
     private  Long garageId;
 
@@ -31,4 +24,52 @@ public class OpenDayDto implements Serializable {
 
     @Schema(description = "The linked day plan")
     private  DayPlan workPlan;
+    //endregion
+
+    //region Constructors
+    public OpenDayDto() {
+    }
+
+    public OpenDayDto(Long garageId, LocalDate date, Integer maxParallelAppointments, DayPlan workPlan) {
+        this.garageId = garageId;
+        this.date = date;
+        this.maxParallelAppointments = maxParallelAppointments;
+        this.workPlan = workPlan;
+    }
+    //endregion
+
+    //region Getters & Setters methods
+
+    public Long getGarageId() {
+        return garageId;
+    }
+
+    public void setGarageId(Long garageId) {
+        this.garageId = garageId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Integer getMaxParallelAppointments() {
+        return maxParallelAppointments;
+    }
+
+    public void setMaxParallelAppointments(Integer maxParallelAppointments) {
+        this.maxParallelAppointments = maxParallelAppointments;
+    }
+
+    public DayPlan getWorkPlan() {
+        return workPlan;
+    }
+
+    public void setWorkPlan(DayPlan workPlan) {
+        this.workPlan = workPlan;
+    }
+    //endregion
 }
