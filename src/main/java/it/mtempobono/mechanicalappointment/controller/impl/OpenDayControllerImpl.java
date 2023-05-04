@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.controller.impl;
 
-import it.mtempobono.mechanicalappointment.controller.FilterDay;
+import it.mtempobono.mechanicalappointment.model.dto.FilterDay;
 import it.mtempobono.mechanicalappointment.controller.OpenDayController;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;

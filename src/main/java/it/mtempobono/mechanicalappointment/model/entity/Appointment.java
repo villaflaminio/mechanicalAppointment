@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,6 +56,10 @@ public class Appointment implements Comparable<Appointment> {
 
     @Column(name = "id_calendar_event")
     private String idCalendarEvent;
+
+    @OneToMany(mappedBy = "appointment")
+    @JsonManagedReference(value="appointment-vote")
+    private List<Vote> votes;
 
     private Boolean isMechanicalActionCustom;
     //get start time from internal time

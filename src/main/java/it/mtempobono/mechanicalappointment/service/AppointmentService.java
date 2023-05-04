@@ -1,10 +1,12 @@
 package it.mtempobono.mechanicalappointment.service;
 
+import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
+import it.mtempobono.mechanicalappointment.model.entity.Vote;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -32,4 +34,10 @@ public interface AppointmentService {
     ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation);
 
     ResponseEntity<Appointment> appointmentStateUpdate(String status, Long appointmentId);
+
+    ResponseEntity<Vote> voteAppointment(AppointmentVote appointmentVote);
+
+    ResponseEntity<Vote> modifyVote(AppointmentVote appointmentVote, Long id);
+
+    ResponseEntity<Boolean> deleteVote(Long id);
 }

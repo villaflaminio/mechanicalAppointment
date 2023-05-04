@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.mtempobono.mechanicalappointment.model.dto.FilterDay;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import org.springframework.data.domain.Page;
@@ -80,7 +81,7 @@ public interface OpenDayController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping("/filterDays")
-    ResponseEntity<Page<OpenDay>> findFilterByDays(@RequestBody  FilterDay filterDay,
+    ResponseEntity<Page<OpenDay>> findFilterByDays(@RequestBody FilterDay filterDay,
                                                    @RequestParam(required = false, defaultValue = "0", name = "page")  Integer page,
                                                    @RequestParam(required = false, defaultValue = "10", name = "size") Integer size,
                                                    @RequestParam(required = false, name = "sortField") String sortField,

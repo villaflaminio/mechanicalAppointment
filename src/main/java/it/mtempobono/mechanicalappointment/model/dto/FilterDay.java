@@ -1,4 +1,4 @@
-package it.mtempobono.mechanicalappointment.controller;
+package it.mtempobono.mechanicalappointment.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

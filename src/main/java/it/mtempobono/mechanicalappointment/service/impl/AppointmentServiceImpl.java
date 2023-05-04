@@ -2,7 +2,7 @@ package it.mtempobono.mechanicalappointment.service.impl;
 
 import com.google.api.client.util.DateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
-import it.mtempobono.mechanicalappointment.model.DayPlan;
+import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.GoogleCalendarCreateEvent;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.builders.AppointmentBuilder;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,6 +41,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     private UserRepository userRepository;
     @Autowired
     private OpenDayRepository openDayRepository;
+
+    @Autowired
+    private VoteRepository voteRepository;
 
     @Autowired
     private MechanicalActionRepository mechanicalActionRepository;
@@ -262,6 +264,41 @@ public class AppointmentServiceImpl implements AppointmentService {
         return ResponseEntity.ok(appointmentRepository.save(setStatus(status, appointment)));
     }
 
+    @Override
+    public ResponseEntity<Vote> voteAppointment(AppointmentVote appointmentVote) {
+        Appointment appointment = appointmentRepository.findById(appointmentVote.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        Vote vote = Vote.builder()
+                .appointment(appointment)
+                .comment(appointmentVote.getComment())
+                .rating(appointmentVote.getRating())
+                .user(appointment.getVehicle().getUser())
+                .build();
+
+        Vote newVote = voteRepository.save(vote);
+
+        return ResponseEntity.ok(newVote);
+    }
+
+    @Override
+    public ResponseEntity<Vote> modifyVote(AppointmentVote appointmentVote, Long id) {
+        Vote vote = voteRepository.findById(id).orElseThrow(() -> new RuntimeException("Vote not found"));
+
+        vote.setComment(appointmentVote.getComment());
+        vote.setRating(appointmentVote.getRating());
+
+        Vote newVote = voteRepository.save(vote);
+
+        return ResponseEntity.ok(newVote);
+    }
+
+    @Override
+    public ResponseEntity<Boolean> deleteVote(Long id) {
+        voteRepository.deleteById(id);
+
+        return ResponseEntity.ok(true);
+    }
+
 
     private Appointment setStatus(String status, Appointment appointment) {
         if (status.equals("CONFIRMED")) {
@@ -399,6 +436,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Appointment> appointments = appointmentRepository.findAllByVehicleIn(user.getVehicle());
-        return ResponseEntity.ok(appointments);    }
+        return ResponseEntity.ok(appointments);
+    }
     // endregion CRUD Methods
 }

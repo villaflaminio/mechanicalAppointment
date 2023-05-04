@@ -12,6 +12,7 @@ import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
+import it.mtempobono.mechanicalappointment.model.entity.Vote;
 import it.mtempobono.mechanicalappointment.security.CurrentUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -103,7 +104,7 @@ public interface AppointmentController {
                     mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
-    @GetMapping("/myappointments/{id}")
+    @GetMapping("/appointmentsUser/{id}")
     ResponseEntity<List<Appointment>> findAllByUserId(@PathVariable("id") Long id);
 
 
@@ -189,4 +190,38 @@ public interface AppointmentController {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 
+
+    @Operation(
+            summary = "Vote appointment",
+            description = "Vote appointment"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
+    @PostMapping("/vote")
+    ResponseEntity<Vote> voteAppointment(@RequestBody AppointmentVote appointmentVote);
+
+    @Operation(
+            summary = "Modify vote",
+            description = "Modify vote"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
+    @PutMapping("/vote/{id}")
+    ResponseEntity<Vote> modifyVote(@RequestBody AppointmentVote appointmentVote , @PathVariable("id") Long id);
+
+    //delete vote
+    @Operation(
+            summary = "Delete vote",
+            description = "Delete vote"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
+    @DeleteMapping("/vote/{id}")
+    ResponseEntity<Boolean> deleteVote(@PathVariable("id") Long id);
 }

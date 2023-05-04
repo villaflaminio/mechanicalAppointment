@@ -1,11 +1,13 @@
 package it.mtempobono.mechanicalappointment.controller.impl;
 
 import it.mtempobono.mechanicalappointment.controller.AppointmentController;
+import it.mtempobono.mechanicalappointment.controller.AppointmentVote;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
+import it.mtempobono.mechanicalappointment.model.entity.Vote;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -78,5 +80,20 @@ public class AppointmentControllerImpl implements AppointmentController {
 
     @Override
     public ResponseEntity<Void> delete(Long id) { return appointmentService.delete(id);}
+
+    @Override
+    public ResponseEntity<Vote> voteAppointment(AppointmentVote appointmentVote) {
+        return  appointmentService.voteAppointment(appointmentVote);
+    }
+
+    @Override
+    public ResponseEntity<Vote> modifyVote(AppointmentVote appointmentVote, Long id) {
+        return appointmentService.modifyVote(appointmentVote, id);
+    }
+
+    @Override
+    public ResponseEntity<Boolean> deleteVote(Long id) {
+        return  appointmentService.deleteVote(id);
+    }
     //endregion CRUD Methods
 }

@@ -1,6 +1,6 @@
 package it.mtempobono.mechanicalappointment.service.impl;
 
-import it.mtempobono.mechanicalappointment.controller.FilterDay;
+import it.mtempobono.mechanicalappointment.model.dto.FilterDay;
 import it.mtempobono.mechanicalappointment.model.builders.OpenDayBuilder;
 import it.mtempobono.mechanicalappointment.model.dto.OpenDayDto;
 import it.mtempobono.mechanicalappointment.model.entity.Garage;
@@ -8,7 +8,6 @@ import it.mtempobono.mechanicalappointment.model.entity.OpenDay;
 import it.mtempobono.mechanicalappointment.repository.GarageRepository;
 import it.mtempobono.mechanicalappointment.repository.OpenDayRepository;
 import it.mtempobono.mechanicalappointment.service.OpenDayService;
-import it.mtempobono.mechanicalappointment.util.PropertiesHelper;
 import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -54,6 +54,10 @@ public class User {
 
     private String providerId;
 
+    @OneToMany(mappedBy="user")
+    @JsonManagedReference(value="user-vote")
+    private Set<Vote> votes;
+
     //relation with vehicle
     @OneToMany(mappedBy = "user")
     @JsonManagedReference

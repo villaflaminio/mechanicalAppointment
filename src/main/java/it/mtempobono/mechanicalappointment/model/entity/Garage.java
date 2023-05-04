@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -55,4 +56,8 @@ public class Garage {
 
     @OneToMany(mappedBy = "garage")
     private List<OpenDay> openDay;
+
+    @OneToMany(mappedBy = "garage")
+    @JsonManagedReference(value="garage-appointment")
+    private List<Vote> votes;
 }
