@@ -71,7 +71,7 @@ public interface VehicleController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PostMapping
-    ResponseEntity<Vehicle> save(@RequestBody @Validated VehicleDto vehicle);
+    ResponseEntity<Vehicle> save(@RequestBody @Validated VehicleDto vehicle) throws Exception;
 
     /**
      * Update the vehicle
@@ -87,7 +87,7 @@ public interface VehicleController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @PutMapping("/{id}")
-    ResponseEntity<Vehicle> update(@RequestBody VehicleDto vehicle, @PathVariable("id") Long id);
+    ResponseEntity<Vehicle> update(@RequestBody VehicleDto vehicle, @PathVariable("id") Long id) throws Exception;
 
     /**
      * Delete the vehicle
@@ -103,7 +103,7 @@ public interface VehicleController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable("id") Long id);
+    ResponseEntity<Void> delete(@PathVariable("id") Long id) throws Exception;
 
 
     /**

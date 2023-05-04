@@ -73,10 +73,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             return ResponseEntity.ok(appointmentRepository.findAll());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         } finally {
             logger.debug("Exit from findAll() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -93,10 +94,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             return appointment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         } finally {
             logger.debug("Exit from findById() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     private String createCalendarEvent(OpenDay openDay, AppointmentDto appointmentDto, Vehicle vehicle, MechanicalAction mechanicalAction) throws Exception {
@@ -141,7 +143,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             // Check that vehicle exists
             if (vehicle == null) {
                 logger.error("Vehicle not found");
-                return ResponseEntity.badRequest().build();
+                throw new RuntimeException("Vehicle not found");
             }
 
             // Check that appointment status is not null and valid.
@@ -406,10 +408,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @Override

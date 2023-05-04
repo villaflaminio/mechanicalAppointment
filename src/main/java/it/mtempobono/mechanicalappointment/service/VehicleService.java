@@ -14,11 +14,11 @@ public interface VehicleService {
 
     ResponseEntity<Vehicle> findById(Long id);
 
-    ResponseEntity<Vehicle> save(VehicleDto vehicle);
+    ResponseEntity<Vehicle> save(VehicleDto vehicle) throws Exception;
 
-    ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id);
+    ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id) throws Exception;
 
-    ResponseEntity<Void> delete(Long id);
+    ResponseEntity<Void> delete(Long id) throws Exception;
 
     ResponseEntity<List<Vehicle>> findByUserId(Long id);
 }

@@ -32,18 +32,20 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
     // endregion Fields
 
     // region Methods
+
     /**
      * Get all the mechanicalActions
+     *
      * @return the list of mechanicalActions
      */
     @Override
-    public ResponseEntity<List<MechanicalAction>> findAll(){
+    public ResponseEntity<List<MechanicalAction>> findAll() {
         try {
             logger.debug("Enter into findAll() method");
             return ResponseEntity.ok(mechanicalActionRepository.findAll());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
-        }finally {
+        } finally {
             logger.debug("Exit from findAll() method");
         }
         return ResponseEntity.notFound().build();
@@ -51,18 +53,19 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
 
     /**
      * Get the mechanicalAction by id
+     *
      * @param id the mechanicalAction id
      * @return the mechanicalAction
      */
     @Override
-    public ResponseEntity<MechanicalAction> findById(Long id){
+    public ResponseEntity<MechanicalAction> findById(Long id) {
         try {
             logger.info("findById() called with id: {}", id);
             Optional<MechanicalAction> mechanicalAction = mechanicalActionRepository.findById(id);
             return mechanicalAction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
-        }finally {
+        } finally {
             logger.debug("Exit from findById() method");
         }
         return ResponseEntity.notFound().build();
@@ -70,18 +73,19 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
 
     /**
      * Create a new mechanicalAction
+     *
      * @param mechanicalAction the mechanicalAction to create
      * @return the created mechanicalAction
      */
     @Override
-    public ResponseEntity<MechanicalAction> save(MechanicalActionDto mechanicalAction){
+    public ResponseEntity<MechanicalAction> save(MechanicalActionDto mechanicalAction) {
         try {
             logger.info("save() called with mechanicalAction: {}", mechanicalAction);
 
             // Check if internal duration and external duration are not null
             if (mechanicalAction.getInternalDuration() == null || mechanicalAction.getExternalDuration() == null) {
                 logger.error("Internal duration or external duration is null");
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("Internal duration or external duration is null");
             }
 
             MechanicalAction newMechanicalAction = MechanicalActionBuilder.aMechanicalAction()
@@ -97,19 +101,20 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
 
         } catch (Exception e) {
             logger.error("Error in save() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from save() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
      * Update the mechanicalAction
+     *
      * @param mechanicalAction the mechanicalAction to update
      * @return the updated mechanicalAction
      */
     @Override
-    public ResponseEntity<MechanicalAction> update(MechanicalActionDto mechanicalAction, Long id){
+    public ResponseEntity<MechanicalAction> update(MechanicalActionDto mechanicalAction, Long id) {
         try {
             logger.info("update() called with mechanicalAction: {}", mechanicalAction);
 
@@ -119,7 +124,8 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
             // If the mechanicalAction doesn't exist, return a 404 error
             if (mechanicalActionToUpdateOptional.isEmpty()) {
                 logger.error("MechanicalAction not found");
-                return ResponseEntity.notFound().build();
+
+                throw new IllegalArgumentException("MechanicalAction not found");
             }
 
             PropertyCheckerUtils.copyNonNullProperties(mechanicalAction, mechanicalActionToUpdateOptional.get());
@@ -138,26 +144,28 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
             return ResponseEntity.ok(mechanicalActionRepository.save(mechanicalActionToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());
+            throw e;
+
         } finally {
             logger.debug("Exit from update() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
      * Delete the mechanicalAction
+     *
      * @param id the mechanicalAction id
      * @return the deleted mechanicalAction
      */
     @Override
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(Long id) {
         try {
             logger.info("delete() called with id: {}", id);
 
             // Check if the mechanicalAction exists
             if (!mechanicalActionRepository.existsById(id)) {
                 logger.error("MechanicalAction not found");
-                return ResponseEntity.notFound().build();
+                throw new IllegalArgumentException("MechanicalAction not found");
             }
 
             mechanicalActionRepository.deleteById(id);
@@ -165,10 +173,10 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     // endregion Methods

@@ -13,11 +13,11 @@ public interface PlaceService {
 
     ResponseEntity<Place> findById(Long id);
 
-    ResponseEntity<Void> delete(Long id);
+    ResponseEntity<Void> delete(Long id) throws Exception;
 
-    ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality);
+    ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality) throws Exception;
 
-    ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province);
+    ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province) throws Exception;
 
-    ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region);
+    ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region) throws Exception;
 }

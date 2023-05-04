@@ -29,12 +29,14 @@ public class PlaceServiceImpl implements PlaceService {
     // endregion Fields
 
     // region Methods
+
     /**
      * Get all the places
+     *
      * @return the list of places
      */
     @Override
-    public ResponseEntity<List<Place>> findAll(int page, int size){
+    public ResponseEntity<List<Place>> findAll(int page, int size) {
         try {
             logger.debug("Enter into findAll() method");
 
@@ -44,45 +46,47 @@ public class PlaceServiceImpl implements PlaceService {
             return ResponseEntity.ok(allPlaces.getContent());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findAll() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Get the place by id
+     *
      * @param id the place id
      * @return the place
      */
     @Override
-    public ResponseEntity<Place> findById(Long id){
+    public ResponseEntity<Place> findById(Long id) {
         try {
             logger.info("findById() called with id: {}", id);
             Optional<Place> place = placeRepository.findById(id);
             return place.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findById() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Delete the place
+     *
      * @param id the place id
      * @return the deleted place
      */
     @Override
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(Long id) throws Exception {
         try {
             logger.info("delete() called with id: {}", id);
 
             // Check if the place exists
             if (!placeRepository.existsById(id)) {
                 logger.error("Place not found");
-                return ResponseEntity.notFound().build();
+                throw new Exception("Place not found");
             }
 
             placeRepository.deleteById(id);
@@ -90,10 +94,10 @@ public class PlaceServiceImpl implements PlaceService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     // endregion Methods
@@ -102,73 +106,76 @@ public class PlaceServiceImpl implements PlaceService {
 
     /**
      * Get the places by municipality starts with
+     *
      * @param municipality the place municipality
      * @return the list of places that starts with the municipality param
      */
     @Override
-    public ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality){
+    public ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality) throws Exception {
         try {
             logger.info("findPlaceByMunicipalityStartsWith() called with municipality starts with: {}", municipality);
             List<Place> places = placeRepository.findPlaceByMunicipalityStartsWith(municipality);
 
             // If no places found, return not found
             if (places.isEmpty())
-                return ResponseEntity.notFound().build();
+                throw new Exception("Place not found");
 
             return ResponseEntity.ok(places);
         } catch (Exception e) {
             logger.error("Error in findPlaceByMunicipalityStartsWith() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findPlaceByMunicipalityStartsWith() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Get the places by municipality starts with
+     *
      * @param province the place municipality
      * @return the list of places that starts with the municipality param
      */
     @Override
-    public ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province){
+    public ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province) throws Exception {
         try {
             logger.info("findPlaceByProvinceStartsWith() called with municipality starts with: {}", province);
             List<Place> places = placeRepository.findPlaceByProvinceStartsWith(province);
 
             // If no places found, return not found
             if (places.isEmpty())
-                return ResponseEntity.notFound().build();
+                throw new Exception("Place not found");
 
             return ResponseEntity.ok(places);
         } catch (Exception e) {
             logger.error("Error in findPlaceByProvinceStartsWith() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findPlaceByProvinceStartsWith() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Get the places by municipality starts with
+     *
      * @param region the place municipality
      * @return the list of places that starts with the municipality param
      */
     @Override
-    public ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region){
+    public ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region) throws Exception {
         try {
             logger.info("findPlaceByRegionStartsWith() called with municipality starts with: {}", region);
             List<Place> places = placeRepository.findPlaceByRegionStartsWith(region);
 
             // If no places found, return not found
             if (places.isEmpty())
-                return ResponseEntity.notFound().build();
+                throw new Exception("Place not found");
 
             return ResponseEntity.ok(places);
         } catch (Exception e) {
             logger.error("Error in findPlaceByRegionStartsWith() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findPlaceByRegionStartsWith() method");
         }
-        return ResponseEntity.notFound().build();
     }
 }

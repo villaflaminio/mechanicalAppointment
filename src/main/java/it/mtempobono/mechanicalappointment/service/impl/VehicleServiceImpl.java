@@ -37,49 +37,53 @@ public class VehicleServiceImpl implements VehicleService {
     // endregion Fields
 
     // region Methods
+
     /**
      * Get all the vehicles
+     *
      * @return the list of vehicles
      */
     @Override
-    public ResponseEntity<List<Vehicle>> findAll(){
+    public ResponseEntity<List<Vehicle>> findAll() {
         try {
             logger.debug("Enter into findAll() method");
             return ResponseEntity.ok(vehicleRepository.findAll());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findAll() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Get the vehicle by id
+     *
      * @param id the vehicle id
      * @return the vehicle
      */
     @Override
-    public ResponseEntity<Vehicle> findById(Long id){
+    public ResponseEntity<Vehicle> findById(Long id) {
         try {
             logger.info("findById() called with id: {}", id);
             Optional<Vehicle> vehicle = vehicleRepository.findById(id);
             return vehicle.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findById() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
      * Create a new vehicle
+     *
      * @param vehicleDto the vehicle to create
      * @return the created vehicle
      */
     @Override
-    public ResponseEntity<Vehicle> save(VehicleDto vehicleDto){
+    public ResponseEntity<Vehicle> save(VehicleDto vehicleDto) throws Exception {
         try {
             logger.info("save() called with vehicle: {}", vehicleDto);
 
@@ -89,7 +93,7 @@ public class VehicleServiceImpl implements VehicleService {
             // If the user doesn't exist, return a 404 error
             if (userOptional.isEmpty()) {
                 logger.error("User not found");
-                return ResponseEntity.notFound().build();
+                throw new Exception("User not found");
             }
 
             // Create a new vehicle using fields from vehicleDto
@@ -107,19 +111,20 @@ public class VehicleServiceImpl implements VehicleService {
 
         } catch (Exception e) {
             logger.error("Error in save() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from save() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
      * Update the vehicle
+     *
      * @param vehicleDto the vehicle to update
      * @return the updated vehicle
      */
     @Override
-    public ResponseEntity<Vehicle> update(VehicleDto vehicleDto, Long id){
+    public ResponseEntity<Vehicle> update(VehicleDto vehicleDto, Long id) throws Exception {
         try {
             logger.info("update() called with vehicle: {}", vehicleDto);
 
@@ -129,7 +134,7 @@ public class VehicleServiceImpl implements VehicleService {
             // If the vehicle doesn't exist, return a 404 error
             if (vehicleToUpdateOptional.isEmpty()) {
                 logger.error("Vehicle not found");
-                return ResponseEntity.notFound().build();
+                throw new Exception("Vehicle not found");
             }
 
             PropertyCheckerUtils.copyNonNullProperties(vehicleDto, vehicleToUpdateOptional.get());
@@ -138,26 +143,27 @@ public class VehicleServiceImpl implements VehicleService {
             return ResponseEntity.ok(vehicleRepository.save(vehicleToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from update() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
      * Delete the vehicle
+     *
      * @param id the vehicle id
      * @return the deleted vehicle
      */
     @Override
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(Long id) throws Exception {
         try {
             logger.info("delete() called with id: {}", id);
 
             // Check if the vehicle exists
             if (!vehicleRepository.existsById(id)) {
                 logger.error("Vehicle not found");
-                return ResponseEntity.notFound().build();
+                throw new Exception("Vehicle not found");
             }
 
             vehicleRepository.deleteById(id);
@@ -165,31 +171,30 @@ public class VehicleServiceImpl implements VehicleService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
      * Get the vehicles by user id
+     *
      * @param id the user id
      * @return the list of vehicles
      */
     @Override
-    public ResponseEntity<List<Vehicle>> findByUserId(Long id){
+    public ResponseEntity<List<Vehicle>> findByUserId(Long id) {
         try {
             logger.info("findByUserId() called with id: {}", id);
             return ResponseEntity.ok(vehicleRepository.findByUserId(id));
         } catch (Exception e) {
             logger.error("Error in findByUserId() method: {}", e.getMessage());
-        }finally {
+            throw e;
+        } finally {
             logger.debug("Exit from findByUserId() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     // endregion Methods
-
-
 }

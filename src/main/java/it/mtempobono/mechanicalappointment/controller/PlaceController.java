@@ -78,7 +78,7 @@ public interface PlaceController {
             @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable("id") Long id);
+    ResponseEntity<Void> delete(@PathVariable("id") Long id) throws Exception;
     //endregion CRUD Methods
 
     // region Autocomplete Methods
@@ -99,7 +99,7 @@ public interface PlaceController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/findPlaceByMunicipalityStartsWith")
     ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(
-            @RequestParam(value = "municipality") String municipality);
+            @RequestParam(value = "municipality") String municipality) throws Exception;
 
     /**
      * Get the place by province starts with the specified string
@@ -117,7 +117,7 @@ public interface PlaceController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/findPlaceByProvinceStartsWith")
     ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(
-            @RequestParam(value = "province") String province);
+            @RequestParam(value = "province") String province) throws Exception;
 
     /**
      * Get the place by region starts with the specified string
@@ -135,7 +135,7 @@ public interface PlaceController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/findPlaceByRegionStartsWith")
     ResponseEntity<List<Place>> findPlaceByRegionStartsWith(
-            @RequestParam(value = "region") String region);
+            @RequestParam(value = "region") String region) throws Exception;
 
     // endregion Autocomplete Methods
 }

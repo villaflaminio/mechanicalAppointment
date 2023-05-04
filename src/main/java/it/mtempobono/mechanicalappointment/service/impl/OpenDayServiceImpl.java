@@ -56,10 +56,10 @@ public class OpenDayServiceImpl implements OpenDayService {
             return ResponseEntity.ok(openDayRepository.findAll());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from findAll() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -76,10 +76,10 @@ public class OpenDayServiceImpl implements OpenDayService {
             return openDay.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from findById() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -98,7 +98,7 @@ public class OpenDayServiceImpl implements OpenDayService {
             Garage garage = garageRepository.findById(garageId).orElse(null);
             if (garage == null) {
                 logger.error("Garage is null, you have to insert a valid one");
-                return ResponseEntity.badRequest().build();
+                throw new ResourceNotFoundException("Garage not found");
             }
 
             OpenDay newOpenDay = OpenDayBuilder.anOpenDay()
@@ -112,10 +112,10 @@ public class OpenDayServiceImpl implements OpenDayService {
 
         } catch (Exception e) {
             logger.error("Error in save() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from save() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -135,7 +135,7 @@ public class OpenDayServiceImpl implements OpenDayService {
             // If the openDay doesn't exist, return a 404 error
             if (openDayToUpdateOptional.isEmpty()) {
                 logger.error("OpenDay not found");
-                return ResponseEntity.notFound().build();
+                throw new ResourceNotFoundException("OpenDay not found");
             }
 
             // Retrieve the linked garage for the openDay
@@ -143,7 +143,7 @@ public class OpenDayServiceImpl implements OpenDayService {
             Garage garage = garageRepository.findById(garageId).orElse(null);
             if (garage == null) {
                 logger.error("Garage is null, you have to insert a valid one");
-                return ResponseEntity.badRequest().build();
+                throw new ResourceNotFoundException("Garage not found");
             }
 
             PropertyCheckerUtils.copyNonNullProperties(openDay, openDayToUpdateOptional.get());
@@ -154,10 +154,10 @@ public class OpenDayServiceImpl implements OpenDayService {
             return ResponseEntity.ok(openDayRepository.save(openDayToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from update() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -174,7 +174,7 @@ public class OpenDayServiceImpl implements OpenDayService {
             // Check if the openDay exists
             if (!openDayRepository.existsById(id)) {
                 logger.error("OpenDay not found");
-                return ResponseEntity.notFound().build();
+                throw new ResourceNotFoundException("OpenDay not found");
             }
 
             openDayRepository.deleteById(id);
@@ -182,10 +182,10 @@ public class OpenDayServiceImpl implements OpenDayService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw e;
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     @Override

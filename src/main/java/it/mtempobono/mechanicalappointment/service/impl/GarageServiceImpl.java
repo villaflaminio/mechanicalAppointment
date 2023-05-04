@@ -11,6 +11,7 @@ import it.mtempobono.mechanicalappointment.util.PropertyCheckerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +45,11 @@ public class GarageServiceImpl implements GarageService {
             return ResponseEntity.ok(garageRepository.findAll());
         } catch (Exception e) {
             logger.error("Error in findAll() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         }finally {
             logger.debug("Exit from findAll() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -63,10 +65,11 @@ public class GarageServiceImpl implements GarageService {
             return garage.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             logger.error("Error in findById() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         }finally {
             logger.debug("Exit from findById() method");
         }
-        return ResponseEntity.notFound().build();
     }
 
     /**
@@ -83,13 +86,13 @@ public class GarageServiceImpl implements GarageService {
             Long placeId = garage.getPlaceId();
             if (placeId == null || placeId == 0) {
                 logger.error("Place is null, you have to insert a valid one");
-                return ResponseEntity.badRequest().build();
+                throw new ResourceNotFoundException("Place is null, you have to insert a valid one");
             }
 
             Place place = placeRepository.findById(placeId).orElse(null);
             if (place == null) {
                 logger.error("Place not found");
-                return ResponseEntity.badRequest().build();
+                throw new ResourceNotFoundException("Place not found");
             }
 
             // Maps the GarageDto to Garage building a new Garage object
@@ -111,10 +114,10 @@ public class GarageServiceImpl implements GarageService {
 
         } catch (Exception e) {
             logger.error("Error in save() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }finally {
             logger.debug("Exit from save() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -149,10 +152,11 @@ public class GarageServiceImpl implements GarageService {
             return ResponseEntity.ok(garageRepository.save(garageToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+
         } finally {
             logger.debug("Exit from update() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     /**
@@ -168,7 +172,7 @@ public class GarageServiceImpl implements GarageService {
             // Check if the garage exists
             if (!garageRepository.existsById(id)) {
                 logger.error("Garage not found");
-                return ResponseEntity.notFound().build();
+                throw new ResourceNotFoundException("Garage not found");
             }
 
             garageRepository.deleteById(id);
@@ -176,10 +180,10 @@ public class GarageServiceImpl implements GarageService {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             logger.error("Error in delete() method: {}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } finally {
             logger.debug("Exit from delete() method");
         }
-        return ResponseEntity.badRequest().build();
     }
 
     // endregion CRUD Methods

@@ -40,17 +40,17 @@ public class VehicleControllerImpl implements VehicleController {
     }
 
     @Override
-    public ResponseEntity<Vehicle> save(VehicleDto vehicle) {
+    public ResponseEntity<Vehicle> save(VehicleDto vehicle) throws Exception {
         return vehicleService.save(vehicle);
     }
 
     @Override
-    public ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id) {
+    public ResponseEntity<Vehicle> update(VehicleDto vehicle, Long id) throws Exception {
         return vehicleService.update(vehicle, id);
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) { return vehicleService.delete(id);}
+    public ResponseEntity<Void> delete(Long id) throws Exception { return vehicleService.delete(id);}
     //endregion CRUD Methods
 
 

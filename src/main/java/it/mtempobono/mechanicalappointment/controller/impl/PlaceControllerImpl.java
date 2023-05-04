@@ -35,22 +35,22 @@ public class PlaceControllerImpl implements PlaceController {
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) { return placeService.delete(id);}
+    public ResponseEntity<Void> delete(Long id) throws Exception { return placeService.delete(id);}
     //endregion CRUD Methods
 
     // region Autocomplete methods
     @Override
-    public ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality){
+    public ResponseEntity<List<Place>> findPlaceByMunicipalityStartsWith(String municipality) throws Exception {
         return placeService.findPlaceByMunicipalityStartsWith(municipality);
     }
 
     @Override
-    public ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province){
+    public ResponseEntity<List<Place>> findPlaceByProvinceStartsWith(String province) throws Exception {
         return placeService.findPlaceByProvinceStartsWith(province);
     }
 
     @Override
-    public ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region){
+    public ResponseEntity<List<Place>> findPlaceByRegionStartsWith(String region) throws Exception {
         return placeService.findPlaceByRegionStartsWith(region);
     }
     // endregion
