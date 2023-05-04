@@ -100,6 +100,11 @@ public class OpenDayServiceImpl implements OpenDayService {
                 logger.error("Garage is null, you have to insert a valid one");
                 throw new ResourceNotFoundException("Garage not found");
             }
+            if(openDayRepository.existsByGarageIdAndDate(garageId, openDay.getDate())) {
+                logger.error("OpenDay already exists");
+                throw new IllegalArgumentException("OpenDay already exists");
+            }
+
 
             OpenDay newOpenDay = OpenDayBuilder.anOpenDay()
                     .garage(garage)
