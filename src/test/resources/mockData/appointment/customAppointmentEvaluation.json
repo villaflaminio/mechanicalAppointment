@@ -1,0 +1,33 @@
+{
+  "appointmentId": 1,
+  "internalTime": {
+    "start": {
+      "hour": 10,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    },
+    "end": {
+      "hour": 10,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    }
+  },
+  "externalTime": {
+    "start": {
+      "hour": 10,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    },
+    "end": {
+      "hour": 10,
+      "minute": 30,
+      "second": 0,
+      "nano": 0
+    }
+  },
+  "price": 100,
+  "approved": true
+}

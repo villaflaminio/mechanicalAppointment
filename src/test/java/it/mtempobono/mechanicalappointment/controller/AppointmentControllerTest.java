@@ -559,6 +559,7 @@ public class AppointmentControllerTest {
 
         assertThat(resultPost).isNotNull();
     }
+
     @Test
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
@@ -579,13 +580,31 @@ public class AppointmentControllerTest {
 
         Appointment appointment = repository.findById(appointmentId).get();
 
+        final File jsonFileEval = new ClassPathResource("mockData/appointment/customAppointmentEvaluation.json").getFile();
+        final String appointmentToEval = Files.readString(jsonFileEval.toPath());
+
         MvcResult resultPost = this.mockMvc.perform(post("/api/appointments/customAppointment" )
                         .contentType(APPLICATION_JSON)
+                        .content(appointmentToEval)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         assertThat(resultPost).isNotNull();
+
+        String content = resultPost.getResponse().getContentAsString();
+        JSONObject jsonObject = (JSONObject) parser.parse(content);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        AppointmentDto customAppointment = mapper.readValue(jsonObject.toString(), AppointmentDto.class);
+
+        assertThat(customAppointment).isNotNull();
+        assertThat(customAppointment.getComment()).isEqualTo(appointment.getComment());
     }
+
+
+
 }

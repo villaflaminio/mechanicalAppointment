@@ -121,7 +121,7 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
             @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @PostMapping("/customAppointment")
-    ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation);
+    ResponseEntity<Appointment> handleCustomAppointment(@RequestBody @Validated CustomAppointmentEvaluation customAppointmentEvaluation);
 
 
     /**
