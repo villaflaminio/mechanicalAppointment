@@ -3,6 +3,7 @@ package it.mtempobono.mechanicalappointment.controller.impl;
 import it.mtempobono.mechanicalappointment.controller.AppointmentController;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
+import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
@@ -53,6 +54,16 @@ public class AppointmentControllerImpl implements AppointmentController {
     @Override
     public ResponseEntity<List<Appointment>> findAllByUserId(Long id) {
         return  appointmentService.findAllByUserId(id);
+    }
+
+    @Override
+    public ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation) {
+        return appointmentService.handleCustomAppointment(customAppointmentEvaluation);
+    }
+
+    @Override
+    public ResponseEntity<Appointment> appointmentStateUpdate(String status, Long appointmentId) {
+        return  appointmentService.appointmentStateUpdate(status, appointmentId);
     }
 
     @Override

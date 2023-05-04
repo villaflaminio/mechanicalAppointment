@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
+import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.security.CurrentUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public interface AppointmentController {
 
     /**
      * Get all the appointments
+     *
      * @return the list of appointments
      */
     @Operation(
@@ -35,16 +38,17 @@ public interface AppointmentController {
             description = "Get all Appointments objects. The response is a list of Appointments objects."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content (
+            @ApiResponse(responseCode = "200", content = {@Content(
                     array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
-                    mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+                    mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping
     ResponseEntity<List<Appointment>> findAll();
 
     /**
      * Get the appointment by id
+     *
      * @param id the appointment id
      * @return the appointment
      */
@@ -53,9 +57,9 @@ public interface AppointmentController {
             description = "Get a Appointment object by specifying its id. The response is Appointment object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping("/{id}")
     ResponseEntity<Appointment> findById(@PathVariable("id") Long id);
 
@@ -65,25 +69,25 @@ public interface AppointmentController {
             description = "Get all available Appointments objects. The response is a list of Appointments objects."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content (
+            @ApiResponse(responseCode = "200", content = {@Content(
                     array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
-                    mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+                    mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping("/availableTimeSlots")
-    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId , Long mechanicalActionId, boolean externalTimeslot);
+    ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot);
 
-//get all appointments by user principal
+    //get all appointments by user principal
     @Operation(
             summary = "Retrieve all Appointments by user principal",
             description = "Get all Appointments objects by user principal. The response is a list of Appointments objects."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content (
+            @ApiResponse(responseCode = "200", content = {@Content(
                     array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
-                    mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+                    mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping("/myappointments")
     ResponseEntity<List<Appointment>> findAllByUserPrincipal(@CurrentUser UserPrincipal userPrincipal);
 
@@ -94,17 +98,49 @@ public interface AppointmentController {
     )
 
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content (
+            @ApiResponse(responseCode = "200", content = {@Content(
                     array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
-                    mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+                    mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @GetMapping("/myappointments/{id}")
     ResponseEntity<List<Appointment>> findAllByUserId(@PathVariable("id") Long id);
 
 
+    @Operation(
+            summary = "Handle custom technical evaluation",
+            description = " Handle custom technical evaluation. The response is a list of Appointments objects."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(
+                    array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
+                    mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
+    @PostMapping("/customAppointment")
+    ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation);
+
+
+    /**
+     * Update the appointment state
+     *
+     * @param status        the appointment status
+     * @param appointmentId the appointment id
+     * @return the updated appointment
+     */
+    @Operation(
+            summary = "Update the appointment state",
+            description = "Update the appointment state. The response is the updated Appointment object. The status can be CONFIRMED,  FINISHED, REJECTED")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
+    @PostMapping("/{appointmentId}/state/{status}")
+    ResponseEntity<Appointment> appointmentStateUpdate(@PathVariable("status") @Schema(example = "CONFIRMED") String status, @PathVariable("appointmentId") @Schema(example = "1") Long appointmentId);
+
     /**
      * Create a new appointment
+     *
      * @param appointment the appointment to create
      * @return the created appointment
      */
@@ -113,14 +149,15 @@ public interface AppointmentController {
             description = "Creates a new appointment. The response is the created Appointment object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @PostMapping
     ResponseEntity<Appointment> save(@RequestBody @Validated AppointmentDto appointment) throws Exception;
 
     /**
      * Update the appointment
+     *
      * @param appointment the appointment to update
      * @return the updated appointment
      */
@@ -129,14 +166,15 @@ public interface AppointmentController {
             description = "Updates an existing appointment. The response is the updated Appointment object."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = Appointment.class), mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @PutMapping("/{id}")
     ResponseEntity<Appointment> update(@RequestBody AppointmentDto appointment, @PathVariable("id") Long id);
 
     /**
      * Delete the appointment
+     *
      * @param id the appointment id
      * @return the deleted appointment
      */
@@ -145,9 +183,9 @@ public interface AppointmentController {
             description = "Deletes a appointment."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+            @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema())}),
+            @ApiResponse(responseCode = "500", content = {@Content(schema = @Schema())})})
     @DeleteMapping("/{id}")
     ResponseEntity<Void> delete(@PathVariable("id") Long id);
 

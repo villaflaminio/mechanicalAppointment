@@ -2,6 +2,7 @@ package it.mtempobono.mechanicalappointment.service;
 
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
+import it.mtempobono.mechanicalappointment.model.dto.CustomAppointmentEvaluation;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
 import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +28,8 @@ public interface AppointmentService {
     ResponseEntity<List<Appointment>> findAllByUserPrincipal(UserPrincipal userPrincipal);
 
     ResponseEntity<List<Appointment>> findAllByUserId(Long id);
+
+    ResponseEntity<Appointment> handleCustomAppointment(CustomAppointmentEvaluation customAppointmentEvaluation);
+
+    ResponseEntity<Appointment> appointmentStateUpdate(String status, Long appointmentId);
 }
