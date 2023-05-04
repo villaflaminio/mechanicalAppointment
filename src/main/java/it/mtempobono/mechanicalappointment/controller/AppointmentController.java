@@ -10,10 +10,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
+import it.mtempobono.mechanicalappointment.security.CurrentUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
@@ -71,6 +72,35 @@ public interface AppointmentController {
             @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
     @GetMapping("/availableTimeSlots")
     ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId , Long mechanicalActionId, boolean externalTimeslot);
+
+//get all appointments by user principal
+    @Operation(
+            summary = "Retrieve all Appointments by user principal",
+            description = "Get all Appointments objects by user principal. The response is a list of Appointments objects."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content (
+                    array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
+                    mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/myappointments")
+    ResponseEntity<List<Appointment>> findAllByUserPrincipal(@CurrentUser UserPrincipal userPrincipal);
+
+    //find all appointments by user id
+    @Operation(
+            summary = "Retrieve all Appointments by user id",
+            description = "Get all Appointments objects by user id. The response is a list of Appointments objects."
+    )
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content (
+                    array = @ArraySchema(schema = @Schema(implementation = Appointment.class)),
+                    mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
+    @GetMapping("/myappointments/{id}")
+    ResponseEntity<List<Appointment>> findAllByUserId(@PathVariable("id") Long id);
 
 
     /**

@@ -4,8 +4,8 @@ import it.mtempobono.mechanicalappointment.controller.AppointmentController;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.model.dto.AppointmentDto;
 import it.mtempobono.mechanicalappointment.model.entity.Appointment;
+import it.mtempobono.mechanicalappointment.model.entity.UserPrincipal;
 import it.mtempobono.mechanicalappointment.service.AppointmentService;
-import it.mtempobono.mechanicalappointment.service.impl.AppointmentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -43,6 +43,16 @@ public class AppointmentControllerImpl implements AppointmentController {
     @Override
     public ResponseEntity<List<TimePeriod>> getAvailableAppointmentsTimeSlots(Long opendayId, Long mechanicalActionId, boolean externalTimeslot) {
        return appointmentService.getAvailableAppointmentsTimeSlots(opendayId, mechanicalActionId,externalTimeslot);
+    }
+
+    @Override
+    public ResponseEntity<List<Appointment>> findAllByUserPrincipal(UserPrincipal userPrincipal) {
+        return appointmentService.findAllByUserPrincipal(userPrincipal);
+    }
+
+    @Override
+    public ResponseEntity<List<Appointment>> findAllByUserId(Long id) {
+        return  appointmentService.findAllByUserId(id);
     }
 
     @Override
