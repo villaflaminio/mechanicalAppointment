@@ -53,7 +53,8 @@ public class OpenDaysControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_create_one_openDay() throws Exception {
+    })
+    void should_create_one_openDay() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/openDay/createOpenDay.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -89,7 +90,8 @@ public class OpenDaysControllerTest {
     @SqlGroup({
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
-    })    void should_update_one_openDay() throws Exception {
+    })
+    void should_update_one_openDay() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/openDay/createOpenDay.json").getFile();
         final String companyToCreate = Files.readString(jsonFile.toPath());
 
@@ -257,5 +259,99 @@ public class OpenDaysControllerTest {
 
         Optional<OpenDay> openDayOptional = repository.findById(openDay.getId());
         assertThat(openDayOptional).isEmpty();
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    void should_filter_by_GarageId() throws Exception {
+        final File jsonFile = new ClassPathResource("mockData/openDay/createOpenDay.json").getFile();
+        final String openDayToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult resultOpenDayCreation = this.mockMvc.perform(post("/api/opendays")
+                        .contentType(APPLICATION_JSON)
+                        .content(openDayToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        JSONObject jsonResultOpenDayCreation = (JSONObject) parser.parse(resultOpenDayCreation.getResponse().getContentAsString());
+        Long openDayId = Long.parseLong(jsonResultOpenDayCreation.get("id").toString());
+
+        OpenDay openDay = repository.findById(openDayId).get();
+
+
+        MvcResult resultGet = this.mockMvc.perform(get("/api/opendays/garage/" + openDay.getGarage().getId())
+                        .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONArray jsonArray = (JSONArray) parser.parse(contentGet);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<OpenDayDto> openDayDtos = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            openDayDtos.add(mapper.readValue(jsonArray.get(i).toString(), OpenDayDto.class));
+        }
+
+        assertThat(openDayDtos).hasSize(2);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    void should_filterDays_by_GarageId_and_Days() throws Exception {
+        final File jsonFile = new ClassPathResource("mockData/openDay/createOpenDay.json").getFile();
+        final String openDayToCreate = Files.readString(jsonFile.toPath());
+
+        MvcResult resultOpenDayCreation = this.mockMvc.perform(post("/api/opendays")
+                        .contentType(APPLICATION_JSON)
+                        .content(openDayToCreate))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        JSONObject jsonResultOpenDayCreation = (JSONObject) parser.parse(resultOpenDayCreation.getResponse().getContentAsString());
+        Long openDayId = Long.parseLong(jsonResultOpenDayCreation.get("id").toString());
+
+        OpenDay openDay = repository.findById(openDayId).get();
+
+
+        final File filterDaysJsonFile = new ClassPathResource("mockData/openDay/filterDays.json").getFile();
+        final String openDayTofilter = Files.readString(filterDaysJsonFile.toPath());
+        MvcResult resultGet = this.mockMvc.perform(post("/api/opendays/filterDays")
+                        .contentType(APPLICATION_JSON)
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("sortField", "")
+                        .param("sortDirection", "")
+                        .content(openDayTofilter)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        String contentGet = resultGet.getResponse().getContentAsString();
+        JSONObject jsonResult = (JSONObject) parser.parse(contentGet);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        JSONArray jsonArray = (JSONArray) jsonResult.get("content");
+        List<OpenDayDto> openDayDtos = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            openDayDtos.add(mapper.readValue(jsonArray.get(i).toString(), OpenDayDto.class));
+        }
+
+        assertThat(openDayDtos).hasSize(2);
     }
 }
