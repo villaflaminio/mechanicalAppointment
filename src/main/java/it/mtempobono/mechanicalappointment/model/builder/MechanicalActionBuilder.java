@@ -61,7 +61,7 @@ public final class MechanicalActionBuilder {
         mechanicalAction.setName(name);
         mechanicalAction.setDescription(description);
         mechanicalAction.setPrice(price);
-        mechanicalAction.setActive(isActive);
+        mechanicalAction.setIsActive(isActive);
         mechanicalAction.setInternalDuration(internalDuration);
         mechanicalAction.setExternalDuration(externalDuration);
         return mechanicalAction;

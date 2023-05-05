@@ -77,7 +77,7 @@ public final class VehicleBuilder {
         vehicle.setBrand(brand);
         vehicle.setYear(year);
         vehicle.setFuel(fuel);
-        vehicle.setActive(isActive);
+        vehicle.setIsActive(isActive);
         vehicle.setUser(user);
         vehicle.setReservation(reservation);
         return vehicle;

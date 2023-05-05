@@ -1,14 +1,12 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "vehicles")
-@Data
 public class Vehicle {
     //region Fields
     @Id
@@ -110,11 +108,11 @@ public class Vehicle {
         this.fuel = fuel;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 

@@ -142,7 +142,7 @@ public class EmailService {
             String startTime = appointment.getExternalTime().getStart().getHour() + ":" + appointment.getExternalTime().getStart().getMinute();
             String endTime = appointment.getExternalTime().getEnd().getHour() + ":" + appointment.getExternalTime().getEnd().getMinute();
 
-            String appointmentType = appointment.getMechanicalActionCustom() ? "Custom" : "Stock";
+            String appointmentType = appointment.getIsMechanicalActionCustom() ? "Custom" : "Stock";
 
             Map<String, Object> model = new HashMap<>();
             model.put("customerName", appointment.getVehicle().getUser().getName());
@@ -193,7 +193,7 @@ public class EmailService {
             String startTime = appointment.getExternalTime().getStart().getHour() + ":" + appointment.getExternalTime().getStart().getMinute();
             String endTime = appointment.getExternalTime().getEnd().getHour() + ":" + appointment.getExternalTime().getEnd().getMinute();
 
-            String appointmentType = appointment.getMechanicalActionCustom() ? "Custom" : "Stock";
+            String appointmentType = appointment.getIsMechanicalActionCustom() ? "Custom" : "Stock";
 
             Map<String, Object> model = new HashMap<>();
             model.put("customerName", appointment.getVehicle().getUser().getName());

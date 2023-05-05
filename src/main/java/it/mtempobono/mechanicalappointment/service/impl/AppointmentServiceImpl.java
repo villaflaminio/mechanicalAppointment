@@ -215,8 +215,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             List<TimePeriod> availableHoursInternal = slots.getAvailableHoursOnInteralTime();
             List<TimePeriod> availableHoursExternal = slots.getAvailableHoursOnExternalTime();
 
-            if (availableHoursExternal.stream().anyMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart())) &&
-                    availableHoursInternal.stream().anyMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
+            if (availableHoursExternal.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart())) &&
+                    availableHoursInternal.stream().noneMatch(timePeriod -> timePeriod.getStart().equals(appointmentDto.getTimeSlotSelected().getStart()))) {
                 logger.error("Appointment internal time is not valid. Could be null or start after the end time.");
                 throw new RuntimeException("Appointment internal time is not valid. Could be null or start after the end time.");
             }

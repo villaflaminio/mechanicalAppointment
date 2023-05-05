@@ -1,14 +1,12 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 
 import java.io.Serializable;
 
 /**
  * A DTO for the {@link it.mtempobono.mechanicalappointment.model.entity.Vehicle} entity
  */
-@Data
 public class VehicleDto implements Serializable {
     //region Fields
     @Schema(description = "Unique identifier of the Vehicle.", example = "GJ123AA")
@@ -90,11 +88,11 @@ public class VehicleDto implements Serializable {
         this.fuel = fuel;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 

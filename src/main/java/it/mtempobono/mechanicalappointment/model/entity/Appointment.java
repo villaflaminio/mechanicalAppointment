@@ -178,11 +178,11 @@ public class Appointment implements Comparable<Appointment> {
         this.votes = votes;
     }
 
-    public Boolean getMechanicalActionCustom() {
+    public Boolean getIsMechanicalActionCustom() {
         return isMechanicalActionCustom;
     }
 
-    public void setMechanicalActionCustom(Boolean mechanicalActionCustom) {
+    public void setIsMechanicalActionCustom(Boolean mechanicalActionCustom) {
         isMechanicalActionCustom = mechanicalActionCustom;
     }
     //endregion

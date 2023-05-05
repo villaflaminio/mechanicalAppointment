@@ -198,7 +198,7 @@ public class AuthController {
         mechanicalAction.setName("CUSTOM");
         mechanicalAction.setDescription("CUSTOM");
         mechanicalAction.setPrice(0.0);
-        mechanicalAction.setActive(true);
+        mechanicalAction.setIsActive(true);
         mechanicalAction.setInternalDuration(Duration.ZERO);
         mechanicalAction.setExternalDuration(Duration.ZERO);
 

@@ -91,7 +91,7 @@ public class MechanicalActionServiceImpl implements MechanicalActionService {
                     .internalDuration(mechanicalAction.getInternalDuration().getDuration())
                     .externalDuration(mechanicalAction.getExternalDuration().getDuration())
                     .price(mechanicalAction.getPrice())
-                    .isActive(mechanicalAction.getActive())
+                    .isActive(mechanicalAction.getIsActive())
                     .build();
 
             return ResponseEntity.ok(mechanicalActionRepository.save(newMechanicalAction));

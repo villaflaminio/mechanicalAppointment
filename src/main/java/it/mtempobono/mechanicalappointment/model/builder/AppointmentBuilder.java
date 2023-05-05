@@ -90,7 +90,7 @@ public final class AppointmentBuilder {
         appointment.setInternalTime(internalTime);
         appointment.setPrice(price);
         appointment.setIdCalendarEvent(idCalendarEvent);
-        appointment.setMechanicalActionCustom(isMechanicalActionCustom);
+        appointment.setIsMechanicalActionCustom(isMechanicalActionCustom);
         return appointment;
     }
 }
