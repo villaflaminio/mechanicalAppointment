@@ -1,12 +1,14 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "vehicles")
+@Data
 public class Vehicle {
     //region Fields
     @Id
@@ -32,11 +34,11 @@ public class Vehicle {
     private Boolean isActive;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "user-vehicle")
     private User user;
 
     @OneToMany(mappedBy = "vehicle")
-    @JsonBackReference
+    @JsonBackReference(value = "vehicle-appointment")
     private List<Appointment> reservation;
     //endregion
 

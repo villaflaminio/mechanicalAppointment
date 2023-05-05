@@ -55,7 +55,7 @@ public class User {
 
     //relation with vehicle
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    @JsonManagedReference (value="user-vehicle")
     private List<Vehicle> vehicle;
 
     @ManyToMany(fetch = FetchType.EAGER)

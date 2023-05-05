@@ -13,9 +13,9 @@ public final class AppointmentBuilder {
     private TimePeriod externalTime;
     private TimePeriod internalTime;
     private Double price;
-
     private String idCalendarEvent;
 
+    private Boolean isMechanicalActionCustom;
     private AppointmentBuilder() {
     }
 
@@ -72,6 +72,11 @@ public final class AppointmentBuilder {
         this.idCalendarEvent = idCalendarEvent;
         return this;
     }
+    public AppointmentBuilder mechanicalActionCustom( Boolean isMechanicalActionCustom) {
+        this.isMechanicalActionCustom = isMechanicalActionCustom;
+        return this;
+    }
+
 
     public Appointment build() {
         Appointment appointment = new Appointment();
@@ -85,6 +90,7 @@ public final class AppointmentBuilder {
         appointment.setInternalTime(internalTime);
         appointment.setPrice(price);
         appointment.setIdCalendarEvent(idCalendarEvent);
+        appointment.setMechanicalActionCustom(isMechanicalActionCustom);
         return appointment;
     }
 }

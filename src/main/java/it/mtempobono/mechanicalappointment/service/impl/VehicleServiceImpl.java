@@ -136,7 +136,6 @@ public class VehicleServiceImpl implements VehicleService {
 
             PropertyCheckerUtils.copyNonNullProperties(vehicleDto, vehicleToUpdateOptional.get());
             vehicleToUpdateOptional.get().setId(id);
-
             return ResponseEntity.ok(vehicleRepository.save(vehicleToUpdateOptional.get()));
         } catch (Exception e) {
             logger.error("Error in update() method: {}", e.getMessage());

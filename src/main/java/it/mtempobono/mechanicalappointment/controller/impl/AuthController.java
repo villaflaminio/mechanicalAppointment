@@ -146,7 +146,7 @@ public class AuthController {
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
-                .role(user.getAuthorities())
+                .role(user.getRoles())
                 .token(tokenRefreshResponse.getAccessToken())
                 .refreshToken(tokenRefreshResponse.getRefreshToken())
                 .duration(Long.toString(appProperties.getAuth().getTokenExpirationMsec()))
@@ -185,9 +185,9 @@ public class AuthController {
 
 
         User user = new User();
-        user.setEmail("admin@flaminiovilla.it");
+        user.setEmail("admin@admin.it");
         user.setName("admin");
-        user.setPassword(passwordEncoder.encode("flaminio"));
+        user.setPassword(passwordEncoder.encode("password"));
         user.setRoles(roles);
         user.setProvider(AuthProvider.local);
 

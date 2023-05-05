@@ -195,6 +195,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .internalTime(new TimePeriod(LocalTime.of(0, 0), LocalTime.of(0, 0)))
                 .externalTime(new TimePeriod(LocalTime.of(0, 0), LocalTime.of(0, 0)))
                 .idCalendarEvent(null)
+                .mechanicalActionCustom(true)
                 .build();
 
     }
@@ -238,6 +239,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .internalTime(internalTime)
                 .externalTime(externalTime)
                 .idCalendarEvent(createCalendarEvent(openDay, appointmentDto, vehicle, mechanicalAction))
+                .mechanicalActionCustom(false)
                 .build();
     }
 

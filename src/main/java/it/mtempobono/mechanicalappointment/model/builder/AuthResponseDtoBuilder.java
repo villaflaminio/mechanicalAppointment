@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.model.builder;
 
 import it.mtempobono.mechanicalappointment.model.dto.AuthResponseDto;
+import it.mtempobono.mechanicalappointment.model.entity.Role;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
@@ -9,7 +10,7 @@ public final class AuthResponseDtoBuilder {
     private long id;
     private String email;
     private String name;
-    private Collection<? extends SimpleGrantedAuthority> role;
+    private Collection<Role> role;
     private String token;
     private String refreshToken;
     private String duration;
@@ -36,7 +37,7 @@ public final class AuthResponseDtoBuilder {
         return this;
     }
 
-    public AuthResponseDtoBuilder role(Collection<? extends SimpleGrantedAuthority> role) {
+    public AuthResponseDtoBuilder role(Collection<Role> role) {
         this.role = role;
         return this;
     }

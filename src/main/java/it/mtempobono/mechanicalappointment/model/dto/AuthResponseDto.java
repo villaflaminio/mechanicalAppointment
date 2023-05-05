@@ -1,5 +1,10 @@
 package it.mtempobono.mechanicalappointment.model.dto;
 
+import it.mtempobono.mechanicalappointment.model.entity.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
@@ -7,13 +12,14 @@ import java.util.Collection;
 /**
  * This class represents the response of the authentication.
  */
-
+@Data
+@Builder
 public class AuthResponseDto {
     //region Fields
     public long id;
     public String email;
     public String name;
-    public Collection<? extends SimpleGrantedAuthority> role;
+    public Collection<Role> role;
     public String token;
     public String refreshToken;
     public String duration;
@@ -23,7 +29,7 @@ public class AuthResponseDto {
     public AuthResponseDto() {
     }
 
-    public AuthResponseDto(long id, String email, String name, Collection<? extends SimpleGrantedAuthority> role, String token, String refreshToken, String duration) {
+    public AuthResponseDto(long id, String email, String name, Collection<Role> role, String token, String refreshToken, String duration) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -61,11 +67,12 @@ public class AuthResponseDto {
         this.name = name;
     }
 
-    public Collection<? extends SimpleGrantedAuthority> getRole() {
+    public Collection<Role> getRole() {
         return role;
     }
 
-    public void setRole(Collection<? extends SimpleGrantedAuthority> role) {
+    public void setRole(Collection<Role> role
+    ) {
         this.role = role;
     }
 
