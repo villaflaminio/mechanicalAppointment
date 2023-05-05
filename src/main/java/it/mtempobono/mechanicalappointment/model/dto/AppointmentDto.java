@@ -98,11 +98,11 @@ public class AppointmentDto implements Serializable {
         this.status = status;
     }
 
-    public Boolean getMechanicalActionCustom() {
+    public Boolean getIsMechanicalActionCustom() {
         return isMechanicalActionCustom;
     }
 
-    public void setMechanicalActionCustom(Boolean mechanicalActionCustom) {
+    public void setIsMechanicalActionCustom(Boolean mechanicalActionCustom) {
         isMechanicalActionCustom = mechanicalActionCustom;
     }
 
