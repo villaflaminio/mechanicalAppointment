@@ -198,7 +198,7 @@ public class AppointmentControllerTest {
             @Sql(value = "classpath:init/clean.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "classpath:init/data_init.sql", executionPhase = BEFORE_TEST_METHOD)
     })
-    void should_get_one_appointment_by_id() throws Exception {
+    void should_get_all_appointments_by_id() throws Exception {
         final File jsonFile = new ClassPathResource("mockData/appointment/createAppointment.json").getFile();
         final String appointmentToCreate = Files.readString(jsonFile.toPath());
 

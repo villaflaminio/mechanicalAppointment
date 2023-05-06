@@ -139,7 +139,6 @@ public class VehiclesControllerTest {
 
         List<String> vehicleDifferences = MyReflectionTestUtils.compareGetters(vehicle, modifyVehicleDtoRequest, compareGetters);
         assertThat(vehicleDifferences).isEmpty();
-        //compare with old company
         vehicleDifferences = MyReflectionTestUtils.compareGetters(vehicle, oldVehicle, compareGetters);
         assertThat(vehicleDifferences).hasSize(6);
 

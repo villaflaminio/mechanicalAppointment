@@ -48,9 +48,9 @@ class AppointmentServiceImplTest {
     11:00 → 11:30
     11:30 → 12:00
     12:00 → 14:00	x	x	x	x
-    14:00 → 14:30	x			x
+    14:00 → 14:30	x
     14:30 → 15:00	x			x
-    15:00 → 15:30	x	x	x	x
+    15:00 → 15:30	x	x		x
     15:30 → 16:00	x	x	x
     16:00 → 16:30		x	x
     16:30 → 17:00			x
@@ -283,26 +283,7 @@ class AppointmentServiceImplTest {
         assertThat(availableHoursExternal).doesNotContain(new TimePeriod(LocalTime.of(16, 30), LocalTime.of(17, 0)));
     }
 
-    /*
-     6:00
-     7:00 → 7:30
-     7:30 → 8:00
-     8:00 → 8:30 	x
-     8:30 → 9:00	    x
-     9:00 →9:30	    x
-     9:30 → 10:00	x
-     10:00 → 10:30	x	x
-     10:30 → 11:00	x	x
-     11:00 → 11:30		x
-     11:30 → 12:00		x
-     12:00 → 14:00	x	x
-     14:00 → 14:30
-     14:30 → 15:00
-     15:00 → 15:30	x
-     15:30 → 16:00	x
-     16:00 → 16:30	x
-     16:30 → 17:00
-      */
+
     @Test
     void test_appointment_with2Scheduled_appointment_atSameTime() {
 

@@ -21,7 +21,7 @@ CREATE MEMORY TABLE "PUBLIC"."APPOINTMENT"(
 ALTER TABLE "PUBLIC"."APPOINTMENT" ADD CONSTRAINT "PUBLIC"."CONSTRAINT_2" PRIMARY KEY("ID");  
 -- 1 +/- SELECT COUNT(*) FROM PUBLIC.APPOINTMENT;             
 INSERT INTO "PUBLIC"."APPOINTMENT" VALUES
-(1, 'I need to change the tires', '{"start":{"hour":0,"minute":0,"second":0,"nano":0},"end":{"hour":0,"minute":0,"second":0,"nano":0}}', NULL, '{"start":{"hour":0,"minute":0,"second":0,"nano":0},"end":{"hour":0,"minute":0,"second":0,"nano":0}}', NULL, 0.0, 'AWAITING_APPROVAL', 1, 1, 1);    
+(1, 'I need to change the tires', '{"start":{"hour":0,"minute":0,"second":0,"nano":0},"end":{"hour":0,"minute":0,"second":0,"nano":0}}', NULL, '{"start":{"hour":0,"minute":0,"second":0,"nano":0},"end":{"hour":0,"minute":0,"second":0,"nano":0}}', true, 0.0, 'AWAITING_APPROVAL', 1, 1, 1);
 CREATE MEMORY TABLE "PUBLIC"."AUTHORITY"(
     "NAME" CHARACTER VARYING(50) NOT NULL
 );      

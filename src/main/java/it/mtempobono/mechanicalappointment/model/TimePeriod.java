@@ -3,10 +3,12 @@ package it.mtempobono.mechanicalappointment.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.util.wrappers.LocalTimeWrapper;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -80,9 +82,9 @@ public class TimePeriod implements Comparable<TimePeriod>, Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TimePeriod peroid = (TimePeriod) o;
-        return this.start.equals(peroid.getStart()) &&
+        return this.start.getLocalTime().equals(peroid.getStart().getLocalTime()) &&
 
-                this.end.equals(peroid.getEnd());
+                this.end.getLocalTime().equals(peroid.getEnd().getLocalTime());
     }
 
     @Override
@@ -96,6 +98,10 @@ public class TimePeriod implements Comparable<TimePeriod>, Serializable{
                 "start=" + start +
                 ", end=" + end +
                 '}';
+    }
+
+    public Collection<? extends TimePeriod> splitEvery30Minutes() {
+
     }
     // endregion Overrides
 }

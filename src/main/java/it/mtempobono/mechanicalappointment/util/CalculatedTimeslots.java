@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.util;
 
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
+import lombok.Data;
 
 import java.util.List;
 

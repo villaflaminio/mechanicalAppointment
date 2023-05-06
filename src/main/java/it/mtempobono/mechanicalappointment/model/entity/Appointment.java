@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
 import it.mtempobono.mechanicalappointment.util.converters.TimePeriodConverter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalTime;

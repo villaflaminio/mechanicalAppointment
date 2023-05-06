@@ -102,13 +102,20 @@ public class AppointmentCore {
 //                intervalFilled = findOverlappingIntervals(intervalFilled);
 //            }
 
+            List<TimePeriod> intervalFilledSplitEvrery30minutes = new ArrayList<>();
+
+            for (TimePeriod timePeriod : intervalFilled) {
+                intervalFilledSplitEvrery30minutes.addAll(timePeriod.splitEvery30Minutes());
+            }
+
+
             Map<TimePeriod, Integer> frequencyMap = new HashMap<>();
             for (TimePeriod number : intervalFilled) {
                 frequencyMap.put(number, frequencyMap.getOrDefault(number, 0) + 1);
             }
 
             for (Map.Entry<TimePeriod, Integer> entry : frequencyMap.entrySet()) {
-                if (entry.getValue() > maxEventInParallel) {
+                if (entry.getValue() >= maxEventInParallel) {
                     intervalToExclude.add(entry.getKey());
                 }
             }

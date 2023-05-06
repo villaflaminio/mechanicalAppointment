@@ -1,12 +1,12 @@
 package it.mtempobono.mechanicalappointment.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 
 public class DayPlan implements Serializable {
     //region Fields

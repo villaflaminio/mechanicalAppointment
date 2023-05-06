@@ -1,6 +1,7 @@
 package it.mtempobono.mechanicalappointment.model.entity;
 
 import it.mtempobono.mechanicalappointment.util.converters.DurationConverter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.Duration;

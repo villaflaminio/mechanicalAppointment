@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class LocalTimeWrapper implements Serializable {
     //region Fields
@@ -68,4 +69,10 @@ public class LocalTimeWrapper implements Serializable {
         this.nano = nano;
     }
     //endregion
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hour, minute, second, nano);
+    }
+
 }

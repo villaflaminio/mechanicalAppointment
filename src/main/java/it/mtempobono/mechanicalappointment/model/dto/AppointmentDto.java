@@ -2,6 +2,7 @@ package it.mtempobono.mechanicalappointment.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import it.mtempobono.mechanicalappointment.model.TimePeriod;
+import lombok.Data;
 
 import java.io.Serializable;
 
