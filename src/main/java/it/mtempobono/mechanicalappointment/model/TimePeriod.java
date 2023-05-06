@@ -82,9 +82,8 @@ public class TimePeriod implements Comparable<TimePeriod>, Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TimePeriod peroid = (TimePeriod) o;
-        return this.start.getLocalTime().equals(peroid.getStart().getLocalTime()) &&
-
-                this.end.getLocalTime().equals(peroid.getEnd().getLocalTime());
+        return this.start.equals(peroid.getStart()) &&
+                this.end.equals(peroid.getEnd());
     }
 
     @Override

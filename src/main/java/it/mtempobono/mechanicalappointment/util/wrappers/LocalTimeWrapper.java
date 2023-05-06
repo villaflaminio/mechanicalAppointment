@@ -2,6 +2,7 @@ package it.mtempobono.mechanicalappointment.util.wrappers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import it.mtempobono.mechanicalappointment.model.TimePeriod;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -17,6 +18,7 @@ public class LocalTimeWrapper implements Serializable {
     private int second;
     @Schema(example = "0")
     private int nano;
+
     @JsonIgnore
     public LocalTime getLocalTime() {
         return LocalTime.of(hour, minute, second, nano);
@@ -75,4 +77,14 @@ public class LocalTimeWrapper implements Serializable {
         return Objects.hash(hour, minute, second, nano);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LocalTimeWrapper)) return false;
+        LocalTimeWrapper that = (LocalTimeWrapper) o;
+        return hour == that.hour &&
+                minute == that.minute &&
+                second == that.second &&
+                nano == that.nano;
+    }
 }
