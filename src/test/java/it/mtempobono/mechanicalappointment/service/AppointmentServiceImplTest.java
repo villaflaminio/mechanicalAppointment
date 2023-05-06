@@ -99,11 +99,11 @@ class AppointmentServiceImplTest {
         assertEquals(availableHoursInternal.get(2).getEnd().getLocalTime(), LocalTime.of(17, 0));
 
         assertEquals(availableHoursExternal.size(), 2);
-        assertEquals(availableHoursInternal.get(0).getStart().getLocalTime(), LocalTime.of(11, 0));
-        assertEquals(availableHoursInternal.get(0).getEnd().getLocalTime(), LocalTime.of(13, 0));
+        assertEquals(availableHoursExternal.get(0).getStart().getLocalTime(), LocalTime.of(11, 0));
+        assertEquals(availableHoursExternal.get(0).getEnd().getLocalTime(), LocalTime.of(13, 0));
 
-        assertEquals(availableHoursInternal.get(1).getStart().getLocalTime(), LocalTime.of(14, 0));
-        assertEquals(availableHoursInternal.get(1).getEnd().getLocalTime(), LocalTime.of(16, 0));
+        assertEquals(availableHoursExternal.get(1).getStart().getLocalTime(), LocalTime.of(14, 0));
+        assertEquals(availableHoursExternal.get(1).getEnd().getLocalTime(), LocalTime.of(16, 0));
 
 
     }

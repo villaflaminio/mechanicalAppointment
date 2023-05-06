@@ -100,8 +100,5 @@ public class TimePeriod implements Comparable<TimePeriod>, Serializable{
                 '}';
     }
 
-    public Collection<? extends TimePeriod> splitEvery30Minutes() {
-
-    }
     // endregion Overrides
 }

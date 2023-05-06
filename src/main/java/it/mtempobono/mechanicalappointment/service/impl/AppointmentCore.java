@@ -105,12 +105,16 @@ public class AppointmentCore {
             List<TimePeriod> intervalFilledSplitEvrery30minutes = new ArrayList<>();
 
             for (TimePeriod timePeriod : intervalFilled) {
-                intervalFilledSplitEvrery30minutes.addAll(timePeriod.splitEvery30Minutes());
+                timePeriod.getDuration().toMinutes();
+                int numberOfSplit = (int) timePeriod.getDuration().toMinutes() / 30;
+                for (int i = 0; i < numberOfSplit; i++) {
+                    intervalFilledSplitEvrery30minutes.add(new TimePeriod(timePeriod.getStart().getLocalTime().plusMinutes(i * 30), timePeriod.getStart().getLocalTime().plusMinutes((i + 1) * 30)));
+                }
             }
 
 
             Map<TimePeriod, Integer> frequencyMap = new HashMap<>();
-            for (TimePeriod number : intervalFilled) {
+            for (TimePeriod number : intervalFilledSplitEvrery30minutes) {
                 frequencyMap.put(number, frequencyMap.getOrDefault(number, 0) + 1);
             }
 
@@ -210,6 +214,7 @@ public class AppointmentCore {
             for (TimePeriod period : periods) {
 
                 // Case 1: appointment overlaps the start of the period
+                System.out.println("appointment start :  " + appointmentPeriod.getStart().getLocalTime()+ " appointment end " +appointmentPeriod.getEnd().getLocalTime()  +  " period start : " + period.getStart().getLocalTime() + " period end : " + period.getEnd().getLocalTime());
                 if ((appointment.getStart().getLocalTime().isBefore(period.getStart().getLocalTime()) || appointment.getStart().equals(period.getStart()))
                         && appointment.getEnd().getLocalTime().isAfter(period.getStart().getLocalTime()) &&
                         appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
@@ -224,13 +229,16 @@ public class AppointmentCore {
                 }
 
                 // Case 3: appointment is within the period
-                if (appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) && appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
+                if ((appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) ||(appointment.getStart().getLocalTime().equals(period.getStart().getLocalTime()) )) &&
+                        (appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()) || appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()))){
                     TimePeriod time = new TimePeriod(period.getStart().getLocalTime(), appointment.getStart().getLocalTime());
-
+                    System.out.println("time start : " + time.getStart().getLocalTime() + " time end : " + time.getEnd().getLocalTime());
+                    System.out.println("work internal duration : " + work.getInternalDuration().toMinutes() + " time duration : " + time.getDuration().toMinutes());
                     if (work.getInternalDuration() != null && work.getInternalDuration().toMinutes() <= time.getDuration().toMinutes()) {
                         toAdd.add(time);
                     }
                     period.setStart(appointment.getEnd());
+                    System.out.println("new time start : " + period.getStart().getLocalTime() + " time end : " + period.getEnd().getLocalTime());
 
                 }
             }
