@@ -12,6 +12,25 @@ import java.util.*;
 
 public class AppointmentCore {
 
+    //singleton pattern
+    private static AppointmentCore instance = null;
+
+    private AppointmentCore() {
+    }
+
+    public static AppointmentCore getInstance() {
+        if (instance == null) {
+            instance = new AppointmentCore();
+        }
+        return instance;
+    }
+
+    /**
+     * Finds the available timeslots for a given day.
+     *
+     * @param dayPlan the DayPlan to analyze
+     * @return a list of TimePeriods representing the available timeslots
+     */
     private static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
         return start1.isBefore(end2) && start2.isBefore(end1);
     }
@@ -37,50 +56,13 @@ public class AppointmentCore {
                     LocalTime overlapEnd = interval1.getEnd().getLocalTime().isAfter(interval2.getEnd().getLocalTime()) ? interval2.getEnd().getLocalTime() : interval1.getEnd().getLocalTime();
                     TimePeriod overlapping = new TimePeriod(overlapStart, overlapEnd);
                     // Add the overlapping interval to the list only if it's not already present
-//                    if (!overlappingIntervals.contains(overlapping)) {
                     overlappingIntervals.add(overlapping);
-//                    }
                 }
             }
         }
         return overlappingIntervals;
     }
 
-//    public List<TimePeriod> findOverlappingIntervalFromTimePeriod(List<TimePeriod> intervals) {
-//        Collections.sort(intervals); //(n log n)
-//        List<TimePeriod> overlappingInterval = new ArrayList<>();
-//        List<int[]> overlappingIntervals = new ArrayList<>();
-//
-//        for (int i = 0; i < intervals.size(); i++) { //n
-//
-//            for (int j = i + 1; j < intervals.size(); j++) {
-//                if (isOverlapping(intervals.get(i).getStart(), intervals.get(i).getEnd(),
-//                        intervals.get(j).getStart(), intervals.get(j).getEnd())) {
-//
-//                    LocalTime prevStartInterval = intervals.get(i).getStart();
-//                    LocalTime currStartInterval = intervals.get(j).getStart();
-//
-//                    LocalTime prevEndInterval = intervals.get(i).getEnd();
-//                    LocalTime currEndInterval = intervals.get(j).getEnd();
-//
-//                    int[] prevInterval = {prevStartInterval.toSecondOfDay(), prevEndInterval.toSecondOfDay()};
-//                    int[] currInterval = {currStartInterval.toSecondOfDay(), currEndInterval.toSecondOfDay()};
-//
-//                    int[] overlapping = new int[]{Math.max(prevInterval[0], currInterval[0]), Math.min(prevInterval[1], currInterval[1])};
-//
-//                    if (overlappingIntervals.stream()
-//                            .noneMatch(x -> Arrays.equals(x, overlapping)))
-//                        overlappingIntervals.add(overlapping);
-//
-//                }
-//            }
-//        }
-//        for (int[] interval : overlappingIntervals) {
-//
-//            overlappingInterval.add(new TimePeriod(LocalTime.ofSecondOfDay(interval[0]), LocalTime.ofSecondOfDay(interval[1])));
-//        }
-//        return overlappingInterval;
-//    }
 
     public CalculatedTimeslots getAvailableAppointments(OpenDay openDay, MechanicalAction work) {
 
@@ -98,9 +80,6 @@ public class AppointmentCore {
         } else {
             List<TimePeriod> intervalFilled = findOverlappingIntervals(scheduledAppointments);
             List<TimePeriod> intervalToExclude = new ArrayList<>();
-//            for (int i = 1; i < maxEventInParallel; i++) {
-//                intervalFilled = findOverlappingIntervals(intervalFilled);
-//            }
 
             List<TimePeriod> intervalFilledSplitEvrery30minutes = new ArrayList<>();
 
@@ -130,19 +109,6 @@ public class AppointmentCore {
 
         return calculateAvailableHours(availablePeroids, work, openDay);
     }
-
-//    public List<TimePeriod> calculateAvailableHours(List<TimePeriod> availableTimePeroids, MechanicalAction work) {
-//        ArrayList<TimePeriod> availableHours = new ArrayList();
-//        for (TimePeriod peroid : availableTimePeroids) {
-//            TimePeriod workPeroid = new TimePeriod(peroid.getStart(), peroid.getStart().plusMinutes(work.getInternalDuration().toMinutes()));
-//            while (workPeroid.getEnd().isBefore(peroid.getEnd()) || workPeroid.getEnd().equals(peroid.getEnd())) {
-//                availableHours.add(new TimePeriod(workPeroid.getStart(), workPeroid.getStart().plusMinutes(work.getInternalDuration().toMinutes())));
-//                workPeroid.setStart(workPeroid.getStart().plusMinutes(work.getInternalDuration().toMinutes()));
-//                workPeroid.setEnd(workPeroid.getEnd().plusMinutes(work.getInternalDuration().toMinutes()));
-//            }
-//        }
-//        return availableHours;
-//    }
 
 
     /**
@@ -214,7 +180,7 @@ public class AppointmentCore {
             for (TimePeriod period : periods) {
 
                 // Case 1: appointment overlaps the start of the period
-                System.out.println("appointment start :  " + appointmentPeriod.getStart().getLocalTime()+ " appointment end " +appointmentPeriod.getEnd().getLocalTime()  +  " period start : " + period.getStart().getLocalTime() + " period end : " + period.getEnd().getLocalTime());
+//                System.out.println("appointment start :  " + appointmentPeriod.getStart().getLocalTime() + " appointment end " + appointmentPeriod.getEnd().getLocalTime() + " period start : " + period.getStart().getLocalTime() + " period end : " + period.getEnd().getLocalTime());
                 if ((appointment.getStart().getLocalTime().isBefore(period.getStart().getLocalTime()) || appointment.getStart().equals(period.getStart()))
                         && appointment.getEnd().getLocalTime().isAfter(period.getStart().getLocalTime()) &&
                         appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime())) {
@@ -229,11 +195,11 @@ public class AppointmentCore {
                 }
 
                 // Case 3: appointment is within the period
-                if ((appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) ||(appointment.getStart().getLocalTime().equals(period.getStart().getLocalTime()) )) &&
-                        (appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()) || appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()))){
+                if ((appointment.getStart().getLocalTime().isAfter(period.getStart().getLocalTime()) || (appointment.getStart().getLocalTime().equals(period.getStart().getLocalTime()))) &&
+                        (appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()) || appointment.getEnd().getLocalTime().isBefore(period.getEnd().getLocalTime()))) {
                     TimePeriod time = new TimePeriod(period.getStart().getLocalTime(), appointment.getStart().getLocalTime());
-                    System.out.println("time start : " + time.getStart().getLocalTime() + " time end : " + time.getEnd().getLocalTime());
-                    System.out.println("work internal duration : " + work.getInternalDuration().toMinutes() + " time duration : " + time.getDuration().toMinutes());
+//                    System.out.println("time start : " + time.getStart().getLocalTime() + " time end : " + time.getEnd().getLocalTime());
+//                    System.out.println("work internal duration : " + work.getInternalDuration().toMinutes() + " time duration : " + time.getDuration().toMinutes());
                     if (work.getInternalDuration() != null && work.getInternalDuration().toMinutes() <= time.getDuration().toMinutes()) {
                         toAdd.add(time);
                     }
@@ -252,33 +218,6 @@ public class AppointmentCore {
 
         return periods;
     }
-
-
-//    public List<TimePeriod> excludeAppointmentsFromTimePeriods(List<TimePeriod> peroids, List<TimePeriod> appointments) {
-//
-//        List<TimePeriod> toAdd = new ArrayList();
-//        Collections.sort(appointments);
-//        for (TimePeriod appointment : appointments) {
-//            TimePeriod appointMentPeroid = new TimePeriod(appointment.getStart(), appointment.getEnd());
-//            for (TimePeriod peroid : peroids) {
-//                if ((appointment.getStart().isBefore(peroid.getStart()) || appointment.getStart().equals(peroid.getStart()))
-//                        && appointment.getEnd().isAfter(peroid.getStart()) && appointment.getEnd().isBefore(peroid.getEnd())) {
-//                    peroid.setStart(appointment.getEnd());
-//                }
-//                if (appointment.getStart().isAfter(peroid.getStart()) && appointment.getStart().isBefore(peroid.getEnd())
-//                        && appointment.getEnd().isAfter(peroid.getEnd()) || appointment.getEnd().equals(peroid.getEnd())) {
-//                    peroid.setEnd(appointment.getStart());
-//                }
-//                if (appointment.getStart().isAfter(peroid.getStart()) && appointment.getEnd().isBefore(peroid.getEnd())) {
-//                    toAdd.add(new TimePeriod(peroid.getStart(), appointment.getStart()));
-//                    peroid.setStart(appointment.getEnd());
-//                }
-//            }
-//        }
-//        peroids.addAll(toAdd);
-//        Collections.sort(peroids);
-//        return peroids;
-//    }
 
 
 }

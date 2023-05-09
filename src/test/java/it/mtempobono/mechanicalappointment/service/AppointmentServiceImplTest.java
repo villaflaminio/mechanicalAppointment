@@ -27,7 +27,7 @@ class AppointmentServiceImplTest {
 
     @InjectMocks
     AppointmentServiceImpl appointmentService = new AppointmentServiceImpl();
-    private AppointmentCore appointmentCore = new AppointmentCore();
+    private AppointmentCore appointmentCore = AppointmentCore.getInstance();
 
     OpenDay openDay = new OpenDay();
 

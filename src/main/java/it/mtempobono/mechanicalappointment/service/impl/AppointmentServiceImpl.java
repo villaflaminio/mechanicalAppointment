@@ -33,7 +33,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     //region Fields
 
     private static final Logger logger = LoggerFactory.getLogger(AppointmentServiceImpl.class);
-    private final AppointmentCore appointmentCore = new AppointmentCore();
+    private AppointmentCore appointmentCore = AppointmentCore.getInstance();
     @Autowired
     private EmailService emailService;
     @Autowired

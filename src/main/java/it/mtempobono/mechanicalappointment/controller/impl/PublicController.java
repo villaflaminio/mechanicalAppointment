@@ -29,7 +29,7 @@ import java.util.Scanner;
 @RequestMapping("api/public")
 public class PublicController {
 
-    private AppointmentCore appointmentCore = new AppointmentCore();
+    private AppointmentCore appointmentCore = AppointmentCore.getInstance();
     @Autowired
     private PlaceRepository placeRepository;
 
