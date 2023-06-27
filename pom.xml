@@ -34,7 +34,7 @@
     <description>mechanicalAppointment</description>
     <properties>
         <java.version>17</java.version>
-        <start-class>it.mtempobono.mechanicalappointment.MechanicalAppointmentApplication</start-class>
+        <start-class>it.flaminiovilla.mechanicalappointment.MechanicalAppointmentApplication</start-class>
 
     </properties>
 
